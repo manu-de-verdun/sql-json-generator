@@ -23,5 +23,5 @@ describe('#update', function() {
 
     });
 
-    
+
 });
