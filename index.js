@@ -1,6 +1,6 @@
-module.exports = function (db, params) {
+module.exports = {
 
-    this.update = function (data, callback) {
+    update : function (data) {
 
         // UPDATE
         var sql = "UPDATE `" + data.update + "`";
@@ -10,7 +10,7 @@ module.exports = function (db, params) {
         var setArray = [];
 
         setKeys.forEach( function (key) {
-            setArray.push("`" + key + "` = '" + data.set[key] + "' ");
+            setArray.push("`" + key + "` = '" + data.set[key] + "'");
         });
 
         sql +=  " SET " +  setArray.toString(',');
@@ -20,20 +20,13 @@ module.exports = function (db, params) {
         var whereArray = [];
 
         whereKeys.forEach( function (key) {
-            whereArray.push("`" + key + "` = '" + data.where[key] + "' ");
+            whereArray.push("`" + key + "` = '" + data.where[key] + "'");
         });
 
 
         sql +=  " WHERE " +  whereArray.toString(' AND ');
 
-        db.query(sql, function (err, results) {
-            if (err) {
-                err.sql = sql;
-                return callback(err, null);
-            }
-            return callback(null, results);
-        });
-    };
-
+        return sql;
+    }
 
 };

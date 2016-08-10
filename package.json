@@ -1,14 +1,14 @@
 {
-  "name": "sql-parser",
+  "name": "sql-generator",
   "version": "0.0.1",
-  "description": "A Small library to create sql queries from JSON object",
+  "description": "A Small library to create sql queries from JSON objects",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "./node_modules/.bin/mocha --reporter spec"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/manu-de-verdun/sql-parser.git"
+    "url": "git+https://github.com/manu-de-verdun/sql-generator.git"
   },
   "keywords": [
     "SQL",
@@ -18,9 +18,9 @@
   "author": "Emmanuel Pautet <emmanuel.pautet@gmail.com> (https://www.linkedin.com/in/epautet)",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/manu-de-verdun/sql-parser/issues"
+    "url": "https://github.com/manu-de-verdun/sql-generator/issues"
   },
-  "homepage": "https://github.com/manu-de-verdun/sql-parser#readme",
+  "homepage": "https://github.com/manu-de-verdun/sql-generator#readme",
   "devDependencies": {
     "chai": "^3.5.0",
     "mocha": "^3.0.2"
