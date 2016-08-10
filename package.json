@@ -20,5 +20,9 @@
   "bugs": {
     "url": "https://github.com/manu-de-verdun/sql-parser/issues"
   },
-  "homepage": "https://github.com/manu-de-verdun/sql-parser#readme"
+  "homepage": "https://github.com/manu-de-verdun/sql-parser#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.0.2"
+  }
 }
