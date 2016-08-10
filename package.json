@@ -1,5 +1,5 @@
 {
-  "name": "json2sql",
+  "name": "sql-json-generator",
   "version": "0.1.0",
   "description": "A Small library to create sql queries from JSON objects",
   "main": "index.js",
