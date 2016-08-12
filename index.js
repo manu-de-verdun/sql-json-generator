@@ -1,6 +1,6 @@
 module.exports = {
 
-    update : function (data) {
+    update : function (data , callback) {
 
         // UPDATE
         var sql = "UPDATE `" + data.update + "`";
@@ -26,7 +26,9 @@ module.exports = {
 
         sql +=  " WHERE " +  whereArray.toString(' AND ');
 
-        return sql;
+        console.log(sql);
+
+        callback( null , sql );
     }
 
 };
