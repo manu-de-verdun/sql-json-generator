@@ -9,10 +9,12 @@ var sqlParams = {};
 sqlParams = {
     update: 'mytable',
     set : {
-        field_b: 1
+        field_c: 1,
+        field_d: 1
     },
     where: {
-        field_a: 1
+        field_a: 1,
+        field_b: 1
     }
 }
 

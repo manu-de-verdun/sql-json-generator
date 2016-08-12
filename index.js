@@ -13,7 +13,7 @@ module.exports = {
             setArray.push("`" + key + "` = '" + data.set[key] + "'");
         });
 
-        sql +=  " SET " +  setArray.toString(',');
+        sql +=  " SET " +  setArray.join(',');
 
         // WHERE
         var whereKeys = Object.keys(data.where);
@@ -23,10 +23,7 @@ module.exports = {
             whereArray.push("`" + key + "` = '" + data.where[key] + "'");
         });
 
-
-        sql +=  " WHERE " +  whereArray.toString(' AND ');
-
-        console.log(sql);
+        sql +=  " WHERE " +  whereArray.join(' AND ');
 
         callback( null , sql );
     }
