@@ -9,19 +9,17 @@ var sqlParams = {};
 
 sqlParams = {
     update: 'mytable',
-    set : {
+    set: {
         field_c: 1,
         field_d: 1
     },
     where: {
-        field_a: 1,
-        field_b: 1
+        field_c: 1,
+        field_d: 1
     }
 }
 
-sqlGenerator.update( sqlParams , function ( err, result ) {
-    console.log( 'sqlParams' , sqlParams)
-    console.log( 'err:' , err);
-    console.log( 'result:' , result);
-})
+var sqlQuery = sqlGenerator.update(sqlParams);
+console.log('result', sqlQuery);
+
 

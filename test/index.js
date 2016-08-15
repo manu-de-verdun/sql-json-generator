@@ -7,6 +7,7 @@ describe('#update', function() {
 
     var sqlGenerator = new SQLGenerator();
     var sqlParams;
+    var sqlQuery;
 
     it('simple update', function() {
 
@@ -22,10 +23,7 @@ describe('#update', function() {
 
         expectedResult = 'UPDATE `mytable` SET `field_b` = \'1\' WHERE `field_a` = \'1\'';
 
-        sqlGenerator.update(sqlParams , function ( err, result ) {
-            expect(err).to.be.null;
-            result.should.equal(expectedResult);
-        });
+        sqlGenerator.update(sqlParams).should.equal(expectedResult);
 
     });
 
@@ -44,10 +42,7 @@ describe('#update', function() {
 
         expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` = \'1\'';
 
-        sqlGenerator.update(sqlParams , function ( err, result ) {
-            expect(err).to.be.null;
-            result.should.equal(expectedResult);
-        });
+        sqlGenerator.update(sqlParams).should.equal(expectedResult);
 
     });
 
@@ -69,11 +64,7 @@ describe('#update', function() {
 
         expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` = \'1\' AND `field_b` = \'1\'';
 
-        sqlGenerator.update(sqlParams , function ( err, result ) {
-            expect(err).to.be.null;
-            result.should.equal(expectedResult);
-        });
-
+        sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
 
 
