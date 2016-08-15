@@ -14,10 +14,37 @@ var test = function () {
 
         whereKeys.forEach(function (key) {
 
-            if ( typeof conditions[key] === 'object') {
+            // Logical AND
+            if ( key === "$and" ) {
+
+                var andArray = [];
+
+                conditions[key].forEach( function ( element ) {
+                    andArray.push(whereBuilder(element , null ));
+                });
+
+                whereArray.push( "(" + andArray.join(' AND ') + ")");
+
+            }
+
+            //Logical OR
+            else if ( key === "$or" ) {
+
+                var andArray = [];
+
+                conditions[key].forEach( function ( element ) {
+                    andArray.push(whereBuilder(element , null ));
+                });
+
+                whereArray.push( "(" + andArray.join(' OR ') + ")");
+            }
+
+            // Nested Object (not part of a logical operation)
+            else if ( typeof conditions[key] === 'object') {
                 whereArray.push(whereBuilder(conditions[key] , key ));
             }
 
+            // Comparaison Operators
             else {
                 switch (key) {
 

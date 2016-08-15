@@ -210,5 +210,116 @@ describe('#update', function() {
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
 
+    it('$and', function() {
+
+        sqlParams = {
+            update: 'mytable',
+            set: {
+                field_c: 1,
+                field_d: 1
+            },
+            where: {
+                $and : [
+                    {field_a: 1},
+                    {field_b: 1}
+                ]
+
+            }
+        };
+
+        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE (`field_a` = \'1\' AND `field_b` = \'1\')';
+
+        sqlGenerator.update(sqlParams).should.equal(expectedResult);
+    });
+
+    it('$or', function() {
+
+        sqlParams = {
+            update: 'mytable',
+            set: {
+                field_c: 1,
+                field_d: 1
+            },
+            where: {
+                $or : [
+                    {field_a: 1},
+                    {field_b: 1}
+                ]
+
+            }
+        };
+
+        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE (`field_a` = \'1\' OR `field_b` = \'1\')';
+
+        sqlGenerator.update(sqlParams).should.equal(expectedResult);
+    });
+
+
+
+    it('$or and nested $and and $or', function() {
+
+        sqlParams = {
+            update: 'mytable',
+            set: {
+                field_c: 1,
+                field_d: 1
+            },
+            where: {
+                $or : [
+                    {
+                        $or : [
+                            {field_a: 1},
+                            {field_b: 1}
+                        ]
+
+                    },
+                    {
+                        $and : [
+                            {field_c: 1},
+                            {field_d: 1}
+                        ]
+
+                    }
+                ]
+            }
+        };
+
+        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE ((`field_a` = \'1\' OR `field_b` = \'1\') OR (`field_c` = \'1\' AND `field_d` = \'1\'))';
+
+        sqlGenerator.update(sqlParams).should.equal(expectedResult);
+    });
+
+    it('complex query', function() {
+
+        sqlParams = {
+            update: 'mytable',
+            set: {
+                field_c: 1,
+                field_d: 1
+            },
+            where: {
+                $or : [
+                    {
+                        $or : [
+                            {field_a: { $gte : 8 }},
+                            {field_a: { $lt : 10 }},
+                        ]
+
+                    },
+                    {
+                        $and : [
+                            {field_b: 3.15},
+                            {field_d: { $ne: 'ERR'}}
+                        ]
+
+                    }
+                ]
+            }
+        };
+
+        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE ((`field_a` >= \'8\' OR `field_a` < \'10\') OR (`field_b` = \'3.15\' AND `field_d` <> \'ERR\'))';
+
+        sqlGenerator.update(sqlParams).should.equal(expectedResult);
+    });
 
 });
