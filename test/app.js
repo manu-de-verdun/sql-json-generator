@@ -14,9 +14,6 @@ sqlParams = {
         field_d: 1
     },
     where: {
-        $gt: {
-            field_a: 1
-        }
     }
 };
 
