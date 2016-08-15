@@ -1,6 +1,6 @@
 var test = function () {
 
-    var whereBuilder = function (conditions, operador) {
+    var whereBuilder = function (conditions, parentKey) {
 
         var whereKeys = Object.keys(conditions);
         var whereArray = [];
@@ -8,30 +8,30 @@ var test = function () {
 
         console.log('');
         console.log('whereBuilder');
-        console.log('  operador: ' , operador);
         console.log('  conditions: ', conditions);
+        console.log('  parentKey: ' , parentKey);
 
 
         whereKeys.forEach(function (key) {
 
-            switch (key) {
-
-                case "$gt" :
-                        whereArray.push(whereBuilder(conditions[key], '$gt'));
-                    break;
-
-                default:
-
-                    switch (operador) {
-
-                        case '$gt':
-                            whereArray.push("`" + key + "` > '" + conditions[key] + "'");
-                            break;
-
-                        default:
-                            whereArray.push("`" + key + "` = '" + conditions[key] + "'");
-                    }
+            if ( typeof conditions[key] === 'object') {
+                whereArray.push(whereBuilder(conditions[key] , key ));
             }
+
+            else {
+                switch (key) {
+
+                    case "$gt" :
+                        whereArray.push("`" + parentKey + "` > '" + conditions[key] + "'");
+                        break;
+
+                    default:
+                        whereArray.push("`" + key + "` = '" + conditions[key] + "'");
+
+                }
+
+            }
+
         });
 
         whereExpression += whereArray.join(' AND ');

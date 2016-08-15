@@ -14,6 +14,12 @@ sqlParams = {
         field_d: 1
     },
     where: {
+        field_a: {
+            $gt: 1
+        },
+        field_b: {
+            $gt: 1
+        }
     }
 };
 
