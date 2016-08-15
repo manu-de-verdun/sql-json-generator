@@ -53,9 +53,9 @@ result: UPDATE  `mytable`  SET `field_b` = '1' WHERE `field_a` = '1'
 
 ``where: condition``
 
-#### AND
+#### Logical Operators
 
-##### Simple AND
+##### default AND
 
 ```
 {
@@ -65,4 +65,36 @@ result: UPDATE  `mytable`  SET `field_b` = '1' WHERE `field_a` = '1'
 }
 ```
 
-``field_a =  '1' AND field_b =  '1' AND field_c =  '1'``
+will return:
+
+```
+field_a = '1' AND field_b = '1' AND field_c = '1'
+```
+
+
+#### Comparaison Operators
+
+
+|    JSON  |     SQL       |
+|----------|:-------------:|
+| ``$gt`` | ``>`` |
+| ``$gte`` |    ``>=``   |
+| ``$lt`` |    ``<``   |
+| ``$lte`` |    ``<=``   |
+| ``$eq`` |    ``=``   |
+| ``$ne`` |    ``<>``   |
+
+```
+{
+    field_a: {
+        $gt: 1
+    }
+}
+```
+
+
+will return:
+
+```
+field_a > '1'
+```
