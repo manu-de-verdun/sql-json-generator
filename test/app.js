@@ -1,9 +1,10 @@
 /**
  * Created by manu on 12/08/2016.
  */
-sqlGenerator = require('../index');
+var SQLGenerator = require('../index');
 
 
+var sqlGenerator = new SQLGenerator();
 var sqlParams = {};
 
 sqlParams = {

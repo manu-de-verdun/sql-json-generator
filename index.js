@@ -1,31 +1,35 @@
-module.exports = {
+var test = function () {
 
-    update : function (data , callback) {
 
-        // UPDATE
-        var sql = "UPDATE `" + data.update + "`";
+        this.update =  function (data, callback) {
 
-        // SET
-        var setKeys = Object.keys(data.set);
-        var setArray = [];
+            // UPDATE
+            var sql = "UPDATE `" + data.update + "`";
 
-        setKeys.forEach( function (key) {
-            setArray.push("`" + key + "` = '" + data.set[key] + "'");
-        });
+            // SET
+            var setKeys = Object.keys(data.set);
+            var setArray = [];
 
-        sql +=  " SET " +  setArray.join(',');
+            setKeys.forEach(function (key) {
+                setArray.push("`" + key + "` = '" + data.set[key] + "'");
+            });
 
-        // WHERE
-        var whereKeys = Object.keys(data.where);
-        var whereArray = [];
+            sql += " SET " + setArray.join(',');
 
-        whereKeys.forEach( function (key) {
-            whereArray.push("`" + key + "` = '" + data.where[key] + "'");
-        });
+            // WHERE
+            var whereKeys = Object.keys(data.where);
+            var whereArray = [];
 
-        sql +=  " WHERE " +  whereArray.join(' AND ');
+            whereKeys.forEach(function (key) {
+                whereArray.push("`" + key + "` = '" + data.where[key] + "'");
+            });
 
-        callback( null , sql );
+            sql += " WHERE " + whereArray.join(' AND ');
+
+            callback(null, sql);
     }
 
-};
+}
+
+
+module.exports = test;

@@ -1,10 +1,11 @@
 var should = require('chai').should();
 var expect = require('chai').expect;
 
-var sqlGenerator = require('../index');
+var SQLGenerator = require('../index');
 
 describe('#update', function() {
 
+    var sqlGenerator = new SQLGenerator();
     var sqlParams;
 
     it('simple update', function() {

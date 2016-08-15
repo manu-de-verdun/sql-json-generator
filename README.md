@@ -42,3 +42,11 @@ result: UPDATE  `mytable`  SET `field_b` = '1' WHERE `field_a` = '1'
 
 
 ## Formating queryData
+
+
+### WHERE
+
+``where: condition``
+
+#### AND
+
