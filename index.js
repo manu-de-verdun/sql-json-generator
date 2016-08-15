@@ -9,7 +9,7 @@ var test = function () {
         console.log('');
         console.log('whereBuilder');
         console.log('  operador: ' , operador);
-        console.log(conditions);
+        console.log('  conditions: ', conditions);
 
 
         whereKeys.forEach(function (key) {
@@ -17,7 +17,7 @@ var test = function () {
             switch (key) {
 
                 case "$gt" :
-                        whereBuilder(conditions[key], '$gt');
+                        whereArray.push(whereBuilder(conditions[key], '$gt'));
                     break;
 
                 default:

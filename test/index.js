@@ -7,7 +7,6 @@ describe('#update', function() {
 
     var sqlGenerator = new SQLGenerator();
     var sqlParams;
-    var sqlQuery;
 
     it('simple update', function() {
 
@@ -19,7 +18,7 @@ describe('#update', function() {
             where: {
                 field_a: 1
             }
-        }
+        };
 
         expectedResult = 'UPDATE `mytable` SET `field_b` = \'1\' WHERE `field_a` = \'1\'';
 
@@ -38,7 +37,7 @@ describe('#update', function() {
             where: {
                 field_a: 1
             }
-        }
+        };
 
         expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` = \'1\'';
 
@@ -60,12 +59,33 @@ describe('#update', function() {
                 field_a: 1,
                 field_b: 1
             }
-        }
+        };
 
         expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` = \'1\' AND `field_b` = \'1\'';
 
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
+
+    it('simple $gt', function() {
+
+        sqlParams = {
+            update: 'mytable',
+            set: {
+                field_c: 1,
+                field_d: 1
+            },
+            where: {
+                $gt: {
+                    field_a: 1
+                }
+            }
+        };
+
+        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` > \'1\'';
+
+        sqlGenerator.update(sqlParams).should.equal(expectedResult);
+    });
+
 
 
 });

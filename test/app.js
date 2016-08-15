@@ -14,12 +14,15 @@ sqlParams = {
         field_d: 1
     },
     where: {
-        field_c: 1,
-        field_d: 1
+        $gt: {
+            field_a: 1
+        }
     }
-}
+};
 
 var sqlQuery = sqlGenerator.update(sqlParams);
-console.log('result', sqlQuery);
+
+console.log(' ');
+console.log('Query: ', sqlQuery);
 
 
