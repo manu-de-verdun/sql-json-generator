@@ -6,6 +6,11 @@ Generate SQL command from JSON object
 
 Install with `npm install sql-json-generator`
 
+´´´
+var SQLGenerator = require('sql-json-generator');
+var sqlGenerator = new SQLGenerator();
+´´´
+
 ## API
 
 
@@ -50,3 +55,14 @@ result: UPDATE  `mytable`  SET `field_b` = '1' WHERE `field_a` = '1'
 
 #### AND
 
+##### Simple AND
+
+```
+{
+    field_a: 1,
+    field_b: 1,
+    field_c: 1
+}
+```
+
+``field_a =  '1' AND field_b =  '1' AND field_c =  '1'``
