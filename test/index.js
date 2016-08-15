@@ -110,4 +110,105 @@ describe('#update', function() {
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
 
+    it('simple $gte', function() {
+
+        sqlParams = {
+            update: 'mytable',
+            set: {
+                field_c: 1,
+                field_d: 1
+            },
+            where: {
+                field_a: {
+                    $gte: 1
+                }
+            }
+        };
+
+        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` >= \'1\'';
+
+        sqlGenerator.update(sqlParams).should.equal(expectedResult);
+    });
+
+    it('simple $lt', function() {
+
+        sqlParams = {
+            update: 'mytable',
+            set: {
+                field_c: 1,
+                field_d: 1
+            },
+            where: {
+                field_a: {
+                    $lt: 1
+                }
+            }
+        };
+
+        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` < \'1\'';
+
+        sqlGenerator.update(sqlParams).should.equal(expectedResult);
+    });
+
+    it('simple $lte', function() {
+
+        sqlParams = {
+            update: 'mytable',
+            set: {
+                field_c: 1,
+                field_d: 1
+            },
+            where: {
+                field_a: {
+                    $lte: 1
+                }
+            }
+        };
+
+        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` <= \'1\'';
+
+        sqlGenerator.update(sqlParams).should.equal(expectedResult);
+    });
+
+    it('simple $eq', function() {
+
+        sqlParams = {
+            update: 'mytable',
+            set: {
+                field_c: 1,
+                field_d: 1
+            },
+            where: {
+                field_a: {
+                    $eq: 1
+                }
+            }
+        };
+
+        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` = \'1\'';
+
+        sqlGenerator.update(sqlParams).should.equal(expectedResult);
+    });;
+
+    it('simple $ne', function() {
+
+        sqlParams = {
+            update: 'mytable',
+            set: {
+                field_c: 1,
+                field_d: 1
+            },
+            where: {
+                field_a: {
+                    $ne: 1
+                }
+            }
+        };
+
+        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` <> \'1\'';
+
+        sqlGenerator.update(sqlParams).should.equal(expectedResult);
+    });
+
+
 });

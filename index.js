@@ -25,6 +25,26 @@ var test = function () {
                         whereArray.push("`" + parentKey + "` > '" + conditions[key] + "'");
                         break;
 
+                    case "$gte" :
+                        whereArray.push("`" + parentKey + "` >= '" + conditions[key] + "'");
+                        break;
+
+                    case "$lt" :
+                        whereArray.push("`" + parentKey + "` < '" + conditions[key] + "'");
+                        break;
+
+                    case "$lte" :
+                        whereArray.push("`" + parentKey + "` <= '" + conditions[key] + "'");
+                        break;
+
+                    case "$eq" :
+                        whereArray.push("`" + parentKey + "` = '" + conditions[key] + "'");
+                        break;
+
+                    case "$ne" :
+                        whereArray.push("`" + parentKey + "` <> '" + conditions[key] + "'");
+                        break;
+
                     default:
                         whereArray.push("`" + key + "` = '" + conditions[key] + "'");
 

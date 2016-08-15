@@ -18,7 +18,7 @@ sqlParams = {
             $gt: 1
         },
         field_b: {
-            $gt: 1
+            $lt: 1
         }
     }
 };
