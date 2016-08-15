@@ -1,32 +1,47 @@
 var test = function () {
 
+    var whereBuilder = function (conditions, callback) {
 
-        this.update =  function (data, callback) {
+        var whereKeys = Object.keys(conditions);
+        var whereArray = [];
+        var whereExpression = " WHERE ";
 
-            // UPDATE
-            var sql = "UPDATE `" + data.update + "`";
+        whereKeys.forEach(function (key) {
+            whereArray.push("`" + key + "` = '" + conditions[key] + "'");
+        });
 
-            // SET
-            var setKeys = Object.keys(data.set);
-            var setArray = [];
+        whereExpression += whereArray.join(' AND ');
 
-            setKeys.forEach(function (key) {
-                setArray.push("`" + key + "` = '" + data.set[key] + "'");
-            });
+        return callback( null , whereExpression);
+    };
 
-            sql += " SET " + setArray.join(',');
 
-            // WHERE
-            var whereKeys = Object.keys(data.where);
-            var whereArray = [];
+    this.update = function (data, callback) {
 
-            whereKeys.forEach(function (key) {
-                whereArray.push("`" + key + "` = '" + data.where[key] + "'");
-            });
+        // UPDATE
+        var sql = "UPDATE `" + data.update + "`";
 
-            sql += " WHERE " + whereArray.join(' AND ');
+        // SET
+        var setKeys = Object.keys(data.set);
+        var setArray = [];
+
+        setKeys.forEach(function (key) {
+            setArray.push("`" + key + "` = '" + data.set[key] + "'");
+        });
+
+        sql += " SET " + setArray.join(',');
+
+        whereBuilder ( data.where , function ( err, result ) {
+
+            if (err) return callback ( err, null);
+
+            sql += result;
 
             callback(null, sql);
+
+
+        } );
+
     }
 
 }
