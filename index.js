@@ -176,6 +176,28 @@ var sqlJsonGenerator = function () {
 
     };
 
+
+    /**
+     * Generate an UPDATE command based on params
+     * @param queryParams
+     * @returns {string} SQL Query
+     */
+    this.select = function (queryParams, callback) {
+
+        // test if required query params are provided
+        if ( !queryParams || !queryParams.$from  ) return null;
+
+        // DELETE
+        var sql = "DELETE FROM `" + queryParams.$delete + "`";
+
+        if ( queryParams.$where ) {
+            sql += " WHERE " + whereBuilder(queryParams.$where, null);
+        }
+
+        return sql;
+
+    };
+
 };
 
 

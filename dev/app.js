@@ -8,14 +8,11 @@ var sqlGenerator = new SQLGenerator();
 var sqlParams = {};
 
 sqlParams = {
-    $insert: 'mytable',
-    $values : {
-        field_a: 1,
-        field_b: 1
-    }
+    $select: id_modelo_insumo,
+    $from : 'mi_itens_inventarios'
 };
 
-var sqlQuery = sqlGenerator.insert(sqlParams);
+var sqlQuery = sqlGenerator.select(sqlParams);
 
 console.log(' ');
 console.log('Query: ', sqlQuery);
