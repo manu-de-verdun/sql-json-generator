@@ -59,7 +59,7 @@ The function returns a string with the SQL.
 
 ```
 sqlParams = {
-    from: 'mytable',
+    delete: 'mytable',
     where: {
         field_a: 1
     }
