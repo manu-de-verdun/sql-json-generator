@@ -15,7 +15,7 @@ describe('#update - json errors', function () {
     });
 
 
-    it('call with missing update param', function () {
+    it('call with missing $update', function () {
 
         sqlParams = {
             $set: {
@@ -28,7 +28,7 @@ describe('#update - json errors', function () {
 
     });
 
-    it('call with missing set param', function () {
+    it('call with missing $set', function () {
 
         sqlParams = {
             $update: 'table1'

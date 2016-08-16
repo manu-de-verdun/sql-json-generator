@@ -16,7 +16,7 @@ describe('#delete - json errors', function () {
     });
 
 
-    it('call with missing delete param', function () {
+    it('call with missing $delete param', function () {
 
         sqlParams = {
             $where: {
