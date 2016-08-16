@@ -23,6 +23,26 @@ var sqlGenerator = new SQLGenerator();
 The first paramenter contains the data used to produce the SQL query.
 The function returns a string with the SQL.
 
+```
+sqlParams = {
+    $update: 'mytable',
+    $set : {
+        field_b: 1
+    },
+    $where: {
+        field_a: 1
+    }
+}
+
+sqlGenerator.update( sqlParams);
+```
+
+will return:
+
+```
+UPDATE  `mytable`  SET `field_b` = '1' WHERE `field_a` = '1'
+```
+
 ### UPDATE
 
 `.update( queryData )`

@@ -131,19 +131,24 @@ var sqlJsonGenerator = function () {
         // INSERT
         var sql = "INSERT INTO `" + queryParams.$insert + "`";
 
-        // SET
-        var setKeys = Object.keys(queryParams.$set);
-        var setArray = [];
+        // KEYS
+        var setKeys = Object.keys(queryParams.$values);
 
+        var keysArray = [];
         setKeys.forEach(function (key) {
-            setArray.push("`" + key + "` = '" + queryParams.$set[key] + "'");
+            keysArray.push("`" + key + "`");
         });
 
-        sql += " SET " + setArray.join(',');
+        sql += " (" + keysArray.join(',') + ")" ;
 
-        if ( queryParams.$where ) {
-            sql += " WHERE " + whereBuilder(queryParams.$where, null);
-        }
+        // Values
+
+        var valuesArray = [];
+        setKeys.forEach(function (key) {
+            valuesArray.push("'" + queryParams.$values[key] + "'");
+        });
+
+        sql += " VALUES (" + valuesArray.join(',') + ")" ;
 
         return sql;
 

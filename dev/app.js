@@ -8,9 +8,9 @@ var sqlGenerator = new SQLGenerator();
 var sqlParams = {};
 
 sqlParams = {
-    delete: 'mi_itens_inventarios',
-    values: {
-
+    $insert: 'table_1',
+    $values: {
+        field_a: 1
     }
 };
 
