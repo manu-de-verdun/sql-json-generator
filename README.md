@@ -99,29 +99,11 @@ UPDATE  `mytable`  SET `field_b` = '1' WHERE `field_a` = '1'
 ## Formating queryData
 
 
-### WHERE
+### $where
 
-``where: condition``
+``$where: { conditions... }``
 
-#### Logical Operators
-
-##### default behavior: AND
-
-```
-{
-    field_a: 1,
-    field_b: 1,
-    field_c: 1
-}
-```
-
-will return:
-
-```
-field_a = '1' AND field_b = '1' AND field_c = '1'
-```
-
-##### AND and OR
+#### Logical Operators: $and and $or
 
 *Syntax:* ``{ $and : [{condition1}, {condition2}... ]}`` , ``{ $or : [{condition1}, {condition2}... ]}``
 
@@ -137,6 +119,22 @@ will return:
 
 ```
 (field_a = '1' OR field_b = '1')
+```
+
+##### default behavior: $and
+
+```
+{
+    field_a: 1,
+    field_b: 1,
+    field_c: 1
+}
+```
+
+will return:
+
+```
+field_a = '1' AND field_b = '1' AND field_c = '1'
 ```
 
 #### Comparaison Operators
