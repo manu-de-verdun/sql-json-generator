@@ -3,7 +3,45 @@ var expect = require('chai').expect;
 
 var SQLGenerator = require('../index');
 
-describe('#update', function () {
+describe('#update - json errors', function () {
+
+    var sqlGenerator = new SQLGenerator();
+    var sqlParams;
+
+    it('call without params', function () {
+
+        expect(sqlGenerator.update()).to.be.null;
+
+    });
+
+
+    it('call with missing update param', function () {
+
+        sqlParams = {
+            set: {
+                arquivado: 0,
+                arquivado_codigo: ''
+            }
+        };
+
+        expect(sqlGenerator.update(sqlParams)).to.be.null;
+
+    });
+
+    it('call with missing set param', function () {
+
+        sqlParams = {
+            update: 'table1'
+        };
+
+        expect(sqlGenerator.update(sqlParams)).to.be.null;
+
+    });
+
+});
+
+
+describe('#update - queries', function () {
 
     var sqlGenerator = new SQLGenerator();
     var sqlParams;
@@ -21,6 +59,40 @@ describe('#update', function () {
         };
 
         expectedResult = 'UPDATE `mytable` SET `field_b` = \'1\' WHERE `field_a` = \'1\'';
+
+        sqlGenerator.update(sqlParams).should.equal(expectedResult);
+
+    });
+
+    it('simple update', function () {
+
+        sqlParams = {
+            update: 'mytable',
+            set: {
+                field_b: 1
+            },
+            where: {
+                field_a: 1
+            }
+        };
+
+        expectedResult = 'UPDATE `mytable` SET `field_b` = \'1\' WHERE `field_a` = \'1\'';
+
+        sqlGenerator.update(sqlParams).should.equal(expectedResult);
+
+    });
+
+    it('update without where', function () {
+
+        sqlParams = {
+            update: 'mi_itens_inventarios',
+            set: {
+                arquivado: 0,
+                arquivado_codigo: ''
+            }
+        };
+
+        expectedResult = 'UPDATE `mi_itens_inventarios` SET `arquivado` = \'0\',`arquivado_codigo` = \'\'';
 
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
 

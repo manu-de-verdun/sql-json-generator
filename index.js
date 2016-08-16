@@ -93,6 +93,9 @@ var sqlJsonGenerator = function () {
      */
     this.update = function (queryParams) {
 
+        // test if required query params are provided
+        if ( !queryParams || !queryParams.update || !queryParams.set) return null;
+
         // UPDATE
         var sql = "UPDATE `" + queryParams.update + "`";
 
@@ -106,7 +109,9 @@ var sqlJsonGenerator = function () {
 
         sql += " SET " + setArray.join(',');
 
-        sql += " WHERE " + whereBuilder(queryParams.where, null);
+        if ( queryParams.where ) {
+            sql += " WHERE " + whereBuilder(queryParams.where, null);
+        }
 
         return sql;
 
@@ -119,6 +124,9 @@ var sqlJsonGenerator = function () {
      * @returns {string} SQL Query
      */
     this.insert = function (queryParams, callback) {
+
+        // test if required query params are provided
+        if ( !queryParams || !queryParams.update || !queryParams.set) return null;
 
         // INSERT
         var sql = "UPDATE `" + queryParams.update + "`";
@@ -133,7 +141,9 @@ var sqlJsonGenerator = function () {
 
         sql += " SET " + setArray.join(',');
 
-        sql += " WHERE " + whereBuilder(queryParams.where, null);
+        if ( queryParams.where ) {
+            sql += " WHERE " + whereBuilder(queryParams.where, null);
+        }
 
         return sql;
 
@@ -147,10 +157,15 @@ var sqlJsonGenerator = function () {
      */
     this.delete = function (queryParams, callback) {
 
-        // DELETE
-        var sql = "DELETE FROM `" + queryParams.from + "`";
+        // test if required query params are provided
+        if ( !queryParams || !queryParams.delete ) return null;
 
-        sql += " WHERE " + whereBuilder(queryParams.where, null);
+        // DELETE
+        var sql = "DELETE FROM `" + queryParams.delete + "`";
+
+        if ( queryParams.where ) {
+            sql += " WHERE " + whereBuilder(queryParams.where, null);
+        }
 
         return sql;
 

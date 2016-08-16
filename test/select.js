@@ -8,5 +8,4 @@ describe('#select', function () {
     var sqlGenerator = new SQLGenerator();
     var sqlParams;
 
-
 });

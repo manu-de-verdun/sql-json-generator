@@ -8,10 +8,7 @@ var sqlGenerator = new SQLGenerator();
 var sqlParams = {};
 
 sqlParams = {
-    from: 'mi_itens_inventarios',
-    where: {
-        id_mi_item_inventario: 3
-    }
+    delete: 'loopback_usuarios'
 };
 
 var sqlQuery = sqlGenerator.delete(sqlParams);
