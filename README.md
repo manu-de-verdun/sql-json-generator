@@ -1,3 +1,5 @@
+[![npm version](https://badge.fury.io/js/sql-json-generator.svg)](https://badge.fury.io/js/sql-json-generator)
+
 # sql-json-generator
 
 Generate SQL command from JSON object
@@ -14,12 +16,19 @@ var sqlGenerator = new SQLGenerator();
 ## API
 
 
-### update
+### INSERT
+
+`.insert( queryData )`
+
+The first paramenter contains the data used to produce the SQL query.
+The function returns a string with the SQL.
+
+### UPDATE
 
 `.update( queryData )`
 
-The first paramenter contains the data used to produce the SQL query
-The function returns a string with the SQL
+The first paramenter contains the data used to produce the SQL query.
+The function returns a string with the SQL.
 
 ```
 sqlParams = {
@@ -41,6 +50,29 @@ will return:
 UPDATE  `mytable`  SET `field_b` = '1' WHERE `field_a` = '1'
 ```
 
+### DELETE
+
+`.delete( queryData )`
+
+The first paramenter contains the data used to produce the SQL query.
+The function returns a string with the SQL.
+
+```
+sqlParams = {
+    from: 'mytable',
+    where: {
+        field_a: 1
+    }
+}
+
+sqlGenerator.delete( sqlParams);
+```
+
+will return:
+
+```
+UPDATE  `mytable`  SET `field_b` = '1' WHERE `field_a` = '1'
+```
 
 
 ## Formating queryData

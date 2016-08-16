@@ -1,4 +1,4 @@
-var test = function () {
+var sqlJsonGenerator = function () {
 
     var whereBuilder = function (conditions, parentKey) {
 
@@ -6,10 +6,10 @@ var test = function () {
         var whereArray = [];
         var whereExpression = "";
 
-        console.log('');
-        console.log('whereBuilder');
-        console.log('  conditions: ', conditions);
-        console.log('  parentKey: ' , parentKey);
+        //console.log('');
+        //console.log('whereBuilder');
+        //console.log('  conditions: ', conditions);
+        //console.log('  parentKey: ' , parentKey);
 
 
         whereKeys.forEach(function (key) {
@@ -86,29 +86,77 @@ var test = function () {
         return whereExpression;
     };
 
-
-    this.update = function (data, callback) {
+    /**
+     * Generate an UPDATE command based on params
+     * @param queryParams
+     * @returns {string} SQL Query
+     */
+    this.update = function (queryParams) {
 
         // UPDATE
-        var sql = "UPDATE `" + data.update + "`";
+        var sql = "UPDATE `" + queryParams.update + "`";
 
         // SET
-        var setKeys = Object.keys(data.set);
+        var setKeys = Object.keys(queryParams.set);
         var setArray = [];
 
         setKeys.forEach(function (key) {
-            setArray.push("`" + key + "` = '" + data.set[key] + "'");
+            setArray.push("`" + key + "` = '" + queryParams.set[key] + "'");
         });
 
         sql += " SET " + setArray.join(',');
 
-        sql += " WHERE " + whereBuilder(data.where, null);
+        sql += " WHERE " + whereBuilder(queryParams.where, null);
 
         return sql;
 
-    }
-
-}
+    };
 
 
-module.exports = test;
+    /**
+     * Generate an INSERT command based on params
+     * @param queryParams
+     * @returns {string} SQL Query
+     */
+    this.insert = function (queryParams, callback) {
+
+        // INSERT
+        var sql = "UPDATE `" + queryParams.update + "`";
+
+        // SET
+        var setKeys = Object.keys(queryParams.set);
+        var setArray = [];
+
+        setKeys.forEach(function (key) {
+            setArray.push("`" + key + "` = '" + queryParams.set[key] + "'");
+        });
+
+        sql += " SET " + setArray.join(',');
+
+        sql += " WHERE " + whereBuilder(queryParams.where, null);
+
+        return sql;
+
+    };
+
+
+    /**
+     * Generate an UPDATE command based on params
+     * @param queryParams
+     * @returns {string} SQL Query
+     */
+    this.delete = function (queryParams, callback) {
+
+        // DELETE
+        var sql = "DELETE FROM `" + queryParams.from + "`";
+
+        sql += " WHERE " + whereBuilder(queryParams.where, null);
+
+        return sql;
+
+    };
+
+};
+
+
+module.exports = sqlJsonGenerator;

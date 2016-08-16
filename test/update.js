@@ -3,16 +3,16 @@ var expect = require('chai').expect;
 
 var SQLGenerator = require('../index');
 
-describe('#update', function() {
+describe('#update', function () {
 
     var sqlGenerator = new SQLGenerator();
     var sqlParams;
 
-    it('simple update', function() {
+    it('simple update', function () {
 
         sqlParams = {
             update: 'mytable',
-            set : {
+            set: {
                 field_b: 1
             },
             where: {
@@ -26,11 +26,11 @@ describe('#update', function() {
 
     });
 
-    it('double field update', function() {
+    it('double field update', function () {
 
         sqlParams = {
             update: 'mytable',
-            set : {
+            set: {
                 field_c: 1,
                 field_d: 1
             },
@@ -46,12 +46,11 @@ describe('#update', function() {
     });
 
 
-
-    it('double field update with to where params', function() {
+    it('double field update with to where params', function () {
 
         sqlParams = {
             update: 'mytable',
-            set : {
+            set: {
                 field_c: 1,
                 field_d: 1
             },
@@ -66,7 +65,7 @@ describe('#update', function() {
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
 
-    it('simple $gt', function() {
+    it('simple $gt', function () {
 
         sqlParams = {
             update: 'mytable',
@@ -87,7 +86,7 @@ describe('#update', function() {
     });
 
 
-    it('double $gt', function() {
+    it('double $gt', function () {
 
         sqlParams = {
             update: 'mytable',
@@ -110,7 +109,7 @@ describe('#update', function() {
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
 
-    it('simple $gte', function() {
+    it('simple $gte', function () {
 
         sqlParams = {
             update: 'mytable',
@@ -130,7 +129,7 @@ describe('#update', function() {
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
 
-    it('simple $lt', function() {
+    it('simple $lt', function () {
 
         sqlParams = {
             update: 'mytable',
@@ -150,7 +149,7 @@ describe('#update', function() {
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
 
-    it('simple $lte', function() {
+    it('simple $lte', function () {
 
         sqlParams = {
             update: 'mytable',
@@ -170,7 +169,7 @@ describe('#update', function() {
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
 
-    it('simple $eq', function() {
+    it('simple $eq', function () {
 
         sqlParams = {
             update: 'mytable',
@@ -188,9 +187,10 @@ describe('#update', function() {
         expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` = \'1\'';
 
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
-    });;
+    });
+    ;
 
-    it('simple $ne', function() {
+    it('simple $ne', function () {
 
         sqlParams = {
             update: 'mytable',
@@ -210,7 +210,7 @@ describe('#update', function() {
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
 
-    it('$and', function() {
+    it('$and', function () {
 
         sqlParams = {
             update: 'mytable',
@@ -219,7 +219,7 @@ describe('#update', function() {
                 field_d: 1
             },
             where: {
-                $and : [
+                $and: [
                     {field_a: 1},
                     {field_b: 1}
                 ]
@@ -232,7 +232,7 @@ describe('#update', function() {
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
 
-    it('$or', function() {
+    it('$or', function () {
 
         sqlParams = {
             update: 'mytable',
@@ -241,7 +241,7 @@ describe('#update', function() {
                 field_d: 1
             },
             where: {
-                $or : [
+                $or: [
                     {field_a: 1},
                     {field_b: 1}
                 ]
@@ -255,8 +255,7 @@ describe('#update', function() {
     });
 
 
-
-    it('$or and nested $and and $or', function() {
+    it('$or and nested $and and $or', function () {
 
         sqlParams = {
             update: 'mytable',
@@ -265,16 +264,16 @@ describe('#update', function() {
                 field_d: 1
             },
             where: {
-                $or : [
+                $or: [
                     {
-                        $or : [
+                        $or: [
                             {field_a: 1},
                             {field_b: 1}
                         ]
 
                     },
                     {
-                        $and : [
+                        $and: [
                             {field_c: 1},
                             {field_d: 1}
                         ]
@@ -289,7 +288,7 @@ describe('#update', function() {
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
 
-    it('complex query', function() {
+    it('complex query', function () {
 
         sqlParams = {
             update: 'mytable',
@@ -298,18 +297,18 @@ describe('#update', function() {
                 field_d: 1
             },
             where: {
-                $or : [
+                $or: [
                     {
-                        $or : [
-                            {field_a: { $gte : 8 }},
-                            {field_a: { $lt : 10 }},
+                        $or: [
+                            {field_a: {$gte: 8}},
+                            {field_a: {$lt: 10}},
                         ]
 
                     },
                     {
-                        $and : [
+                        $and: [
                             {field_b: 3.15},
-                            {field_d: { $ne: 'ERR'}}
+                            {field_d: {$ne: 'ERR'}}
                         ]
 
                     }
@@ -323,3 +322,4 @@ describe('#update', function() {
     });
 
 });
+
