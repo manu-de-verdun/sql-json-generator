@@ -32,11 +32,11 @@ The function returns a string with the SQL.
 
 ```
 sqlParams = {
-    update: 'mytable',
-    set : {
+    $update: 'mytable',
+    $set : {
         field_b: 1
     },
-    where: {
+    $where: {
         field_a: 1
     }
 }
@@ -59,8 +59,8 @@ The function returns a string with the SQL.
 
 ```
 sqlParams = {
-    delete: 'mytable',
-    where: {
+    $delete: 'mytable',
+    $where: {
         field_a: 1
     }
 }

@@ -19,7 +19,7 @@ describe('#delete - json errors', function () {
     it('call with missing delete param', function () {
 
         sqlParams = {
-            where: {
+            $where: {
                 id_mi_item_inventario: 3
             }
         };
@@ -40,8 +40,8 @@ describe('#delete - queries', function () {
     it('simple delete', function () {
 
         sqlParams = {
-            delete: 'mi_itens_inventarios',
-            where: {
+            $delete: 'mi_itens_inventarios',
+            $where: {
                 id_mi_item_inventario: 3
             }
         };
@@ -55,7 +55,7 @@ describe('#delete - queries', function () {
     it('delete without where', function () {
 
         sqlParams = {
-            delete: 'loopback_usuarios'
+            $delete: 'loopback_usuarios'
         };
 
         expectedResult = 'DELETE FROM `loopback_usuarios`';

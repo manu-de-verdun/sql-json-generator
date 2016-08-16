@@ -18,7 +18,7 @@ describe('#update - json errors', function () {
     it('call with missing update param', function () {
 
         sqlParams = {
-            set: {
+            $set: {
                 arquivado: 0,
                 arquivado_codigo: ''
             }
@@ -31,7 +31,7 @@ describe('#update - json errors', function () {
     it('call with missing set param', function () {
 
         sqlParams = {
-            update: 'table1'
+            $update: 'table1'
         };
 
         expect(sqlGenerator.update(sqlParams)).to.be.null;
@@ -49,11 +49,11 @@ describe('#update - queries', function () {
     it('simple update', function () {
 
         sqlParams = {
-            update: 'mytable',
-            set: {
+            $update: 'mytable',
+            $set: {
                 field_b: 1
             },
-            where: {
+            $where: {
                 field_a: 1
             }
         };
@@ -67,11 +67,11 @@ describe('#update - queries', function () {
     it('simple update', function () {
 
         sqlParams = {
-            update: 'mytable',
-            set: {
+            $update: 'mytable',
+            $set: {
                 field_b: 1
             },
-            where: {
+            $where: {
                 field_a: 1
             }
         };
@@ -85,8 +85,8 @@ describe('#update - queries', function () {
     it('update without where', function () {
 
         sqlParams = {
-            update: 'mi_itens_inventarios',
-            set: {
+            $update: 'mi_itens_inventarios',
+            $set: {
                 arquivado: 0,
                 arquivado_codigo: ''
             }
@@ -101,12 +101,12 @@ describe('#update - queries', function () {
     it('double field update', function () {
 
         sqlParams = {
-            update: 'mytable',
-            set: {
+            $update: 'mytable',
+            $set: {
                 field_c: 1,
                 field_d: 1
             },
-            where: {
+            $where: {
                 field_a: 1
             }
         };
@@ -121,12 +121,12 @@ describe('#update - queries', function () {
     it('double field update with to where params', function () {
 
         sqlParams = {
-            update: 'mytable',
-            set: {
+            $update: 'mytable',
+            $set: {
                 field_c: 1,
                 field_d: 1
             },
-            where: {
+            $where: {
                 field_a: 1,
                 field_b: 1
             }
@@ -140,12 +140,12 @@ describe('#update - queries', function () {
     it('simple $gt', function () {
 
         sqlParams = {
-            update: 'mytable',
-            set: {
+            $update: 'mytable',
+            $set: {
                 field_c: 1,
                 field_d: 1
             },
-            where: {
+            $where: {
                 field_a: {
                     $gt: 1
                 }
@@ -161,12 +161,12 @@ describe('#update - queries', function () {
     it('double $gt', function () {
 
         sqlParams = {
-            update: 'mytable',
-            set: {
+            $update: 'mytable',
+            $set: {
                 field_c: 1,
                 field_d: 1
             },
-            where: {
+            $where: {
                 field_a: {
                     $gt: 1
                 },
@@ -184,12 +184,12 @@ describe('#update - queries', function () {
     it('simple $gte', function () {
 
         sqlParams = {
-            update: 'mytable',
-            set: {
+            $update: 'mytable',
+            $set: {
                 field_c: 1,
                 field_d: 1
             },
-            where: {
+            $where: {
                 field_a: {
                     $gte: 1
                 }
@@ -204,12 +204,12 @@ describe('#update - queries', function () {
     it('simple $lt', function () {
 
         sqlParams = {
-            update: 'mytable',
-            set: {
+            $update: 'mytable',
+            $set: {
                 field_c: 1,
                 field_d: 1
             },
-            where: {
+            $where: {
                 field_a: {
                     $lt: 1
                 }
@@ -224,12 +224,12 @@ describe('#update - queries', function () {
     it('simple $lte', function () {
 
         sqlParams = {
-            update: 'mytable',
-            set: {
+            $update: 'mytable',
+            $set: {
                 field_c: 1,
                 field_d: 1
             },
-            where: {
+            $where: {
                 field_a: {
                     $lte: 1
                 }
@@ -244,12 +244,12 @@ describe('#update - queries', function () {
     it('simple $eq', function () {
 
         sqlParams = {
-            update: 'mytable',
-            set: {
+            $update: 'mytable',
+            $set: {
                 field_c: 1,
                 field_d: 1
             },
-            where: {
+            $where: {
                 field_a: {
                     $eq: 1
                 }
@@ -265,12 +265,12 @@ describe('#update - queries', function () {
     it('simple $ne', function () {
 
         sqlParams = {
-            update: 'mytable',
-            set: {
+            $update: 'mytable',
+            $set: {
                 field_c: 1,
                 field_d: 1
             },
-            where: {
+            $where: {
                 field_a: {
                     $ne: 1
                 }
@@ -285,12 +285,12 @@ describe('#update - queries', function () {
     it('$and', function () {
 
         sqlParams = {
-            update: 'mytable',
-            set: {
+            $update: 'mytable',
+            $set: {
                 field_c: 1,
                 field_d: 1
             },
-            where: {
+            $where: {
                 $and: [
                     {field_a: 1},
                     {field_b: 1}
@@ -307,12 +307,12 @@ describe('#update - queries', function () {
     it('$or', function () {
 
         sqlParams = {
-            update: 'mytable',
-            set: {
+            $update: 'mytable',
+            $set: {
                 field_c: 1,
                 field_d: 1
             },
-            where: {
+            $where: {
                 $or: [
                     {field_a: 1},
                     {field_b: 1}
@@ -330,12 +330,12 @@ describe('#update - queries', function () {
     it('$or and nested $and and $or', function () {
 
         sqlParams = {
-            update: 'mytable',
-            set: {
+            $update: 'mytable',
+            $set: {
                 field_c: 1,
                 field_d: 1
             },
-            where: {
+            $where: {
                 $or: [
                     {
                         $or: [
@@ -363,12 +363,12 @@ describe('#update - queries', function () {
     it('complex query', function () {
 
         sqlParams = {
-            update: 'mytable',
-            set: {
+            $update: 'mytable',
+            $set: {
                 field_c: 1,
                 field_d: 1
             },
-            where: {
+            $where: {
                 $or: [
                     {
                         $or: [

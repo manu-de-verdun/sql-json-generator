@@ -94,23 +94,23 @@ var sqlJsonGenerator = function () {
     this.update = function (queryParams) {
 
         // test if required query params are provided
-        if ( !queryParams || !queryParams.update || !queryParams.set) return null;
+        if ( !queryParams || !queryParams.$update || !queryParams.$set) return null;
 
         // UPDATE
-        var sql = "UPDATE `" + queryParams.update + "`";
+        var sql = "UPDATE `" + queryParams.$update + "`";
 
         // SET
-        var setKeys = Object.keys(queryParams.set);
+        var setKeys = Object.keys(queryParams.$set);
         var setArray = [];
 
         setKeys.forEach(function (key) {
-            setArray.push("`" + key + "` = '" + queryParams.set[key] + "'");
+            setArray.push("`" + key + "` = '" + queryParams.$set[key] + "'");
         });
 
         sql += " SET " + setArray.join(',');
 
-        if ( queryParams.where ) {
-            sql += " WHERE " + whereBuilder(queryParams.where, null);
+        if ( queryParams.$where ) {
+            sql += " WHERE " + whereBuilder(queryParams.$where, null);
         }
 
         return sql;
@@ -126,23 +126,23 @@ var sqlJsonGenerator = function () {
     this.insert = function (queryParams, callback) {
 
         // test if required query params are provided
-        if ( !queryParams || !queryParams.update || !queryParams.set) return null;
+        if ( !queryParams || !queryParams.$insert || !queryParams.$values) return null;
 
         // INSERT
-        var sql = "UPDATE `" + queryParams.update + "`";
+        var sql = "INSERT INTO `" + queryParams.$insert + "`";
 
         // SET
-        var setKeys = Object.keys(queryParams.set);
+        var setKeys = Object.keys(queryParams.$set);
         var setArray = [];
 
         setKeys.forEach(function (key) {
-            setArray.push("`" + key + "` = '" + queryParams.set[key] + "'");
+            setArray.push("`" + key + "` = '" + queryParams.$set[key] + "'");
         });
 
         sql += " SET " + setArray.join(',');
 
-        if ( queryParams.where ) {
-            sql += " WHERE " + whereBuilder(queryParams.where, null);
+        if ( queryParams.$where ) {
+            sql += " WHERE " + whereBuilder(queryParams.$where, null);
         }
 
         return sql;
@@ -158,13 +158,13 @@ var sqlJsonGenerator = function () {
     this.delete = function (queryParams, callback) {
 
         // test if required query params are provided
-        if ( !queryParams || !queryParams.delete ) return null;
+        if ( !queryParams || !queryParams.$delete ) return null;
 
         // DELETE
-        var sql = "DELETE FROM `" + queryParams.delete + "`";
+        var sql = "DELETE FROM `" + queryParams.$delete + "`";
 
-        if ( queryParams.where ) {
-            sql += " WHERE " + whereBuilder(queryParams.where, null);
+        if ( queryParams.$where ) {
+            sql += " WHERE " + whereBuilder(queryParams.$where, null);
         }
 
         return sql;

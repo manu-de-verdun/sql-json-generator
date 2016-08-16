@@ -8,10 +8,13 @@ var sqlGenerator = new SQLGenerator();
 var sqlParams = {};
 
 sqlParams = {
-    delete: 'loopback_usuarios'
+    delete: 'mi_itens_inventarios',
+    values: {
+
+    }
 };
 
-var sqlQuery = sqlGenerator.delete(sqlParams);
+var sqlQuery = sqlGenerator.insert(sqlParams);
 
 console.log(' ');
 console.log('Query: ', sqlQuery);
