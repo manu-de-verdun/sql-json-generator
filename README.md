@@ -20,17 +20,15 @@ var sqlGenerator = new SQLGenerator();
 
 `.insert( queryData )`
 
-The first paramenter contains the data used to produce the SQL query.
-The function returns a string with the SQL.
+The first parameter contains the data used to produce the SQL query.
+The function returns a string with the SQL. In case of error, will return ``null``
 
 ```
 sqlParams = {
-    $update: 'mytable',
-    $set : {
+    $insert: 'mytable',
+    $values : {
+        field_a: 1,
         field_b: 1
-    },
-    $where: {
-        field_a: 1
     }
 }
 
@@ -40,15 +38,15 @@ sqlGenerator.update( sqlParams);
 will return:
 
 ```
-UPDATE  `mytable`  SET `field_b` = '1' WHERE `field_a` = '1'
+INSERT INTO `mytable` (`field_a`,`field_b`) VALUES ('1','1')
 ```
 
 ### UPDATE
 
 `.update( queryData )`
 
-The first paramenter contains the data used to produce the SQL query.
-The function returns a string with the SQL.
+The first parameter contains the data used to produce the SQL query.
+The function returns a string with the SQL. In case of error, will return ``null``
 
 ```
 sqlParams = {
@@ -70,12 +68,14 @@ will return:
 UPDATE  `mytable`  SET `field_b` = '1' WHERE `field_a` = '1'
 ```
 
+> ``$where`` parameter is optional
+
 ### DELETE
 
 `.delete( queryData )`
 
 The first paramenter contains the data used to produce the SQL query.
-The function returns a string with the SQL.
+The function returns a string with the SQL. In case of error, will return ``null``
 
 ```
 sqlParams = {
@@ -94,6 +94,7 @@ will return:
 UPDATE  `mytable`  SET `field_b` = '1' WHERE `field_a` = '1'
 ```
 
+> ``$where`` parameter is optional
 
 ## Formating queryData
 

@@ -8,9 +8,10 @@ var sqlGenerator = new SQLGenerator();
 var sqlParams = {};
 
 sqlParams = {
-    $insert: 'table_1',
-    $values: {
-        field_a: 1
+    $insert: 'mytable',
+    $values : {
+        field_a: 1,
+        field_b: 1
     }
 };
 
