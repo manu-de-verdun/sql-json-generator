@@ -12,11 +12,13 @@ sqlParams = {
         $from: 'table1',
         $fields: [
             {
-                $field: 'column_a'
+                $field: 'column_a',
+                $as: "new_column_a"
             },
             {
-                $field: 'column_b'
-            },
+                $field: 'column_b',
+                $as: "new_column_b"
+            }
         ]
     }
 };

@@ -36,7 +36,7 @@ describe('#select - queries', function () {
     var sqlParams;
 
 
-    it('simple field  select', function () {
+    it('simple field', function () {
 
         sqlParams = {
             $select : {
@@ -56,7 +56,7 @@ describe('#select - queries', function () {
     });
 
 
-    it('multiple fields select', function () {
+    it('multiple fields', function () {
 
         sqlParams = {
             $select : {
@@ -81,7 +81,7 @@ describe('#select - queries', function () {
     });
 
 
-    it('multiple wrapped fields select', function () {
+    it('multiple wrapped fields', function () {
 
         sqlParams = {
             $select : {
@@ -92,12 +92,36 @@ describe('#select - queries', function () {
                     },
                     {
                         $field: 'column_b'
-                    },
+                    }
                 ]
             }
         };
 
         expectedResult = 'SELECT `table1`.`column_a`, `table1`.`column_b` FROM `table1`';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+    it('multiple $as fields', function () {
+
+        sqlParams = {
+            $select : {
+                $from: 'table1',
+                $fields: [
+                    {
+                        $field: 'column_a',
+                        $as: "new_column_a"
+                    },
+                    {
+                        $field: 'column_b',
+                        $as: "new_column_b"
+                    }
+                ]
+            }
+        };
+
+        expectedResult = 'SELECT `table1`.`column_a` AS new_column_a, `table1`.`column_b` AS new_column_b FROM `table1`';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
