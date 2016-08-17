@@ -3,7 +3,7 @@ var expect = require('chai').expect;
 
 var SQLGenerator = require('../index');
 
-describe('#insert - errors', function () {
+describe('#insert - json errors', function () {
 
     var sqlGenerator = new SQLGenerator();
     var sqlParams;
