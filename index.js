@@ -99,12 +99,30 @@ var sqlJsonGenerator = function () {
      * @param conditions
      * @param parentKey
      */
-    var selectBuilder = function (conditions, parentKey) {
+    var joinBuilder = function (joinData ) {
 
-        console.log('');
-        console.log('selectBuilder');
-        console.log('  conditions: ', conditions);
-        console.log('  parentKey: ' , parentKey);
+        var sqlJoin ='';
+
+        var joinKeys = Object.keys(joinData);
+
+        if ( joinKeys.indexOf('$inner') >= 0 ) {
+                sqlJoin += 'INNER JOIN `' + joinData['$inner'] + '` ';
+        }
+
+        if ( joinKeys.indexOf('$using') >= 0 ) {
+            sqlJoin += 'USING(`' + joinData['$using'] + '`)';
+        }
+
+        return sqlJoin;
+
+    };
+
+    var selectBuilder = function (conditions) {
+
+        //console.log('');
+        //console.log('selectBuilder');
+        //console.log('  conditions: ', conditions);
+
 
         var currentTable;
         var selectKeys = Object.keys(conditions);
@@ -119,6 +137,11 @@ var sqlJsonGenerator = function () {
             selectObject.from.push("FROM `" + currentTable + "`");
         }
 
+        if ( selectKeys.indexOf('$inner') >= 0 ) {
+            currentTable = conditions['$inner'];
+            selectObject.from.push( joinBuilder(conditions ));
+        }
+
         // Process all provided fields
         conditions['$fields'].forEach( function ( field ) {
 
@@ -127,22 +150,32 @@ var sqlJsonGenerator = function () {
 
                 var currentField = {};
 
-
                 // if it is an object, analyze it
                 var fieldKeys = Object.keys(field);
 
-                if ( fieldKeys.indexOf('$field')>= 0 ) {
-                    currentField.name = field['$field'];
+                // If it is a special operation that needs recursive call ( $inner, $left, $right )
+                if ( fieldKeys.indexOf('$inner')>= 0 ) {
+                    var recursiveSelectObject = selectBuilder( field );
+                    recursiveSelectObject.select.forEach( function ( item ) {
+                        selectObject.select.push(item);
+                    });
+                    recursiveSelectObject.from.forEach( function ( item ) {
+                        selectObject.from.push(item);
+                    });
                 }
+                else {
+                    if ( fieldKeys.indexOf('$field')>= 0 ) {
+                        currentField.name = field['$field'];
+                    }
 
-                if ( fieldKeys.indexOf('$as')>= 0 ) {
-                    currentField.as = field['$as'];
+                    if ( fieldKeys.indexOf('$as')>= 0 ) {
+                        currentField.as = field['$as'];
+                    }
+
+                    currentField.sql = "`" + currentTable + "`.`" + currentField.name + "`";
+                    currentField.sql += (currentField.as) ? " AS " + currentField.as : '';
+                    selectObject.select.push( currentField.sql );
                 }
-
-                currentField.sql = "`" + currentTable + "`.`" + currentField.name + "`";
-                currentField.sql += (currentField.as) ? " AS " + currentField.as : '';
-                selectObject.select.push( currentField.sql );
-
             }
             else {
                 // raw field, add it to the select Object
@@ -264,7 +297,7 @@ var sqlJsonGenerator = function () {
         var selectObject= selectBuilder( queryParams.$select );
 
         sql += " " + selectObject.select.join(', ');
-        sql += " " + selectObject.from.join(', ');
+        sql += " " + selectObject.from.join(' ');
 
         // WHERE
         if ( queryParams.$where ) {

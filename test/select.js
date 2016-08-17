@@ -123,6 +123,105 @@ describe('#select - queries', function () {
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
 
+    it('$inner $using', function () {
+
+        sqlParams = {
+            $select : {
+                $from : 'setores',
+                $fields : [
+                    'id_setor',
+                    'nome',
+                    {
+                        $inner : 'unidades',
+                        $using : 'id_unidade',
+                        $fields : [
+                            'id_unidade',
+                            'nome'
+                        ]
+                    }
+                ]
+            }
+        };
+
+        expectedResult = 'SELECT `setores`.`id_setor`, `setores`.`nome`, `unidades`.`id_unidade`, `unidades`.`nome` FROM `setores` INNER JOIN `unidades` USING(`id_unidade`)';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+    it('$inner $using $as', function () {
+
+        sqlParams = {
+            $select : {
+                $from : 'setores',
+                $fields : [
+                    'id_setor',
+                    {
+                        $field: 'nome',
+                        $as: 'setor'
+                    },
+                    {
+                        $inner : 'unidades',
+                        $using : 'id_unidade',
+                        $fields : [
+                            'id_unidade',
+                            {
+                                $field: 'nome',
+                                $as: 'unidade'
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        expectedResult = 'SELECT `setores`.`id_setor`, `setores`.`nome` AS setor, `unidades`.`id_unidade`, `unidades`.`nome` AS unidade FROM `setores` INNER JOIN `unidades` USING(`id_unidade`)';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+    it('nested $inner $using $as', function () {
+
+        sqlParams = {
+            $select : {
+                $from : 'setores',
+                $fields : [
+                    'id_setor',
+                    {
+                        $field: 'nome',
+                        $as: 'setor'
+                    },
+                    {
+                        $inner : 'unidades',
+                        $using : 'id_unidade',
+                        $fields : [
+                            'id_unidade',
+                            {
+                                $field: 'nome',
+                                $as: 'unidade'
+                            },
+                            {
+                                $inner : 'entidades',
+                                $using : 'id_entidade',
+                                $fields : [
+                                    'id_entidade',
+                                    {
+                                        $field: 'sigla',
+                                        $as: 'entidade'
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            }
+        };
+
+        expectedResult = 'SELECT `setores`.`id_setor`, `setores`.`nome` AS setor, `unidades`.`id_unidade`, `unidades`.`nome` AS unidade, `entidades`.`id_entidade`, `entidades`.`sigla` AS entidade FROM `setores` INNER JOIN `unidades` USING(`id_unidade`) INNER JOIN `entidades` USING(`id_entidade`)';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
 });
 
 
