@@ -63,10 +63,7 @@ describe('#select - queries', function () {
                 $from : 'table1',
                 $fields : [
                     'field_a',
-                    {
-                        $field : 'field_b',
-                        $as : 'newFieldName'
-                    },
+                    'field_b',
                     'field_c'
                 ]
             },
@@ -75,7 +72,7 @@ describe('#select - queries', function () {
             }
         };
 
-        expectedResult = 'SELECT `table1`.`field_a`, `table1`.`field_b` AS newFieldName, `table1`.`field_c` FROM `table1` WHERE `field_d` = \'1\'';
+        expectedResult = 'SELECT `table1`.`field_a`, `table1`.`field_b`, `table1`.`field_c` FROM `table1` WHERE `field_d` = \'1\'';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });

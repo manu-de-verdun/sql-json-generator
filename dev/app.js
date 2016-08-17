@@ -9,16 +9,11 @@ var sqlParams = {};
 
 sqlParams = {
     $select : {
-        $from: 'table1',
-        $fields: [
-            {
-                $field: 'column_a',
-                $as: "new_column_a"
-            },
-            {
-                $field: 'column_b',
-                $as: "new_column_b"
-            }
+        $from : 'table1',
+        $fields : [
+            'field_a',
+            'field_b',
+            'field_c'
         ]
     }
 };
