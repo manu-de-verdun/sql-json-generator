@@ -9,33 +9,16 @@ var sqlParams = {};
 
 sqlParams = {
     $select : {
-        $from : 'setores',
+        $from : 'table1',
         $fields : [
-            'id_setor',
+            'column1a',
+            'column1b',
             {
-                $field: 'nome',
-                $as: 'setor'
-            },
-            {
-                $inner : 'unidades',
-                $using : 'id_unidade',
+                $inner : 'table2',
+                $using : 'column2a',
                 $fields : [
-                    'id_unidade',
-                    {
-                        $field: 'nome',
-                        $as: 'unidade'
-                    },
-                    {
-                        $inner : 'entidades',
-                        $using : 'id_entidade',
-                        $fields : [
-                            'id_entidade',
-                            {
-                                $field: 'sigla',
-                                $as: 'entidade'
-                            }
-                        ]
-                    }
+                    'column2a',
+                    'column2b',
                 ]
             }
         ]

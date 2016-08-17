@@ -197,7 +197,30 @@ SELECT `table1`.`column_a` AS column_a_as, `table1`.`column_b` FROM `table1`
 ```
 
 
+### $inner : joins
 
+```
+{
+    $from : 'table1',
+    $fields : [
+        'column1a',
+        'column1b',
+        {
+            $inner : 'table2',
+            $using : 'column2a',
+            $fields : [
+                'column2a',
+                'column2b',
+            ]
+        }
+    ]
+}
+```
+will return:
+
+```
+SELECT `table1`.`column1a`, `table1`.`column1b`, `table2`.`column2a`, `table2`.`column2b` FROM `table1` INNER JOIN `table2` USING(`column2a`)
+```
 
 
 ### $where
