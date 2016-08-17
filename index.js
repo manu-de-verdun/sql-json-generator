@@ -1,5 +1,11 @@
 var sqlJsonGenerator = function () {
 
+    /**
+     * Building SQL WHERE conditions
+     * @param conditions
+     * @param parentKey
+     * @returns {string}
+     */
     var whereBuilder = function (conditions, parentKey) {
 
         var whereKeys = Object.keys(conditions);
@@ -84,6 +90,42 @@ var sqlJsonGenerator = function () {
         whereExpression += whereArray.join(' AND ');
 
         return whereExpression;
+    };
+
+    /**
+     * Building SELECT expression
+     * @param conditions
+     * @param parentKey
+     */
+    var selectBuilder = function (conditions, parentKey) {
+
+        console.log('');
+        console.log('selectBuilder');
+        console.log('  conditions: ', conditions);
+        console.log('  parentKey: ' , parentKey);
+
+        var selectKeys = Object.keys(conditions);
+        var selectObject = {
+            select : [],
+            from: []
+        };
+
+        selectKeys.forEach(function (key) {
+
+            switch (key) {
+                case '$from' :
+                    selectObject.from.push("FROM `" + conditions[key] + "`");
+                    break;
+
+                case '$fields' :
+                    conditions[key].forEach( function ( field ) {
+                        selectObject.select.push("`" + field + "`");
+                    });
+                    break;
+            };
+        });
+
+        return selectObject
     };
 
     /**
@@ -178,18 +220,23 @@ var sqlJsonGenerator = function () {
 
 
     /**
-     * Generate an UPDATE command based on params
+     * Generate an SELECT command based on params
      * @param queryParams
      * @returns {string} SQL Query
      */
     this.select = function (queryParams, callback) {
 
         // test if required query params are provided
-        if ( !queryParams || !queryParams.$from  ) return null;
+        if ( !queryParams || !queryParams.$select  ) return null;
 
-        // DELETE
-        var sql = "DELETE FROM `" + queryParams.$delete + "`";
+        // SELECT
+        var sql = "SELECT";
+        var selectObject= selectBuilder( queryParams.$select );
 
+        sql += " " + selectObject.select.join(', ');
+        sql += " " + selectObject.from.join(', ');
+
+        // WHERE
         if ( queryParams.$where ) {
             sql += " WHERE " + whereBuilder(queryParams.$where, null);
         }
