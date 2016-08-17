@@ -140,7 +140,7 @@ var sqlJsonGenerator = function () {
                 }
 
                 currentField.sql = "`" + currentTable + "`.`" + currentField.name + "`";
-                currentField.sql += (currentField.as) ? " AS " + currentField.as : null;
+                currentField.sql += (currentField.as) ? " AS " + currentField.as : '';
                 selectObject.select.push( currentField.sql );
 
             }

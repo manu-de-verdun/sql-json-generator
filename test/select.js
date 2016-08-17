@@ -80,6 +80,28 @@ describe('#select - queries', function () {
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
 
+
+    it('multiple wrapped fields select', function () {
+
+        sqlParams = {
+            $select : {
+                $from: 'table1',
+                $fields: [
+                    {
+                        $field: 'column_a'
+                    },
+                    {
+                        $field: 'column_b'
+                    },
+                ]
+            }
+        };
+
+        expectedResult = 'SELECT `table1`.`column_a`, `table1`.`column_b` FROM `table1`';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
 });
 
 

@@ -9,18 +9,15 @@ var sqlParams = {};
 
 sqlParams = {
     $select : {
-        $from : 'table1',
-        $fields : [
-            'field_a',
+        $from: 'table1',
+        $fields: [
             {
-                $field : 'field_b',
-                $as : 'newFieldName'
+                $field: 'column_a'
             },
-            'field_c'
+            {
+                $field: 'column_b'
+            },
         ]
-    },
-    $where : {
-        field_d: 1
     }
 };
 
