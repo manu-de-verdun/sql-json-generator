@@ -92,6 +92,8 @@ var sqlJsonGenerator = function () {
         return whereExpression;
     };
 
+
+
     /**
      * Building SELECT expression
      * @param conditions
@@ -111,18 +113,50 @@ var sqlJsonGenerator = function () {
             from: []
         };
 
-
+        // Tests the conditions object keys to see what action is required (from, join, etc...)
         if ( selectKeys.indexOf('$from') >= 0 ) {
             currentTable = conditions['$from'];
             selectObject.from.push("FROM `" + currentTable + "`");
         }
 
+        // Process all provided fields
         conditions['$fields'].forEach( function ( field ) {
-            selectObject.select.push("`" + currentTable + "`.`" + field + "`");
+
+
+            if ( typeof field === 'object')  {
+
+                var currentField = {};
+
+
+                // if it is an object, analyze it
+                var fieldKeys = Object.keys(field);
+
+                if ( fieldKeys.indexOf('$field')>= 0 ) {
+                    currentField.name = field['$field'];
+                }
+
+                if ( fieldKeys.indexOf('$as')>= 0 ) {
+                    currentField.as = field['$as'];
+                }
+
+                currentField.sql = "`" + currentTable + "`.`" + currentField.name + "`";
+                currentField.sql += (currentField.as) ? " AS " + currentField.as : null;
+                selectObject.select.push( currentField.sql );
+
+            }
+            else {
+                // raw field, add it to the select Object
+                selectObject.select.push("`" + currentTable + "`.`" + field + "`");
+            }
+
         });
 
         return selectObject
     };
+
+
+
+
 
     /**
      * Generate an UPDATE command based on params

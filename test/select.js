@@ -36,14 +36,37 @@ describe('#select - queries', function () {
     var sqlParams;
 
 
-    it('simple select', function () {
+    it('simple field  select', function () {
+
+        sqlParams = {
+            $select : {
+                $from : 'table1',
+                $fields : [
+                    'field_a'
+                ]
+            },
+            $where : {
+                field_d: 1
+            }
+        };
+
+        expectedResult = 'SELECT `table1`.`field_a` FROM `table1` WHERE `field_d` = \'1\'';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+    it('multiple fields select', function () {
 
         sqlParams = {
             $select : {
                 $from : 'table1',
                 $fields : [
                     'field_a',
-                    'field_b',
+                    {
+                        $field : 'field_b',
+                        $as : 'newFieldName'
+                    },
                     'field_c'
                 ]
             },
@@ -52,9 +75,15 @@ describe('#select - queries', function () {
             }
         };
 
-        expectedResult = 'SELECT `table1`.`field_a`, `table1`.`field_b`, `table1`.`field_c` FROM `table1` WHERE `field_d` = \'1\'';
+        expectedResult = 'SELECT `table1`.`field_a`, `table1`.`field_b` AS newFieldName, `table1`.`field_c` FROM `table1` WHERE `field_d` = \'1\'';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
 
 });
+
+
+
+
+
+
