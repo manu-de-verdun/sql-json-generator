@@ -39,24 +39,20 @@ describe('#select - queries', function () {
     it('simple select', function () {
 
         sqlParams = {
-            $select: {
-                $from: 'usuarios',
-                $fields: [
-                    'id_usuario',
-                    'nome',
-                    'sobrenome',
-                    'login',
-                    'admin'
+            $select : {
+                $from : 'table1',
+                $fields : [
+                    'field_a',
+                    'field_b',
+                    'field_c'
                 ]
             },
-            $where: {
-                login: 'admin',
-                senha: '123456',
-                ativo: 1
+            $where : {
+                field_d: 1
             }
         };
 
-        expectedResult = 'SELECT `id_usuario`, `nome`, `sobrenome`, `login`, `admin` FROM `usuarios` WHERE `login` = \'admin\' AND `senha` = \'123456\' AND `ativo` = \'1\'';
+        expectedResult = 'SELECT `table1`.`field_a`, `table1`.`field_b`, `table1`.`field_c` FROM `table1` WHERE `field_d` = \'1\'';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });

@@ -15,6 +15,37 @@ var sqlGenerator = new SQLGenerator();
 
 ## API
 
+### SELECT
+
+`.select( queryData )`
+
+The first parameter contains the data used to produce the SQL query.
+The function returns a string with the SQL. In case of error, will return ``null``
+
+```
+sqlParams = {
+    $select : {
+        $from : 'table1',
+        $fields : [
+            'field_a',
+            'field_b',
+            'field_c'
+        ]
+    },
+    $where : {
+        field_d: 1
+    }
+}
+
+sqlGenerator.update( sqlParams);
+```
+
+will return:
+
+```
+SELECT `field_a`, `field_b`, `field_c` FROM `table1` WHERE `field_d` = '1'
+```
+
 
 ### INSERT
 
@@ -98,6 +129,7 @@ UPDATE  `mytable`  SET `field_b` = '1' WHERE `field_a` = '1'
 
 ## Formating queryData
 
+### $select
 
 ### $where
 

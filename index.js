@@ -104,25 +104,21 @@ var sqlJsonGenerator = function () {
         console.log('  conditions: ', conditions);
         console.log('  parentKey: ' , parentKey);
 
+        var currentTable;
         var selectKeys = Object.keys(conditions);
         var selectObject = {
             select : [],
             from: []
         };
 
-        selectKeys.forEach(function (key) {
 
-            switch (key) {
-                case '$from' :
-                    selectObject.from.push("FROM `" + conditions[key] + "`");
-                    break;
+        if ( selectKeys.indexOf('$from') >= 0 ) {
+            currentTable = conditions['$from'];
+            selectObject.from.push("FROM `" + currentTable + "`");
+        }
 
-                case '$fields' :
-                    conditions[key].forEach( function ( field ) {
-                        selectObject.select.push("`" + field + "`");
-                    });
-                    break;
-            };
+        conditions['$fields'].forEach( function ( field ) {
+            selectObject.select.push("`" + currentTable + "`.`" + field + "`");
         });
 
         return selectObject

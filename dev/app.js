@@ -9,19 +9,15 @@ var sqlParams = {};
 
 sqlParams = {
     $select : {
-        $from : 'usuarios',
+        $from : 'table1',
         $fields : [
-            'id_usuario',
-            'nome',
-            'sobrenome',
-            'login',
-            'admin'
+            'field_a',
+            'field_b',
+            'field_c'
         ]
     },
     $where : {
-        login: 'admin',
-        senha: '123456',
-        ativo: 1
+        field_d: 1
     }
 };
 
