@@ -1,4 +1,4 @@
-var sqlJsonGenerator = function () {
+var sqlJsonGenerator = function ( debug ) {
 
     /**
      * Building SQL WHERE conditions
@@ -12,10 +12,13 @@ var sqlJsonGenerator = function () {
         var whereArray = [];
         var whereExpression = "";
 
-        //console.log('');
-        //console.log('whereBuilder');
-        //console.log('  conditions: ', conditions);
-        //console.log('  parentKey: ' , parentKey);
+        if (debug) {
+            console.log('');
+            console.log('whereBuilder');
+            console.log('  conditions: ', conditions);
+            console.log('  parentKey: ' , parentKey);
+            console.log('  inheritedTable: ' , inheritedTable);
+        }
 
 
         whereKeys.forEach(function (key) {
@@ -124,9 +127,11 @@ var sqlJsonGenerator = function () {
 
     var selectBuilder = function (conditions) {
 
-        //console.log('');
-        //console.log('selectBuilder');
-        //console.log('  conditions: ', conditions);
+        if (debug) {
+            console.log('');
+            console.log('selectBuilder');
+            console.log('  conditions: ', conditions);
+        }
 
 
         var currentTable;
@@ -167,11 +172,16 @@ var sqlJsonGenerator = function () {
                 // If it is a special operation that needs recursive call ( $inner, $left, $right )
                 if ( fieldKeys.indexOf('$inner')>= 0 ) {
                     var recursiveSelectObject = selectBuilder( field );
+
+                    //After recursive call, add itens from recursive call into the current object
                     recursiveSelectObject.select.forEach( function ( item ) {
                         selectObject.select.push(item);
                     });
                     recursiveSelectObject.from.forEach( function ( item ) {
                         selectObject.from.push(item);
+                    });
+                    recursiveSelectObject.where.forEach( function ( item ) {
+                        selectObject.where.push(item);
                     });
                 }
                 else {
@@ -311,7 +321,7 @@ var sqlJsonGenerator = function () {
         sql += " " + selectObject.from.join(' ');
 
         if ( selectObject.where.length > 0 ) {
-            sql += " WHERE " + selectObject.where.join('AND ');
+            sql += " WHERE " + selectObject.where.join(' AND ');
         }
 
         return sql;

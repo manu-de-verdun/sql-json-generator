@@ -196,6 +196,26 @@ will return:
 SELECT `table1`.`column_a` AS column_a_as, `table1`.`column_b` FROM `table1`
 ```
 
+#### $where
+
+```
+{
+    $from : 'table1',
+    $fields : [
+        'column_a',
+        'column_b'
+    ],
+    $where : {
+        'column_c' : 1
+    }
+}
+```
+will return:
+
+```
+SELECT `table1`.`column_a`, `table1`.`column_b` FROM `table1` WHERE `table1`.`column_c` = 1
+```
+
 
 ### $inner : joins
 

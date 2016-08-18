@@ -4,7 +4,7 @@
 var SQLGenerator = require('../index');
 
 
-var sqlGenerator = new SQLGenerator();
+var sqlGenerator = new SQLGenerator(true);
 var sqlParams = {};
 
 sqlParams = {
@@ -19,7 +19,10 @@ sqlParams = {
                 $fields : [
                     'id_unidade',
                     'nome'
-                ]
+                ],
+                $where: {
+                    ativo: 1
+                }
             }
         ],
         $where: {
