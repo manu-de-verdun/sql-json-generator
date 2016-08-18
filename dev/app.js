@@ -9,25 +9,15 @@ var sqlParams = {};
 
 sqlParams = {
     $select : {
-        $from : 'setores',
+        $from : 'mi_itens',
         $fields : [
-            'id_setor',
-            'nome',
+            'id_mi_item',
             {
-                $inner : 'unidades',
-                $using : 'id_unidade',
-                $fields : [
-                    'id_unidade',
-                    'nome'
-                ],
-                $where: {
-                    ativo: 1
-                }
-            }
-        ],
-        $where: {
-            ativo: 1
-        }
+                $field: 'data',
+                $dateFormat : '%Y-%m-%d',
+                $as: 'data'
+            },
+        ]
     }
 };
 

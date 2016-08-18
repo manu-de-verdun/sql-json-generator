@@ -1,4 +1,4 @@
-var sqlJsonGenerator = function ( debug ) {
+var sqlJsonGenerator = function (debug) {
 
     /**
      * Building SQL WHERE conditions
@@ -6,7 +6,7 @@ var sqlJsonGenerator = function ( debug ) {
      * @param parentKey
      * @returns {string}
      */
-    var whereBuilder = function (conditions, parentKey, inheritedTable ) {
+    var whereBuilder = function (conditions, parentKey, inheritedTable) {
 
         var whereKeys = Object.keys(conditions);
         var whereArray = [];
@@ -16,54 +16,54 @@ var sqlJsonGenerator = function ( debug ) {
             console.log('');
             console.log('whereBuilder');
             console.log('  conditions: ', conditions);
-            console.log('  parentKey: ' , parentKey);
-            console.log('  inheritedTable: ' , inheritedTable);
+            console.log('  parentKey: ', parentKey);
+            console.log('  inheritedTable: ', inheritedTable);
         }
 
 
         whereKeys.forEach(function (key) {
 
             // Logical AND
-            if ( key === "$and" ) {
+            if (key === "$and") {
 
                 var andArray = [];
 
-                conditions[key].forEach( function ( element ) {
-                    andArray.push(whereBuilder(element , null, inheritedTable ));
+                conditions[key].forEach(function (element) {
+                    andArray.push(whereBuilder(element, null, inheritedTable));
                 });
 
-                whereArray.push( "(" + andArray.join(' AND ') + ")");
+                whereArray.push("(" + andArray.join(' AND ') + ")");
 
             }
 
             //Logical OR
-            else if ( key === "$or" ) {
+            else if (key === "$or") {
 
                 var andArray = [];
 
-                conditions[key].forEach( function ( element ) {
-                    andArray.push(whereBuilder(element , null, inheritedTable ));
+                conditions[key].forEach(function (element) {
+                    andArray.push(whereBuilder(element, null, inheritedTable));
                 });
 
-                whereArray.push( "(" + andArray.join(' OR ') + ")");
+                whereArray.push("(" + andArray.join(' OR ') + ")");
             }
 
             // Nested Object (not part of a logical operation)
-            else if ( typeof conditions[key] === 'object') {
-                whereArray.push(whereBuilder(conditions[key] , key, inheritedTable ));
+            else if (typeof conditions[key] === 'object') {
+                whereArray.push(whereBuilder(conditions[key], key, inheritedTable));
             }
 
             // Comparaison Operators
             else {
 
-                var conditionBuilder = function ( column, table, operador, condition ) {
-                    whereArray.push( (( table )? "`" + table + "`." : "" ) + "`" + column + "` " + operador + " '" + condition + "'");
+                var conditionBuilder = function (column, table, operador, condition) {
+                    whereArray.push((( table ) ? "`" + table + "`." : "" ) + "`" + column + "` " + operador + " '" + condition + "'");
                 };
 
                 switch (key) {
 
                     case "$gt" :
-                        conditionBuilder( parentKey, inheritedTable , '>', conditions[key]  );
+                        conditionBuilder(parentKey, inheritedTable, '>', conditions[key]);
                         break;
 
                     case "$gte" :
@@ -87,7 +87,7 @@ var sqlJsonGenerator = function ( debug ) {
                         break;
 
                     default:
-                        conditionBuilder( key, inheritedTable , '=', conditions[key]  );
+                        conditionBuilder(key, inheritedTable, '=', conditions[key]);
 
                 }
 
@@ -101,23 +101,22 @@ var sqlJsonGenerator = function ( debug ) {
     };
 
 
-
     /**
      * Building SELECT expression
      * @param conditions
      * @param parentKey
      */
-    var joinBuilder = function (joinData ) {
+    var joinBuilder = function (joinData) {
 
-        var sqlJoin ='';
+        var sqlJoin = '';
 
         var joinKeys = Object.keys(joinData);
 
-        if ( joinKeys.indexOf('$inner') >= 0 ) {
-                sqlJoin += 'INNER JOIN `' + joinData['$inner'] + '` ';
+        if (joinKeys.indexOf('$inner') >= 0) {
+            sqlJoin += 'INNER JOIN `' + joinData['$inner'] + '` ';
         }
 
-        if ( joinKeys.indexOf('$using') >= 0 ) {
+        if (joinKeys.indexOf('$using') >= 0) {
             sqlJoin += 'USING(`' + joinData['$using'] + '`)';
         }
 
@@ -137,66 +136,71 @@ var sqlJsonGenerator = function ( debug ) {
         var currentTable;
         var selectKeys = Object.keys(conditions);
         var selectObject = {
-            select : [],
+            select: [],
             from: [],
             where: []
         };
 
         // Tests the conditions object keys to see what action is required (from, join, etc...)
-        if ( selectKeys.indexOf('$from') >= 0 ) {
+        if (selectKeys.indexOf('$from') >= 0) {
             currentTable = conditions['$from'];
             selectObject.from.push("FROM `" + currentTable + "`");
         }
 
-        if ( selectKeys.indexOf('$inner') >= 0 ) {
+        if (selectKeys.indexOf('$inner') >= 0) {
             currentTable = conditions['$inner'];
-            selectObject.from.push( joinBuilder(conditions ));
+            selectObject.from.push(joinBuilder(conditions));
         }
 
         // WHERE
-        if ( selectKeys.indexOf('$where') >= 0 ) {
-            selectObject.where.push( whereBuilder(conditions['$where'], null , currentTable ));
+        if (selectKeys.indexOf('$where') >= 0) {
+            selectObject.where.push(whereBuilder(conditions['$where'], null, currentTable));
         }
 
-        // Process all provided fields
-        conditions['$fields'].forEach( function ( field ) {
+        // Process all provided elements of fields Array
+        conditions['$fields'].forEach(function (field) {
 
+            // Test if array element is an object
+            if (typeof field === 'object') {
 
-            if ( typeof field === 'object')  {
+                // It's an object. Determine which kind of object
 
-                var currentField = {};
-
-                // if it is an object, analyze it
                 var fieldKeys = Object.keys(field);
 
                 // If it is a special operation that needs recursive call ( $inner, $left, $right )
-                if ( fieldKeys.indexOf('$inner')>= 0 ) {
-                    var recursiveSelectObject = selectBuilder( field );
+                if (fieldKeys.indexOf('$inner') >= 0) {
+                    var recursiveSelectObject = selectBuilder(field);
 
                     //After recursive call, add itens from recursive call into the current object
-                    recursiveSelectObject.select.forEach( function ( item ) {
+                    recursiveSelectObject.select.forEach(function (item) {
                         selectObject.select.push(item);
                     });
-                    recursiveSelectObject.from.forEach( function ( item ) {
+                    recursiveSelectObject.from.forEach(function (item) {
                         selectObject.from.push(item);
                     });
-                    recursiveSelectObject.where.forEach( function ( item ) {
+                    recursiveSelectObject.where.forEach(function (item) {
                         selectObject.where.push(item);
                     });
                 }
-                else {
-                    if ( fieldKeys.indexOf('$field')>= 0 ) {
-                        currentField.name = field['$field'];
-                    }
+                // It is a field object
+                else if (fieldKeys.indexOf('$field') >= 0) {
 
-                    if ( fieldKeys.indexOf('$as')>= 0 ) {
-                        currentField.as = field['$as'];
-                    }
+                        var currentField = {};
 
-                    currentField.sql = "`" + currentTable + "`.`" + currentField.name + "`";
-                    currentField.sql += (currentField.as) ? " AS " + currentField.as : '';
-                    selectObject.select.push( currentField.sql );
-                }
+                        currentField.sql = "`" + currentTable + "`.`" + field['$field'] + "`";
+
+                        if (fieldKeys.indexOf('$dateFormat') >= 0) {
+                            currentField.sql = "DATE_FORMAT(" + currentField.sql + ",'" + field['$dateFormat'] + "')";
+                        }
+
+                        if (fieldKeys.indexOf('$as') >= 0) {
+                            currentField.as = field['$as'];
+                            currentField.sql = (currentField.sql) + " AS " + currentField.as;
+                        }
+
+                        // add the columm to the select object
+                        selectObject.select.push(currentField.sql);
+                    }
             }
             else {
                 // raw field, add it to the select Object
@@ -209,9 +213,6 @@ var sqlJsonGenerator = function ( debug ) {
     };
 
 
-
-
-
     /**
      * Generate an UPDATE command based on params
      * @param queryParams
@@ -220,7 +221,7 @@ var sqlJsonGenerator = function ( debug ) {
     this.update = function (queryParams) {
 
         // test if required query params are provided
-        if ( !queryParams || !queryParams.$update || !queryParams.$set) return null;
+        if (!queryParams || !queryParams.$update || !queryParams.$set) return null;
 
         // UPDATE
         var sql = "UPDATE `" + queryParams.$update + "`";
@@ -235,7 +236,7 @@ var sqlJsonGenerator = function ( debug ) {
 
         sql += " SET " + setArray.join(',');
 
-        if ( queryParams.$where ) {
+        if (queryParams.$where) {
             sql += " WHERE " + whereBuilder(queryParams.$where, null);
         }
 
@@ -252,7 +253,7 @@ var sqlJsonGenerator = function ( debug ) {
     this.insert = function (queryParams, callback) {
 
         // test if required query params are provided
-        if ( !queryParams || !queryParams.$insert || !queryParams.$values) return null;
+        if (!queryParams || !queryParams.$insert || !queryParams.$values) return null;
 
         // INSERT
         var sql = "INSERT INTO `" + queryParams.$insert + "`";
@@ -265,7 +266,7 @@ var sqlJsonGenerator = function ( debug ) {
             keysArray.push("`" + key + "`");
         });
 
-        sql += " (" + keysArray.join(',') + ")" ;
+        sql += " (" + keysArray.join(',') + ")";
 
         // Values
 
@@ -274,7 +275,7 @@ var sqlJsonGenerator = function ( debug ) {
             valuesArray.push("'" + queryParams.$values[key] + "'");
         });
 
-        sql += " VALUES (" + valuesArray.join(',') + ")" ;
+        sql += " VALUES (" + valuesArray.join(',') + ")";
 
         return sql;
 
@@ -289,12 +290,12 @@ var sqlJsonGenerator = function ( debug ) {
     this.delete = function (queryParams, callback) {
 
         // test if required query params are provided
-        if ( !queryParams || !queryParams.$delete ) return null;
+        if (!queryParams || !queryParams.$delete) return null;
 
         // DELETE
         var sql = "DELETE FROM `" + queryParams.$delete + "`";
 
-        if ( queryParams.$where ) {
+        if (queryParams.$where) {
             sql += " WHERE " + whereBuilder(queryParams.$where, null);
         }
 
@@ -311,16 +312,16 @@ var sqlJsonGenerator = function ( debug ) {
     this.select = function (queryParams, callback) {
 
         // test if required query params are provided
-        if ( !queryParams || !queryParams.$select  ) return null;
+        if (!queryParams || !queryParams.$select) return null;
 
         // SELECT
         var sql = "";
-        var selectObject= selectBuilder( queryParams.$select );
+        var selectObject = selectBuilder(queryParams.$select);
 
         sql += "SELECT " + selectObject.select.join(', ');
         sql += " " + selectObject.from.join(' ');
 
-        if ( selectObject.where.length > 0 ) {
+        if (selectObject.where.length > 0) {
             sql += " WHERE " + selectObject.where.join(' AND ');
         }
 

@@ -283,6 +283,27 @@ describe('#select - queries', function () {
     });
 
 
+    it('$field $dateFormat', function () {
+
+        sqlParams = {
+            $select : {
+                $from : 'mi_itens',
+                $fields : [
+                    'id_mi_item',
+                    {
+                        $field: 'data',
+                        $dateFormat : '%Y-%m-%d',
+                        $as: 'data'
+                    },
+                ]
+            }
+        };
+
+        expectedResult = 'SELECT `mi_itens`.`id_mi_item`, DATE_FORMAT(`mi_itens`.`data`,\'%Y-%m-%d\') AS data FROM `mi_itens`';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
 });
 
 

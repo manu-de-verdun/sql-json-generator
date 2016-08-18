@@ -176,7 +176,19 @@ will return:
 SELECT `table1`.`column_a`, `table1`.`column_b` FROM `table1`
 ```
 
+#### $field
+
+``$field : column_name``
+
+> ``$field`` must be used within an object.
+
+> table name is inherited from the parent table object ( $from, $inner ... )
+
 #### $as
+
+``$as : alias name``
+
+> ``$as`` must be used within an object, with a ``$field`` property.
 
 ```
 {
@@ -195,6 +207,31 @@ will return:
 ```
 SELECT `table1`.`column_a` AS column_a_as, `table1`.`column_b` FROM `table1`
 ```
+
+#### $dateFormat
+
+``$dateFormat : output date format`` (see SQL doc).
+
+> ``$dateFormat`` must be used within an object, with a ``$field`` property.
+
+```
+{
+    $from : 'table1',
+    $fields : [
+        {
+            $field: 'column_a',
+            $dateFormat : '%Y-%m-%d',
+            $as: 'column_date'
+        }
+    ]
+}
+```
+will return:
+
+```
+SELECT DATE_FORMAT(`table1`.`column_a`,'%Y-%m-%d') AS column_date FROM `table1`
+```
+
 
 #### $where
 
