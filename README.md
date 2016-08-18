@@ -30,10 +30,10 @@ sqlParams = {
             'column_a',
             'column_b',
             'column_c'
-        ]
-    },
-    $where : {
-        column_d: 1
+        ],
+        $where : {
+            column_d: 1
+        }
     }
 }
 
@@ -43,7 +43,7 @@ sqlGenerator.update( sqlParams);
 will return:
 
 ```
-SELECT `column_a`, `column_b`, `column_c` FROM `table1` WHERE `column_d` = '1'
+SELECT `column_a`, `column_b`, `column_c` FROM `table1` WHERE `table1`.`column_d` = '1'
 ```
 
 
