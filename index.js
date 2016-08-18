@@ -128,7 +128,8 @@ var sqlJsonGenerator = function () {
         var selectKeys = Object.keys(conditions);
         var selectObject = {
             select : [],
-            from: []
+            from: [],
+            where: []
         };
 
         // Tests the conditions object keys to see what action is required (from, join, etc...)
@@ -140,6 +141,11 @@ var sqlJsonGenerator = function () {
         if ( selectKeys.indexOf('$inner') >= 0 ) {
             currentTable = conditions['$inner'];
             selectObject.from.push( joinBuilder(conditions ));
+        }
+
+        // WHERE
+        if ( selectKeys.indexOf('$where') >= 0 ) {
+            selectObject.where.push( whereBuilder(conditions['$where'], null));
         }
 
         // Process all provided fields
@@ -293,16 +299,12 @@ var sqlJsonGenerator = function () {
         if ( !queryParams || !queryParams.$select  ) return null;
 
         // SELECT
-        var sql = "SELECT";
+        var sql = "";
         var selectObject= selectBuilder( queryParams.$select );
 
-        sql += " " + selectObject.select.join(', ');
+        sql += "SELECT " + selectObject.select.join(', ');
         sql += " " + selectObject.from.join(' ');
-
-        // WHERE
-        if ( queryParams.$where ) {
-            sql += " WHERE " + whereBuilder(queryParams.$where, null);
-        }
+        sql += " WHERE " + selectObject.where.join('AND ');
 
         return sql;
 

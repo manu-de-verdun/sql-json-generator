@@ -21,7 +21,10 @@ sqlParams = {
                     'column2b',
                 ]
             }
-        ]
+        ],
+        $where : {
+            column1a : 1
+        }
     }
 };
 
