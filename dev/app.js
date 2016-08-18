@@ -9,21 +9,21 @@ var sqlParams = {};
 
 sqlParams = {
     $select : {
-        $from : 'table1',
+        $from : 'setores',
         $fields : [
-            'column1a',
-            'column1b',
+            'id_setor',
+            'nome',
             {
-                $inner : 'table2',
-                $using : 'column2a',
+                $inner : 'unidades',
+                $using : 'id_unidade',
                 $fields : [
-                    'column2a',
-                    'column2b',
+                    'id_unidade',
+                    'nome'
                 ]
             }
         ],
-        $where : {
-            column1a : 1
+        $where: {
+            ativo: 1
         }
     }
 };

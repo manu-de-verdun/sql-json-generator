@@ -43,14 +43,14 @@ describe('#select - queries', function () {
                 $from : 'table1',
                 $fields : [
                     'field_a'
-                ]
-            },
-            $where : {
-                field_d: 1
+                ],
+                $where : {
+                    field_d: 1
+                }
             }
         };
 
-        expectedResult = 'SELECT `table1`.`field_a` FROM `table1` WHERE `field_d` = \'1\'';
+        expectedResult = 'SELECT `table1`.`field_a` FROM `table1` WHERE `table1`.`field_d` = \'1\'';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -65,14 +65,14 @@ describe('#select - queries', function () {
                     'field_a',
                     'field_b',
                     'field_c'
-                ]
-            },
-            $where : {
-                field_d: 1
+                ],
+                $where : {
+                    field_d: 1
+                }
             }
         };
 
-        expectedResult = 'SELECT `table1`.`field_a`, `table1`.`field_b`, `table1`.`field_c` FROM `table1` WHERE `field_d` = \'1\'';
+        expectedResult = 'SELECT `table1`.`field_a`, `table1`.`field_b`, `table1`.`field_c` FROM `table1` WHERE `table1`.`field_d` = \'1\'';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -221,6 +221,36 @@ describe('#select - queries', function () {
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
+
+
+    it('$inner $using $where', function () {
+
+        sqlParams = {
+            $select : {
+                $from : 'setores',
+                $fields : [
+                    'id_setor',
+                    'nome',
+                    {
+                        $inner : 'unidades',
+                        $using : 'id_unidade',
+                        $fields : [
+                            'id_unidade',
+                            'nome'
+                        ]
+                    }
+                ],
+                $where: {
+                    ativo: 1
+                }
+            }
+        };
+
+        expectedResult = 'SELECT `setores`.`id_setor`, `setores`.`nome`, `unidades`.`id_unidade`, `unidades`.`nome` FROM `setores` INNER JOIN `unidades` USING(`id_unidade`) WHERE `setores`.`ativo` = \'1\'';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
 
 });
 

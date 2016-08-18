@@ -6,7 +6,7 @@ var sqlJsonGenerator = function () {
      * @param parentKey
      * @returns {string}
      */
-    var whereBuilder = function (conditions, parentKey) {
+    var whereBuilder = function (conditions, parentKey, inheritedTable ) {
 
         var whereKeys = Object.keys(conditions);
         var whereArray = [];
@@ -26,7 +26,7 @@ var sqlJsonGenerator = function () {
                 var andArray = [];
 
                 conditions[key].forEach( function ( element ) {
-                    andArray.push(whereBuilder(element , null ));
+                    andArray.push(whereBuilder(element , null, inheritedTable ));
                 });
 
                 whereArray.push( "(" + andArray.join(' AND ') + ")");
@@ -39,7 +39,7 @@ var sqlJsonGenerator = function () {
                 var andArray = [];
 
                 conditions[key].forEach( function ( element ) {
-                    andArray.push(whereBuilder(element , null ));
+                    andArray.push(whereBuilder(element , null, inheritedTable ));
                 });
 
                 whereArray.push( "(" + andArray.join(' OR ') + ")");
@@ -47,15 +47,20 @@ var sqlJsonGenerator = function () {
 
             // Nested Object (not part of a logical operation)
             else if ( typeof conditions[key] === 'object') {
-                whereArray.push(whereBuilder(conditions[key] , key ));
+                whereArray.push(whereBuilder(conditions[key] , key, inheritedTable ));
             }
 
             // Comparaison Operators
             else {
+
+                var conditionBuilder = function ( column, table, operador, condition ) {
+                    whereArray.push( (( table )? "`" + table + "`." : "" ) + "`" + column + "` " + operador + " '" + condition + "'");
+                };
+
                 switch (key) {
 
                     case "$gt" :
-                        whereArray.push("`" + parentKey + "` > '" + conditions[key] + "'");
+                        conditionBuilder( parentKey, inheritedTable , '>', conditions[key]  );
                         break;
 
                     case "$gte" :
@@ -79,7 +84,7 @@ var sqlJsonGenerator = function () {
                         break;
 
                     default:
-                        whereArray.push("`" + key + "` = '" + conditions[key] + "'");
+                        conditionBuilder( key, inheritedTable , '=', conditions[key]  );
 
                 }
 
@@ -145,7 +150,7 @@ var sqlJsonGenerator = function () {
 
         // WHERE
         if ( selectKeys.indexOf('$where') >= 0 ) {
-            selectObject.where.push( whereBuilder(conditions['$where'], null));
+            selectObject.where.push( whereBuilder(conditions['$where'], null , currentTable ));
         }
 
         // Process all provided fields
@@ -304,7 +309,10 @@ var sqlJsonGenerator = function () {
 
         sql += "SELECT " + selectObject.select.join(', ');
         sql += " " + selectObject.from.join(' ');
-        sql += " WHERE " + selectObject.where.join('AND ');
+
+        if ( selectObject.where.length > 0 ) {
+            sql += " WHERE " + selectObject.where.join('AND ');
+        }
 
         return sql;
 
