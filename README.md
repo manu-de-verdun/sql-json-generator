@@ -17,11 +17,12 @@ var sqlGenerator = new SQLGenerator();
 
 ### SELECT
 
-`.select( queryData )`
+``.select( queryData )``
 
 The first parameter contains the data used to produce the SQL query.
 The function returns a string with the SQL. In case of error, will return ``null``
 
+*example:*
 ```
 sqlParams = {
     $select : {
@@ -39,9 +40,7 @@ sqlParams = {
 
 sqlGenerator.update( sqlParams);
 ```
-
-will return:
-
+*will return:*
 ```
 SELECT `column_a`, `column_b`, `column_c` FROM `table1` WHERE `table1`.`column_d` = '1'
 ```
@@ -49,11 +48,12 @@ SELECT `column_a`, `column_b`, `column_c` FROM `table1` WHERE `table1`.`column_d
 
 ### INSERT
 
-`.insert( queryData )`
+``.insert( queryData )``
 
 The first parameter contains the data used to produce the SQL query.
 The function returns a string with the SQL. In case of error, will return ``null``
 
+*example:*
 ```
 sqlParams = {
     $insert: 'mytable',
@@ -65,20 +65,19 @@ sqlParams = {
 
 sqlGenerator.update( sqlParams);
 ```
-
-will return:
-
+*will return:*
 ```
 INSERT INTO `mytable` (`column_a`,`column_b`) VALUES ('1','1')
 ```
 
 ### UPDATE
 
-`.update( queryData )`
+``.update( queryData )``
 
 The first parameter contains the data used to produce the SQL query.
 The function returns a string with the SQL. In case of error, will return ``null``
 
+*example:*
 ```
 sqlParams = {
     $update: 'mytable',
@@ -92,9 +91,7 @@ sqlParams = {
 
 sqlGenerator.update( sqlParams);
 ```
-
-will return:
-
+*will return:*
 ```
 UPDATE  `mytable`  SET `column_b` = '1' WHERE `column_a` = '1'
 ```
@@ -103,11 +100,12 @@ UPDATE  `mytable`  SET `column_b` = '1' WHERE `column_a` = '1'
 
 ### DELETE
 
-`.delete( queryData )`
+``.delete( queryData )``
 
-The first paramenter contains the data used to produce the SQL query.
+The first parameter contains the data used to produce the SQL query.
 The function returns a string with the SQL. In case of error, will return ``null``
 
+*example:*
 ```
 sqlParams = {
     $delete: 'mytable',
@@ -118,9 +116,7 @@ sqlParams = {
 
 sqlGenerator.delete( sqlParams);
 ```
-
-will return:
-
+*will return:*
 ```
 UPDATE  `mytable`  SET `column_b` = '1' WHERE `column_a` = '1'
 ```
@@ -140,6 +136,8 @@ UPDATE  `mytable`  SET `column_b` = '1' WHERE `column_a` = '1'
 #### $from, $fields, $field: basic FROM query
 
 Columns to be displayed in a SELECT statement are elements of an array. It can be just an array of columns names
+
+*example:*
 ```
 {
     $from : 'table1',
@@ -149,14 +147,14 @@ Columns to be displayed in a SELECT statement are elements of an array. It can b
     ]
 }
 ```
-will return:
-
+*will return:*
 ```
 SELECT `table1`.`column_a`, `table1`.`column_b` FROM `table1`
 ```
 
 To apply extra SQL formats to the colums (such as AS, SUM) the column must be wrapped in an object:
 
+*example:*
 ```
 {
     $from : 'table1',
@@ -170,8 +168,7 @@ To apply extra SQL formats to the colums (such as AS, SUM) the column must be wr
     ]
 }
 ```
-will return:
-
+*will return:*
 ```
 SELECT `table1`.`column_a`, `table1`.`column_b` FROM `table1`
 ```
@@ -190,6 +187,7 @@ SELECT `table1`.`column_a`, `table1`.`column_b` FROM `table1`
 
 > ``$as`` must be used within an object, with a ``$field`` property.
 
+*example:*
 ```
 {
     $from : 'table1',
@@ -202,8 +200,7 @@ SELECT `table1`.`column_a`, `table1`.`column_b` FROM `table1`
     ]
 }
 ```
-will return:
-
+*will return:*
 ```
 SELECT `table1`.`column_a` AS column_a_as, `table1`.`column_b` FROM `table1`
 ```
@@ -214,6 +211,7 @@ SELECT `table1`.`column_a` AS column_a_as, `table1`.`column_b` FROM `table1`
 
 > ``$dateFormat`` must be used within an object, with a ``$field`` property.
 
+*example:*
 ```
 {
     $from : 'table1',
@@ -226,8 +224,7 @@ SELECT `table1`.`column_a` AS column_a_as, `table1`.`column_b` FROM `table1`
     ]
 }
 ```
-will return:
-
+*will return:*
 ```
 SELECT DATE_FORMAT(`table1`.`column_a`,'%Y-%m-%d') AS column_date FROM `table1`
 ```
@@ -235,6 +232,8 @@ SELECT DATE_FORMAT(`table1`.`column_a`,'%Y-%m-%d') AS column_date FROM `table1`
 
 #### $where
 
+
+*example:*
 ```
 {
     $from : 'table1',
@@ -247,16 +246,32 @@ SELECT DATE_FORMAT(`table1`.`column_a`,'%Y-%m-%d') AS column_date FROM `table1`
     }
 }
 ```
-will return:
-
+*will return:*
 ```
 SELECT `table1`.`column_a`, `table1`.`column_b` FROM `table1` WHERE `table1`.`column_c` = 1
 ```
 
 
-### $inner : joins
+### JOINS : $inner, $left, $right, $full
 
-```
+``
+
+> JOIN tables are placed as an element inside the ``$fields`` array of the parent table.
+
+> JOIN tables can be nested
+
+|    JSON  |     SQL       |
+|----------|:-------------:|
+| ``$inner`` | INNER JOIN |
+| ``$left`` |    LEFT JOIN   |
+| ``$right`` |    RIGHT JOIN  |
+| ``$full`` |    LEFT JOIN   |
+
+> JOIN object must have one ``$using`` parameter
+> JOIN object must have one ``$fields`` parameter
+
+*example:*
+```json
 {
     $from : 'table1',
     $fields : [
@@ -273,8 +288,7 @@ SELECT `table1`.`column_a`, `table1`.`column_b` FROM `table1` WHERE `table1`.`co
     ]
 }
 ```
-will return:
-
+*will return:*
 ```
 SELECT `table1`.`column1a`, `table1`.`column1b`, `table2`.`column2a`, `table2`.`column2b` FROM `table1` INNER JOIN `table2` USING(`column2a`)
 ```
@@ -286,8 +300,9 @@ SELECT `table1`.`column1a`, `table1`.`column1b`, `table2`.`column2a`, `table2`.`
 
 #### Logical Operators: $and and $or
 
-*Syntax:* ``{ $and : [{condition1}, {condition2}... ]}`` , ``{ $or : [{condition1}, {condition2}... ]}``
+``{ $and : [{condition1}, {condition2}... ]}`` , ``{ $or : [{condition1}, {condition2}... ]}``
 
+*example:*
 ```
 {
     $or : [
@@ -296,14 +311,14 @@ SELECT `table1`.`column1a`, `table1`.`column1b`, `table2`.`column2a`, `table2`.`
     ]
 }
 ```
-will return:
-
+*will return:*
 ```
 (column_a = '1' OR column_b = '1')
 ```
 
 ##### default behavior: $and
 
+*example:*
 ```
 {
     column_a: 1,
@@ -311,15 +326,14 @@ will return:
     column_c: 1
 }
 ```
-
-will return:
-
+*will return:*
 ```
 column_a = '1' AND column_b = '1' AND column_c = '1'
 ```
 
 #### Comparaison Operators
 
+``{ column : { $gt : value }}``
 
 |    JSON  |     SQL       |
 |----------|:-------------:|
@@ -330,8 +344,8 @@ column_a = '1' AND column_b = '1' AND column_c = '1'
 | ``$eq`` |    ``=``   |
 | ``$ne`` |    ``<>``   |
 
-*Syntax:* ``{ column : { $gt : value }}``
 
+*example:*
 ```
 {
     column_a: {
@@ -339,10 +353,7 @@ column_a = '1' AND column_b = '1' AND column_c = '1'
     }
 }
 ```
-
-
-will return:
-
+*will return:*
 ```
 column_a > '1'
 ```

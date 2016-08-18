@@ -108,12 +108,28 @@ var sqlJsonGenerator = function (debug) {
      */
     var joinBuilder = function (joinData) {
 
+        if (debug) {
+            console.log('');
+            console.log('joinBuilder');
+            console.log('  joinData: ', joinData);
+        }
+
+
         var sqlJoin = '';
 
         var joinKeys = Object.keys(joinData);
 
         if (joinKeys.indexOf('$inner') >= 0) {
             sqlJoin += 'INNER JOIN `' + joinData['$inner'] + '` ';
+        }
+        else if (joinKeys.indexOf('$left') >= 0) {
+            sqlJoin += 'LEFT JOIN `' + joinData['$left'] + '` ';
+        }
+        else if (joinKeys.indexOf('$right') >= 0) {
+            sqlJoin += 'RIGHT JOIN `' + joinData['$right'] + '` ';
+        }
+        else if (joinKeys.indexOf('$full') >= 0) {
+            sqlJoin += 'FULL JOIN `' + joinData['$full'] + '` ';
         }
 
         if (joinKeys.indexOf('$using') >= 0) {
@@ -151,6 +167,18 @@ var sqlJsonGenerator = function (debug) {
             currentTable = conditions['$inner'];
             selectObject.from.push(joinBuilder(conditions));
         }
+        else if (selectKeys.indexOf('$left') >= 0) {
+            currentTable = conditions['$left'];
+            selectObject.from.push(joinBuilder(conditions));
+        }
+        else if (selectKeys.indexOf('$right') >= 0) {
+            currentTable = conditions['$right'];
+            selectObject.from.push(joinBuilder(conditions));
+        }
+        else if (selectKeys.indexOf('$full') >= 0) {
+            currentTable = conditions['$full'];
+            selectObject.from.push(joinBuilder(conditions));
+        }
 
         // WHERE
         if (selectKeys.indexOf('$where') >= 0) {
@@ -168,7 +196,7 @@ var sqlJsonGenerator = function (debug) {
                 var fieldKeys = Object.keys(field);
 
                 // If it is a special operation that needs recursive call ( $inner, $left, $right )
-                if (fieldKeys.indexOf('$inner') >= 0) {
+                if (fieldKeys.indexOf('$inner') >= 0 || fieldKeys.indexOf('$left') >= 0 || fieldKeys.indexOf('$right') >= 0 || fieldKeys.indexOf('$full') >= 0) {
                     var recursiveSelectObject = selectBuilder(field);
 
                     //After recursive call, add itens from recursive call into the current object

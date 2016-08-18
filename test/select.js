@@ -304,6 +304,48 @@ describe('#select - queries', function () {
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
 
+
+    it('$left $right $full $using', function () {
+
+        sqlParams = {
+            $select : {
+                $from : 'setores',
+                $fields : [
+                    'id_setor',
+                    'nome',
+                    {
+                        $left : 'unidades',
+                        $using : 'id_unidade',
+                        $fields : [
+                            'id_unidade',
+                            'nome'
+                        ]
+                    },
+                    {
+                        $right : 'usuarios',
+                        $using : 'id_usuario',
+                        $fields : [
+                            'id_usuario',
+                            'nome'
+                        ]
+                    },
+                    {
+                        $full : 'avioes',
+                        $using : 'id_aviao',
+                        $fields : [
+                            'id_aviao',
+                            'nome'
+                        ]
+                    }
+                ]
+            }
+        };
+
+        expectedResult = 'SELECT `setores`.`id_setor`, `setores`.`nome`, `unidades`.`id_unidade`, `unidades`.`nome`, `usuarios`.`id_usuario`, `usuarios`.`nome`, `avioes`.`id_aviao`, `avioes`.`nome` FROM `setores` LEFT JOIN `unidades` USING(`id_unidade`) RIGHT JOIN `usuarios` USING(`id_usuario`) FULL JOIN `avioes` USING(`id_aviao`)';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
 });
 
 
