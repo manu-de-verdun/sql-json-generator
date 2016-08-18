@@ -17,7 +17,7 @@ var sqlGenerator = new SQLGenerator();
 
 ### SELECT
 
-``.select( queryData )``
+``sqlGenerator.select( queryData )``
 
 The first parameter contains the data used to produce the SQL query.
 The function returns a string with the SQL. In case of error, will return ``null``
@@ -25,20 +25,18 @@ The function returns a string with the SQL. In case of error, will return ``null
 *example:*
 ```
 sqlParams = {
-    $select : {
-        $from : 'table1',
-        $fields : [
-            'column_a',
-            'column_b',
-            'column_c'
-        ],
-        $where : {
-            column_d: 1
-        }
+    $from : 'table1',
+    $fields : [
+        'column_a',
+        'column_b',
+        'column_c'
+    ],
+    $where : {
+        column_d: 1
     }
 }
 
-sqlGenerator.update( sqlParams);
+sqlGenerator.select( sqlParams);
 ```
 *will return:*
 ```
@@ -48,7 +46,7 @@ SELECT `column_a`, `column_b`, `column_c` FROM `table1` WHERE `table1`.`column_d
 
 ### INSERT
 
-``.insert( queryData )``
+``sqlGenerator.insert( queryData )``
 
 The first parameter contains the data used to produce the SQL query.
 The function returns a string with the SQL. In case of error, will return ``null``
@@ -63,7 +61,7 @@ sqlParams = {
     }
 }
 
-sqlGenerator.update( sqlParams);
+sqlGenerator.insert( sqlParams);
 ```
 *will return:*
 ```
@@ -72,7 +70,7 @@ INSERT INTO `mytable` (`column_a`,`column_b`) VALUES ('1','1')
 
 ### UPDATE
 
-``.update( queryData )``
+``sqlGenerator.update( queryData )``
 
 The first parameter contains the data used to produce the SQL query.
 The function returns a string with the SQL. In case of error, will return ``null``
@@ -129,11 +127,9 @@ UPDATE  `mytable`  SET `column_b` = '1' WHERE `column_a` = '1'
 
 ## Formating queryData
 
-### $select
+### SELECT
 
-``$where: { params... }``
-
-#### $from, $fields, $field: basic FROM query
+#### $from, $fields, $field: basic SELECT FROM query
 
 Columns to be displayed in a SELECT statement are elements of an array. It can be just an array of columns names
 

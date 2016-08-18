@@ -278,7 +278,7 @@ var sqlJsonGenerator = function (debug) {
      * @param queryParams
      * @returns {string} SQL Query
      */
-    this.insert = function (queryParams, callback) {
+    this.insert = function (queryParams) {
 
         // test if required query params are provided
         if (!queryParams || !queryParams.$insert || !queryParams.$values) return null;
@@ -315,7 +315,7 @@ var sqlJsonGenerator = function (debug) {
      * @param queryParams
      * @returns {string} SQL Query
      */
-    this.delete = function (queryParams, callback) {
+    this.delete = function (queryParams) {
 
         // test if required query params are provided
         if (!queryParams || !queryParams.$delete) return null;
@@ -337,14 +337,13 @@ var sqlJsonGenerator = function (debug) {
      * @param queryParams
      * @returns {string} SQL Query
      */
-    this.select = function (queryParams, callback) {
+    this.select = function (queryParams) {
 
         // test if required query params are provided
-        if (!queryParams || !queryParams.$select) return null;
+        if (!queryParams || !queryParams.$from ) return null;
 
-        // SELECT
         var sql = "";
-        var selectObject = selectBuilder(queryParams.$select);
+        var selectObject = selectBuilder(queryParams);
 
         sql += "SELECT " + selectObject.select.join(', ');
         sql += " " + selectObject.from.join(' ');

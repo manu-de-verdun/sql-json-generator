@@ -8,37 +8,35 @@ var sqlGenerator = new SQLGenerator(true);
 var sqlParams = {};
 
 sqlParams = {
-    $select : {
-        $from : 'setores',
-        $fields : [
-            'id_setor',
-            'nome',
-            {
-                $left : 'unidades',
-                $using : 'id_unidade',
-                $fields : [
-                    'id_unidade',
-                    'nome'
-                ]
-            },
-            {
-                $right : 'usuarios',
-                $using : 'id_usuario',
-                $fields : [
-                    'id_usuario',
-                    'nome'
-                ]
-            },
-            {
-                $full : 'avioes',
-                $using : 'id_aviao',
-                $fields : [
-                    'id_aviao',
-                    'nome'
-                ]
-            }
-        ]
-    }
+    $from: 'setores',
+    $fields: [
+        'id_setor',
+        'nome',
+        {
+            $left: 'unidades',
+            $using: 'id_unidade',
+            $fields: [
+                'id_unidade',
+                'nome'
+            ]
+        },
+        {
+            $right: 'usuarios',
+            $using: 'id_usuario',
+            $fields: [
+                'id_usuario',
+                'nome'
+            ]
+        },
+        {
+            $full: 'avioes',
+            $using: 'id_aviao',
+            $fields: [
+                'id_aviao',
+                'nome'
+            ]
+        }
+    ]
 };
 
 var sqlQuery = sqlGenerator.select(sqlParams);
