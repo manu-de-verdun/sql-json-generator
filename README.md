@@ -271,7 +271,7 @@ SELECT `table1`.`column_a`, `table1`.`column_b` FROM `table1` WHERE `table1`.`co
 > JOIN object must have one ``$fields`` parameter
 
 *example:*
-```json
+```
 {
     $from : 'table1',
     $fields : [
