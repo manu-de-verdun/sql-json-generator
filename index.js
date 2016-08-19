@@ -180,9 +180,12 @@ var sqlJsonGenerator = function (debug) {
             selectObject.from.push(joinBuilder(conditions));
         }
 
-        // WHERE
+        // Process the $where object
         if (selectKeys.indexOf('$where') >= 0) {
-            selectObject.where.push(whereBuilder(conditions['$where'], null, currentTable));
+            // only process the $where object if it is not empty
+            if ( Object.keys(conditions['$where']).length > 0 ) {
+                selectObject.where.push(whereBuilder(conditions['$where'], null, currentTable));
+            }
         }
 
         // Process all provided elements of fields Array

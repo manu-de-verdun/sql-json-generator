@@ -27,6 +27,8 @@ describe('#select - json errors', function () {
 
     });
 
+
+
 });
 
 
@@ -113,6 +115,24 @@ describe('#select - queries', function () {
         expectedResult = 'SELECT `table1`.`column_a` AS new_column_a, `table1`.`column_b` AS new_column_b FROM `table1`';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+    it('call with missing $where', function () {
+
+        sqlParams = {
+            $from : 'table1',
+            $fields : [
+                'field_a'
+            ],
+            $where : {
+            }
+        };
+
+        expectedResult = 'SELECT `table1`.`field_a` FROM `table1`';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+
     });
 
     it('$inner $using', function () {
