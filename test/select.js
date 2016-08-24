@@ -406,10 +406,156 @@ describe('#select - queries', function () {
             ]
         };
 
-        expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` FROM `mi_itens_inventarios` WHERE `mi_itens_inventarios`.`deleted` = \'0\' AND `mi_itens_inventarios`.`arquivado` = \'0\' LIMIT 10,10';
+        expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` FROM `mi_itens_inventarios` WHERE `mi_itens_inventarios`.`deleted` = \'0\' AND `mi_itens_inventarios`.`arquivado` = \'0\' ORDER BY `mi_itens_inventarios`.`id_mi_item_inventario`';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
+
+
+    it('$order DESC', function () {
+
+        sqlParams = {
+            $from : 'mi_itens_inventarios',
+            $fields : [
+                'id_mi_item_inventario',
+                'id_modelo_insumo'
+            ],
+            $order : [
+                {
+                    $field: 'id_mi_item_inventario',
+                    $desc: 1
+                }
+            ]
+        };
+
+        expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` FROM `mi_itens_inventarios` ORDER BY `mi_itens_inventarios`.`id_mi_item_inventario` DESC';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+    it('$order $as', function () {
+
+        sqlParams = {
+            $from : 'mi_itens_inventarios',
+            $fields : [
+                'id_mi_item_inventario',
+                {
+                    $field: 'id_modelo_insumo',
+                    $as: 'id'
+                }
+            ],
+            $order : [
+                'id'
+            ]
+        };
+
+        expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` AS id FROM `mi_itens_inventarios` ORDER BY `mi_itens_inventarios`.`id_modelo_insumo`';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+    it('$order $as', function () {
+
+        sqlParams = {
+            $from : 'mi_itens_inventarios',
+            $fields : [
+                'id_mi_item_inventario',
+                {
+                    $field: 'id_modelo_insumo',
+                    $as: 'id'
+                }
+            ],
+            $order : [
+                {
+                    $as: 'id'
+                }
+            ]
+        };
+
+        expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` AS id FROM `mi_itens_inventarios` ORDER BY `mi_itens_inventarios`.`id_modelo_insumo`';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+    it('$order $as $desc', function () {
+
+        sqlParams = {
+            $from : 'mi_itens_inventarios',
+            $fields : [
+                'id_mi_item_inventario',
+                {
+                    $field: 'id_modelo_insumo',
+                    $as: 'id'
+                }
+            ],
+            $order : [
+                {
+                    $as: 'id',
+                    $desc: 1
+                }
+            ]
+        };
+
+        expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` AS id FROM `mi_itens_inventarios` ORDER BY `mi_itens_inventarios`.`id_modelo_insumo` DESC';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+    it('$order $as $desc complex', function () {
+
+        sqlParams = {
+            $from: 'modelos_insumos',
+            $fields: [
+                'codigo',
+                {$field: 'nome', $as: 'modelo'},
+                'lote',
+                'fracionamento',
+                {
+                    $inner: 'categorias_insumos',
+                    $using: 'id_categoria_insumo',
+                    $fields: [
+                        {$field: 'nome', $as: 'categoria'},
+                        {
+                            $inner: 'categorias_insumos_departamentos',
+                            $using: 'id_categoria_insumo_departamento',
+                            $fields: [
+                                {$field: 'nome', $as: 'departamento'},
+                            ]
+                        }
+                    ]
+                },
+                {
+                    $inner: 'categorias_unidades_medidas',
+                    $using: 'id_categoria_unidade_medida',
+                    $fields: [
+                        {$field: 'sigla', $as: 'unidade'},
+                    ]
+                }
+            ],
+            $order: [
+                {
+                    $table: 'categorias_insumos_departamentos',
+                    $field: 'nome',
+                    $desc: 1
+                },
+                'categoria',
+                {
+                    $as: 'modelo',
+                    $desc: 1
+                }
+            ]
+        };
+
+        expectedResult = 'SELECT `modelos_insumos`.`codigo`, `modelos_insumos`.`nome` AS modelo, `modelos_insumos`.`lote`, `modelos_insumos`.`fracionamento`, `categorias_insumos`.`nome` AS categoria, `categorias_insumos_departamentos`.`nome` AS departamento, `categorias_unidades_medidas`.`sigla` AS unidade FROM `modelos_insumos` INNER JOIN `categorias_insumos` USING(`id_categoria_insumo`) INNER JOIN `categorias_insumos_departamentos` USING(`id_categoria_insumo_departamento`) INNER JOIN `categorias_unidades_medidas` USING(`id_categoria_unidade_medida`) ORDER BY `categorias_insumos_departamentos`.`nome` DESC ,`categorias_insumos`.`nome` ,`modelos_insumos`.`nome` DESC';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
 });
 
 

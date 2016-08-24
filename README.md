@@ -130,7 +130,6 @@ UPDATE  `mytable`  SET `column_b` = '1' WHERE `column_a` = '1'
 
 
 
-
 ## Formating queryData
 
 ### SELECT
@@ -379,3 +378,47 @@ column_a > '1'
 ```
 LIMIT 0,10
 ```
+
+
+### $order
+
+``$order: [ list of fields ]``
+
+*example:*
+```
+{
+    $order : [
+        'column1',
+        'column2'
+    ]
+}
+```
+*will return:*
+```
+ORDER BY current_table.column1, current_table.column2
+```
+
+
+
+> Elements of the $order array can be aliases names, previously defined, using the $as tag
+
+*example:*
+```
+{
+    $fields: [
+        {
+          $field: 'column1'
+          $as : 'alias'
+        }
+    ]
+    $order : [
+        { $as : 'alias' }
+    ]
+}
+```
+*will return:*
+```
+ORDER BY current_table.column1, current_table.column2
+
+> If not using a $table tag, the current table will be used to build the command
+

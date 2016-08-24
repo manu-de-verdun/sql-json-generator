@@ -1,6 +1,6 @@
 var sqlJsonGenerator = function (options) {
 
-    if ( !options ) {
+    if (!options) {
         options = {};
     }
 
@@ -188,7 +188,7 @@ var sqlJsonGenerator = function (options) {
         // Process the $where object
         if (selectKeys.indexOf('$where') >= 0) {
             // only process the $where object if it is not empty
-            if ( Object.keys(conditions['$where']).length > 0 ) {
+            if (Object.keys(conditions['$where']).length > 0) {
                 selectObject.where.push(whereBuilder(conditions['$where'], null, currentTable));
             }
         }
@@ -225,27 +225,27 @@ var sqlJsonGenerator = function (options) {
                 // It is a field object
                 else if (fieldKeys.indexOf('$field') >= 0) {
 
-                        var currentField = {};
+                    var currentField = {};
 
-                        currentField.sql = "`" + currentTable + "`.`" + field['$field'] + "`";
+                    currentField.sql = "`" + currentTable + "`.`" + field['$field'] + "`";
 
-                        if (fieldKeys.indexOf('$dateFormat') >= 0) {
-                            currentField.sql = "DATE_FORMAT(" + currentField.sql + ",'" + field['$dateFormat'] + "')";
-                        }
-
-                        if (fieldKeys.indexOf('$as') >= 0) {
-                            currentField.as = field['$as'];
-                            currentField.sql = (currentField.sql) + " AS " + currentField.as;
-                            selectObject.aliases.push({
-                                $table : currentTable,
-                                $field: field['$field'],
-                                $as: field['$as']
-                            })
-                        }
-
-                        // add the columm to the select object
-                        selectObject.select.push(currentField.sql);
+                    if (fieldKeys.indexOf('$dateFormat') >= 0) {
+                        currentField.sql = "DATE_FORMAT(" + currentField.sql + ",'" + field['$dateFormat'] + "')";
                     }
+
+                    if (fieldKeys.indexOf('$as') >= 0) {
+                        currentField.as = field['$as'];
+                        currentField.sql = (currentField.sql) + " AS " + currentField.as;
+                        selectObject.aliases.push({
+                            $table: currentTable,
+                            $field: field['$field'],
+                            $as: field['$as']
+                        })
+                    }
+
+                    // add the columm to the select object
+                    selectObject.select.push(currentField.sql);
+                }
             }
             else {
                 // raw field, add it to the select Object
@@ -257,7 +257,7 @@ var sqlJsonGenerator = function (options) {
 
         // Process the $limit object
         if (selectKeys.indexOf('$limit') >= 0) {
-            if ( conditions['$limit']['$offset'] >= 0 && conditions['$limit']['$rows'] >= 0  ) {
+            if (conditions['$limit']['$offset'] >= 0 && conditions['$limit']['$rows'] >= 0) {
                 selectObject.limit = ' LIMIT ' + conditions['$limit']['$offset'] + ',' + conditions['$limit']['$rows'];
             }
         }
@@ -270,27 +270,33 @@ var sqlJsonGenerator = function (options) {
                 return x['$as'];
             });
 
-            console.log(aliasesList);
-
             conditions['$order'].forEach(function (orderItem) {
 
                 // test if the array element is an object ( column descriptor ) or a simple string ( an column alias )
                 if (typeof orderItem === 'object') {
-                    //if it is an object, must contain a $table and $field keys
-                    if ( orderItem['$table'] &&  orderItem['$field'] ) {
-                        selectObject.orderBy.push( "`" + orderItem['$table'] + "`.`" + orderItem['$field'] + "`" );
+                    //if it is an object, must contain a $as or $field keys
+                    if (orderItem['$field']) {
+                        //it's a field
+                        selectObject.orderBy.push("`" + ( orderItem['$table'] ? orderItem['$table'] : currentTable) + "`.`" + orderItem['$field'] + "`" + ( orderItem['$desc'] ? ' DESC' : ''));
+                    }
+                    else if (orderItem['$as']) {
+                        var currentAliasIdx = aliasesList.indexOf(orderItem['$as']);
+                        if (currentAliasIdx >= 0) {
+                            // It's an alias
+                            selectObject.orderBy.push("`" + selectObject.aliases[currentAliasIdx]['$table'] + "`.`" + selectObject.aliases[currentAliasIdx]['$field'] + "`" + ( orderItem['$desc'] ? ' DESC' : '' ));
+                        }
                     }
                 }
                 else {
                     // it is not an object. must be an alias or a top level table column name (will use $from table name)
                     var currentAliasIdx = aliasesList.indexOf(orderItem);
-                    if ( currentAliasIdx >= 0) {
+                    if (currentAliasIdx >= 0) {
                         // It's an alias
-                        selectObject.orderBy.push( "`" + selectObject.aliases[currentAliasIdx]['$table'] + "`.`" + selectObject.aliases[currentAliasIdx]['$field'] + "`" );
+                        selectObject.orderBy.push("`" + selectObject.aliases[currentAliasIdx]['$table'] + "`.`" + selectObject.aliases[currentAliasIdx]['$field'] + "`");
                     }
                     else {
                         //It's a top level table column
-                        selectObject.orderBy.push( "`" + currentTable + "`.`" + orderItem + "`" );
+                        selectObject.orderBy.push("`" + currentTable + "`.`" + orderItem + "`");
                     }
                 }
 
@@ -401,7 +407,7 @@ var sqlJsonGenerator = function (options) {
     this.select = function (queryParams) {
 
         // test if required query params are provided
-        if (!queryParams || !queryParams.$from ) return null;
+        if (!queryParams || !queryParams.$from) return null;
 
         var sql = "";
         var selectObject = selectBuilder(queryParams);
