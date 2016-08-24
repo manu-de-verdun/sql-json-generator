@@ -4,7 +4,7 @@
 var SQLGenerator = require('../index');
 
 
-var sqlGenerator = new SQLGenerator(true);
+var sqlGenerator = new SQLGenerator({debug: true});
 var sqlParams = {};
 
 sqlParams = {

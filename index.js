@@ -1,4 +1,4 @@
-var sqlJsonGenerator = function (debug) {
+var sqlJsonGenerator = function (options) {
 
     /**
      * Building SQL WHERE conditions
@@ -12,7 +12,7 @@ var sqlJsonGenerator = function (debug) {
         var whereArray = [];
         var whereExpression = "";
 
-        if (debug) {
+        if (options.debug) {
             console.log('');
             console.log('whereBuilder');
             console.log('  conditions: ', conditions);
@@ -108,7 +108,7 @@ var sqlJsonGenerator = function (debug) {
      */
     var joinBuilder = function (joinData) {
 
-        if (debug) {
+        if (options.debug) {
             console.log('');
             console.log('joinBuilder');
             console.log('  joinData: ', joinData);
@@ -142,7 +142,7 @@ var sqlJsonGenerator = function (debug) {
 
     var selectBuilder = function (conditions) {
 
-        if (debug) {
+        if (options.debug) {
             console.log('');
             console.log('selectBuilder');
             console.log('  conditions: ', conditions);
