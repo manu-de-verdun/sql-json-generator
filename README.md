@@ -359,3 +359,23 @@ column_a = '1' AND column_b = '1' AND column_c = '1'
 ```
 column_a > '1'
 ```
+
+
+
+### $limit
+
+``$limit: { $offset :  offset_value , $rows : rows_to_return  }``
+
+*example:*
+```
+{
+    $limit : {
+        $offset: 0,
+        $rows: 10
+    }
+}
+```
+*will return:*
+```
+LIMIT 0,10
+```

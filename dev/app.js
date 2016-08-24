@@ -8,12 +8,18 @@ var sqlGenerator = new SQLGenerator({debug: true});
 var sqlParams = {};
 
 sqlParams = {
-    $from : 'table1',
+    $from : 'mi_itens_inventarios',
     $fields : [
-        'field_a'
+        'id_mi_item_inventario',
+        'id_modelo_insumo'
     ],
     $where : {
-        field_d: 1
+        'deleted' : 0,
+        'arquivado' : 0
+    },
+    $limit : {
+        $offset: 10,
+        $rows: 10
     }
 };
 

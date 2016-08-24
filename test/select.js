@@ -344,6 +344,49 @@ describe('#select - queries', function () {
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
 
+
+    it('$limit', function () {
+
+        sqlParams = {
+            $from : 'mi_itens_inventarios',
+            $fields : [
+                'id_mi_item_inventario',
+                'id_modelo_insumo'
+            ],
+            $limit : {
+                $offset: 0,
+                $rows: 10
+            }
+        };
+
+        expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` FROM `mi_itens_inventarios` LIMIT 0,10';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+    it('$limit $where', function () {
+
+        sqlParams = {
+            $from : 'mi_itens_inventarios',
+            $fields : [
+                'id_mi_item_inventario',
+                'id_modelo_insumo'
+            ],
+            $where : {
+                'deleted' : 0,
+                'arquivado' : 0
+            },
+            $limit : {
+                $offset: 10,
+                $rows: 10
+            }
+        };
+
+        expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` FROM `mi_itens_inventarios` WHERE `mi_itens_inventarios`.`deleted` = \'0\' AND `mi_itens_inventarios`.`arquivado` = \'0\' LIMIT 10,10';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
 });
 
 

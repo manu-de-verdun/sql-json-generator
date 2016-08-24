@@ -1,5 +1,9 @@
 var sqlJsonGenerator = function (options) {
 
+    if ( !options ) {
+        options = {};
+    }
+
     /**
      * Building SQL WHERE conditions
      * @param conditions
@@ -148,7 +152,6 @@ var sqlJsonGenerator = function (options) {
             console.log('  conditions: ', conditions);
         }
 
-
         var currentTable;
         var selectKeys = Object.keys(conditions);
         var selectObject = {
@@ -186,6 +189,13 @@ var sqlJsonGenerator = function (options) {
             if ( Object.keys(conditions['$where']).length > 0 ) {
                 selectObject.where.push(whereBuilder(conditions['$where'], null, currentTable));
             }
+        }
+
+        // Process the $limit object
+        if (selectKeys.indexOf('$limit') >= 0) {
+             if ( conditions['$limit']['$offset'] >= 0 && conditions['$limit']['$rows'] >= 0  ) {
+                 selectObject.limit = ' LIMIT ' + conditions['$limit']['$offset'] + ',' + conditions['$limit']['$rows'];
+             }
         }
 
         // Process all provided elements of fields Array
@@ -353,6 +363,10 @@ var sqlJsonGenerator = function (options) {
 
         if (selectObject.where.length > 0) {
             sql += " WHERE " + selectObject.where.join(' AND ');
+        }
+
+        if (selectObject.limit) {
+            sql += selectObject.limit;
         }
 
         return sql;
