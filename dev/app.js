@@ -5,9 +5,8 @@ var SQLGenerator = require('../index');
 
 
 var sqlGenerator = new SQLGenerator({debug: true});
-var sqlParams = {};
 
-sqlParams = {
+var queryParams = {
     $from : 'mi_itens_inventarios',
     $fields : [
         'id_mi_item_inventario',
@@ -17,13 +16,13 @@ sqlParams = {
         'deleted' : 0,
         'arquivado' : 0
     },
-    $limit : {
-        $offset: 10,
-        $rows: 10
-    }
+    $order : [
+        'id_mi_item_inventario'
+    ]
 };
 
-var sqlQuery = sqlGenerator.select(sqlParams);
+
+var sqlQuery = sqlGenerator.select(queryParams);
 
 console.log(' ');
 console.log('Query: ', sqlQuery);

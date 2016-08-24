@@ -157,7 +157,9 @@ var sqlJsonGenerator = function (options) {
         var selectObject = {
             select: [],
             from: [],
-            where: []
+            where: [],
+            aliases: [],
+            orderBy: []
         };
 
         // Tests the conditions object keys to see what action is required (from, join, etc...)
@@ -191,12 +193,6 @@ var sqlJsonGenerator = function (options) {
             }
         }
 
-        // Process the $limit object
-        if (selectKeys.indexOf('$limit') >= 0) {
-             if ( conditions['$limit']['$offset'] >= 0 && conditions['$limit']['$rows'] >= 0  ) {
-                 selectObject.limit = ' LIMIT ' + conditions['$limit']['$offset'] + ',' + conditions['$limit']['$rows'];
-             }
-        }
 
         // Process all provided elements of fields Array
         conditions['$fields'].forEach(function (field) {
@@ -222,6 +218,9 @@ var sqlJsonGenerator = function (options) {
                     recursiveSelectObject.where.forEach(function (item) {
                         selectObject.where.push(item);
                     });
+                    recursiveSelectObject.aliases.forEach(function (item) {
+                        selectObject.aliases.push(item);
+                    });
                 }
                 // It is a field object
                 else if (fieldKeys.indexOf('$field') >= 0) {
@@ -237,6 +236,11 @@ var sqlJsonGenerator = function (options) {
                         if (fieldKeys.indexOf('$as') >= 0) {
                             currentField.as = field['$as'];
                             currentField.sql = (currentField.sql) + " AS " + currentField.as;
+                            selectObject.aliases.push({
+                                $table : currentTable,
+                                $field: field['$field'],
+                                $as: field['$as']
+                            })
                         }
 
                         // add the columm to the select object
@@ -249,6 +253,50 @@ var sqlJsonGenerator = function (options) {
             }
 
         });
+
+
+        // Process the $limit object
+        if (selectKeys.indexOf('$limit') >= 0) {
+            if ( conditions['$limit']['$offset'] >= 0 && conditions['$limit']['$rows'] >= 0  ) {
+                selectObject.limit = ' LIMIT ' + conditions['$limit']['$offset'] + ',' + conditions['$limit']['$rows'];
+            }
+        }
+
+
+        // Process the $orderBy object
+        if (selectKeys.indexOf('$order') >= 0) {
+
+            var aliasesList = selectObject.aliases.map(function (x) {
+                return x['$as'];
+            });
+
+            console.log(aliasesList);
+
+            conditions['$order'].forEach(function (orderItem) {
+
+                // test if the array element is an object ( column descriptor ) or a simple string ( an column alias )
+                if (typeof orderItem === 'object') {
+                    //if it is an object, must contain a $table and $field keys
+                    if ( orderItem['$table'] &&  orderItem['$field'] ) {
+                        selectObject.orderBy.push( "`" + orderItem['$table'] + "`.`" + orderItem['$field'] + "`" );
+                    }
+                }
+                else {
+                    // it is not an object. must be an alias or a top level table column name (will use $from table name)
+                    var currentAliasIdx = aliasesList.indexOf(orderItem);
+                    if ( currentAliasIdx >= 0) {
+                        // It's an alias
+                        selectObject.orderBy.push( "`" + selectObject.aliases[currentAliasIdx]['$table'] + "`.`" + selectObject.aliases[currentAliasIdx]['$field'] + "`" );
+                    }
+                    else {
+                        //It's a top level table column
+                        selectObject.orderBy.push( "`" + currentTable + "`.`" + orderItem + "`" );
+                    }
+                }
+
+            });
+
+        }
 
         return selectObject
     };
@@ -363,6 +411,10 @@ var sqlJsonGenerator = function (options) {
 
         if (selectObject.where.length > 0) {
             sql += " WHERE " + selectObject.where.join(' AND ');
+        }
+
+        if (selectObject.orderBy.length > 0) {
+            sql += " ORDER BY " + selectObject.orderBy.join(' ,');
         }
 
         if (selectObject.limit) {
