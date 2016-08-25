@@ -421,6 +421,41 @@ ORDER BY current_table.column1, current_table.column2
 ORDER BY current_table.column1, current_table.column2
 ```
 
+#### $desc
 
-> If not using a $table tag, the current table will be used to build the command
+to append DESC into one ORDER directive, the required field must be explicitly declared using ``$table`` and ``$field``, or ``$as``
 
+*example:*
+```
+{
+    $order : [
+        {
+            $table: 'table1',
+            $field: 'column1',
+            $desc : 1
+        }
+    ]
+}
+```
+*will return:*
+```
+ORDER BY table1.column1 DESC
+```
+
+> If not using a ``$table`` tag with ``$field``, the current table will be used to build the command
+
+*example:*
+```
+{
+    $order : [
+        {
+            $field: 'column1',
+            $desc : 1
+        }
+    ]
+}
+```
+*will return:*
+```
+ORDER BY current_table.column1 DESC
+```
