@@ -1,6 +1,6 @@
 {
   "name": "sql-json-generator",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "description": "Module to create SQL queries from JSON objects",
   "main": "index.js",
   "scripts": {
@@ -16,7 +16,7 @@
     "NODE"
   ],
   "author": "Emmanuel Pautet <emmanuel.pautet@gmail.com> (https://www.linkedin.com/in/epautet)",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/manu-de-verdun/sql-json-generator/issues"
   },

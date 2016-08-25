@@ -419,6 +419,8 @@ ORDER BY current_table.column1, current_table.column2
 *will return:*
 ```
 ORDER BY current_table.column1, current_table.column2
+```
+
 
 > If not using a $table tag, the current table will be used to build the command
 
