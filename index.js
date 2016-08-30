@@ -100,7 +100,7 @@ var sqlJsonGenerator = function (options) {
                         break;
 
                     default:
-                        conditionBuilder(key, inheritedTable, '=', conditions[key]);
+                        conditionBuilder(key, inheritedTable, '=', conditions[key], "'");
 
                 }
 

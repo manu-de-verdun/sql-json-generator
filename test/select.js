@@ -556,6 +556,61 @@ describe('#select - queries', function () {
     });
 
 
+
+    it('$in', function () {
+
+        sqlParams = {
+            $from: 'gesup_usuarios_perfis_privilegios',
+            $fields: ['id_categoria_gesup', 'id_categoria_gesup_acao'],
+            $where: {
+                'id_perfil': {
+                    $in: [2, 4, 7]
+                }
+            }
+        };
+
+        expectedResult = "SELECT `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup`, `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup_acao` FROM `gesup_usuarios_perfis_privilegios` WHERE `gesup_usuarios_perfis_privilegios`.`id_perfil` IN ('2','4','7')";
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+    it('$in empty', function () {
+
+        sqlParams = {
+            $from: 'gesup_usuarios_perfis_privilegios',
+            $fields: ['id_categoria_gesup', 'id_categoria_gesup_acao'],
+            $where: {
+                'id_perfil': {
+                    $in: []
+                }
+            }
+        };
+
+        expectedResult = "SELECT `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup`, `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup_acao` FROM `gesup_usuarios_perfis_privilegios`";
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+    it('$in not an array', function () {
+
+        sqlParams = {
+            $from: 'gesup_usuarios_perfis_privilegios',
+            $fields: ['id_categoria_gesup', 'id_categoria_gesup_acao'],
+            $where: {
+                'id_perfil': {
+                    $in: 12
+                }
+            }
+        };
+
+        expectedResult = "SELECT `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup`, `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup_acao` FROM `gesup_usuarios_perfis_privilegios`";
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
 });
 
 
