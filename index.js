@@ -16,6 +16,10 @@ var sqlJsonGenerator = function (options) {
         var whereArray = [];
         var whereExpression = "";
 
+        var conditionBuilder = function (column, table, operador, condition, delimiter) {
+            whereArray.push((( table ) ? "`" + table + "`." : "" ) + "`" + column + "` " + operador + " " + delimiter + condition + delimiter);
+        };
+
         if (options.debug) {
             console.log('');
             console.log('whereBuilder');
@@ -52,6 +56,14 @@ var sqlJsonGenerator = function (options) {
                 whereArray.push("(" + andArray.join(' OR ') + ")");
             }
 
+            else if (key === "$in") {
+                if ( Array.isArray(conditions[key]) && conditions[key].length > 0  ) {
+                    var inCondition = "('" + conditions[key].join("','") + "')";
+                    conditionBuilder(parentKey, inheritedTable, 'IN', inCondition , '' );
+                }
+            }
+
+
             // Nested Object (not part of a logical operation)
             else if (typeof conditions[key] === 'object') {
                 whereArray.push(whereBuilder(conditions[key], key, inheritedTable));
@@ -60,34 +72,31 @@ var sqlJsonGenerator = function (options) {
             // Comparaison Operators
             else {
 
-                var conditionBuilder = function (column, table, operador, condition) {
-                    whereArray.push((( table ) ? "`" + table + "`." : "" ) + "`" + column + "` " + operador + " '" + condition + "'");
-                };
 
                 switch (key) {
 
                     case "$gt" :
-                        conditionBuilder(parentKey, inheritedTable, '>', conditions[key]);
+                        conditionBuilder(parentKey, inheritedTable, '>', conditions[key], "'");
                         break;
 
                     case "$gte" :
-                        whereArray.push("`" + parentKey + "` >= '" + conditions[key] + "'");
+                        conditionBuilder(parentKey, inheritedTable, '>=', conditions[key], "'");
                         break;
 
                     case "$lt" :
-                        whereArray.push("`" + parentKey + "` < '" + conditions[key] + "'");
+                        conditionBuilder(parentKey, inheritedTable, '<', conditions[key], "'");
                         break;
 
                     case "$lte" :
-                        whereArray.push("`" + parentKey + "` <= '" + conditions[key] + "'");
+                        conditionBuilder(parentKey, inheritedTable, '<=', conditions[key], "'");
                         break;
 
                     case "$eq" :
-                        whereArray.push("`" + parentKey + "` = '" + conditions[key] + "'");
+                        conditionBuilder(parentKey, inheritedTable, '=', conditions[key], "'");
                         break;
 
                     case "$ne" :
-                        whereArray.push("`" + parentKey + "` <> '" + conditions[key] + "'");
+                        conditionBuilder(parentKey, inheritedTable, '<>', conditions[key], "'");
                         break;
 
                     default:

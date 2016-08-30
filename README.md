@@ -359,6 +359,24 @@ column_a = '1' AND column_b = '1' AND column_c = '1'
 column_a > '1'
 ```
 
+#### $in
+
+*example:*
+```
+{
+    column_a: {
+        $in: [
+            1,
+            2
+        ]
+    }
+}
+```
+*will return:*
+```
+column_a IN ( 1 , 2 )
+```
+
 
 
 ### $limit
