@@ -557,7 +557,7 @@ describe('#select - queries', function () {
 
 
 
-    it('$in', function () {
+    it('$in numbers', function () {
 
         sqlParams = {
             $from: 'gesup_usuarios_perfis_privilegios',
@@ -570,6 +570,27 @@ describe('#select - queries', function () {
         };
 
         expectedResult = "SELECT `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup`, `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup_acao` FROM `gesup_usuarios_perfis_privilegios` WHERE `gesup_usuarios_perfis_privilegios`.`id_perfil` IN ('2','4','7')";
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+    it('$in strings', function () {
+
+        sqlParams = {
+            $from: 'gesup_usuarios_perfis_privilegios',
+            $fields: ['id_categoria_gesup', 'id_categoria_gesup_acao'],
+            $where: {
+                'id_perfil': {
+                    $in: [
+                        'AA',
+                        'BB',
+                        'CC'
+                    ]
+                }
+            }
+        };
+
+        expectedResult = "SELECT `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup`, `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup_acao` FROM `gesup_usuarios_perfis_privilegios` WHERE `gesup_usuarios_perfis_privilegios`.`id_perfil` IN ('AA','BB','CC')";
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });

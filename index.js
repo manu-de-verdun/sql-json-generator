@@ -198,7 +198,11 @@ var sqlJsonGenerator = function (options) {
         if (selectKeys.indexOf('$where') >= 0) {
             // only process the $where object if it is not empty
             if (Object.keys(conditions['$where']).length > 0) {
-                selectObject.where.push(whereBuilder(conditions['$where'], null, currentTable));
+                var whereObject = whereBuilder(conditions['$where'], null, currentTable);
+                if ( whereObject ) {
+                    // only add the result of whereBuilder if it has returned a value
+                    selectObject.where.push(whereObject);
+                }
             }
         }
 

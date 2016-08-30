@@ -11,7 +11,11 @@ var queryParams = {
     $fields: ['id_categoria_gesup', 'id_categoria_gesup_acao'],
     $where: {
         'id_perfil': {
-            $in: [2, 4, 7]
+            $in: [
+                'AA',
+                'BB',
+                'CC'
+            ]
         }
     }
 };
