@@ -8,14 +8,13 @@ var sqlGenerator = new SQLGenerator({debug: true});
 
 var queryParams = {
     $from: 'gesup_usuarios_perfis_privilegios',
-    $fields: ['id_categoria_gesup', 'id_categoria_gesup_acao'],
+    $fields: [
+        'id_categoria_gesup',
+        'id_categoria_gesup_acao'
+    ],
     $where: {
-        'id_perfil': {
-            $in: [
-                'AA',
-                'BB',
-                'CC'
-            ]
+        'id_perfil' : {
+            $in: [ '9', '11', '5', '16', '10', '18' ]
         }
     }
 };
