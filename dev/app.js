@@ -7,16 +7,36 @@ var SQLGenerator = require('../index');
 var sqlGenerator = new SQLGenerator({debug: true});
 
 var queryParams = {
-    $from: 'gesup_usuarios_perfis_privilegios',
+    $from: 'modelos_insumos',
     $fields: [
-        'id_categoria_gesup',
-        'id_categoria_gesup_acao'
-    ],
-    $where: {
-        'id_perfil' : {
-            $in: [ '9', '11', '5', '16', '10', '18' ]
+        'id_modelo_insumo',
+        'codigo',
+        'nome',
+        'referencia',
+        'fracionamento',
+        'ativo',
+        {
+            $inner: 'categorias_insumos',
+            $using: 'id_categoria_insumo',
+            $fields: [
+                { $field : 'nome', $as: 'categoria'},
+                {
+                    $inner: 'categorias_insumos_departamentos',
+                    $using: 'id_categoria_insumo_departamento',
+                    $fields: [
+                        { $field : 'nome', $as: 'departamento'},
+                    ]
+                }
+            ]
+        },
+        {
+            $inner: 'categorias_unidades_medidas',
+            $using: 'id_categoria_unidade_medida',
+            $fields: [
+                { $field : 'sigla', $as: 'unidade'},
+            ]
         }
-    }
+    ]
 };
 
 
