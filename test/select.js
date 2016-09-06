@@ -454,9 +454,8 @@ describe('#select - queries', function () {
             $from: 'gesup_usuarios_perfis_privilegios',
             $fields: ['id_categoria_gesup', 'id_categoria_gesup_acao'],
             $where: [{
-                'id_perfil': {
-                    $in: [2, 4, 7]
-                }
+                $field: 'id_perfil',
+                $in: [2, 4, 7]
             }]
         };
 
@@ -471,9 +470,8 @@ describe('#select - queries', function () {
             $from: 'gesup_usuarios_perfis_privilegios',
             $fields: ['id_categoria_gesup', 'id_categoria_gesup_acao'],
             $where: [{
-                'id_perfil': {
-                    $in: ['AA', 'BB', 'CC']
-                }
+                $field: 'id_perfil',
+                $in: ['AA', 'BB', 'CC']
             }]
         };
 
@@ -488,10 +486,9 @@ describe('#select - queries', function () {
         sqlParams = {
             $from: 'gesup_usuarios_perfis_privilegios',
             $fields: ['id_categoria_gesup', 'id_categoria_gesup_acao'],
-            $where: [{
-                'id_perfil': {
-                    $in: []
-                }
+            $where:  [{
+                $field: 'id_perfil',
+                $in: []
             }]
         };
 
@@ -506,10 +503,9 @@ describe('#select - queries', function () {
         sqlParams = {
             $from: 'gesup_usuarios_perfis_privilegios',
             $fields: ['id_categoria_gesup', 'id_categoria_gesup_acao'],
-            $where: [{
-                'id_perfil': {
-                    $in: 12
-                }
+            $where:  [{
+                $field: 'id_perfil',
+                $in: 12
             }]
         };
 

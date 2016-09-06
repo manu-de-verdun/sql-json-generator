@@ -102,24 +102,39 @@ var sqlJsonGenerator = function (options) {
                 return conditionBuilder(conditions['$field'], currentTable, '>', conditions["$gt"], "'");
             }
 
-            if (conditions["$gte"]) {
+            else if (conditions["$gte"]) {
                 return conditionBuilder(conditions['$field'], currentTable, '>=', conditions["$gte"], "'");
             }
 
-            if (conditions["$lt"]) {
+            else if (conditions["$lt"]) {
                 return conditionBuilder(conditions['$field'], currentTable, '<', conditions["$lt"], "'");
             }
 
-            if (conditions["$lte"]) {
+            else if (conditions["$lte"]) {
                 return conditionBuilder(conditions['$field'], currentTable, '<=', conditions["$lte"], "'");
             }
 
-            if (conditions["$eq"]) {
+            else if (conditions["$eq"]) {
                 return conditionBuilder(conditions['$field'], currentTable, '=', conditions["$eq"], "'");
             }
 
-            if (conditions["$ne"]) {
+            else  if (conditions["$ne"]) {
                 return conditionBuilder(conditions['$field'], currentTable, '<>', conditions["$ne"], "'");
+            }
+
+
+            else  if (conditions["$in"]) {
+
+                if (options.debug) {
+                    console.log('      $in'.cyan);
+                }
+                if (Array.isArray(conditions["$in"]) && conditions["$in"].length > 0) {
+                    var inCondition = "('" + conditions["$in"].join("','") + "')";
+                    return conditionBuilder(conditions['$field'], currentTable, 'IN', inCondition, '');
+                }
+                else {
+                    return null;
+                }
             }
 
         }
