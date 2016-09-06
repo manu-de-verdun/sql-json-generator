@@ -37,9 +37,9 @@ sqlParams = {
         'column_b',
         'column_c'
     ],
-    $where : {
+    $where : [{
         column_d: 1
-    }
+    }]
 }
 
 sqlGenerator.select( sqlParams);
@@ -88,9 +88,9 @@ sqlParams = {
     $set : {
         column_b: 1
     },
-    $where: {
+    $where: [{
         column_a: 1
-    }
+    }]
 }
 
 sqlGenerator.update( sqlParams);
@@ -113,9 +113,9 @@ The function returns a string with the SQL. In case of error, will return ``null
 ```
 sqlParams = {
     $delete: 'mytable',
-    $where: {
+    $where: [{
         column_a: 1
-    }
+    }]
 }
 
 sqlGenerator.delete( sqlParams);
@@ -242,9 +242,9 @@ SELECT DATE_FORMAT(`table1`.`column_a`,'%Y-%m-%d') AS column_date FROM `table1`
         'column_a',
         'column_b'
     ],
-    $where : {
+    $where : [{
         'column_c' : 1
-    }
+    }]
 }
 ```
 *will return:*
@@ -297,7 +297,32 @@ SELECT `table1`.`column1a`, `table1`.`column1b`, `table2`.`column2a`, `table2`.`
 
 ### $where
 
-``$where: { conditions... }``
+``$where: [{condition1}, {condition2}....]``
+
+
+#### Simple Column comparison
+
+Simple column comparison, ie *column equal value* can be wrote using simple style
+
+``{ column_name : value }``
+
+> In case of SELECT statement, the column name will be prefixed by the FROM table name
+
+*example:*
+```
+[
+    {column_a: 1}
+]
+```
+*will return:*
+```
+column_a = '1'
+```
+*or, for SELECT statement*
+
+```
+table_a.column_a = '1'
+```
 
 #### Logical Operators: $and and $or
 
@@ -321,20 +346,47 @@ SELECT `table1`.`column1a`, `table1`.`column1b`, `table2`.`column2a`, `table2`.`
 
 *example:*
 ```
-{
-    column_a: 1,
-    column_b: 1,
-    column_c: 1
-}
+[
+    {column_a: 1},
+    {column_b: 1},
+    {column_c: 1}
+]
 ```
 *will return:*
 ```
 column_a = '1' AND column_b = '1' AND column_c = '1'
 ```
 
-#### Comparaison Operators
 
-``{ column : { $gt : value }}``
+#### Complex Colums comparison
+
+``{ $table: table_name, $field: field_name, comparison_operator : value}``
+
+> If ``$table`` is not specified, will use the primary table name *(FROM, UPDATE)*
+
+*example:*
+```
+[
+    {
+        $field: 'column_a',
+        $eq : 1
+    },
+    {
+        $table: 'table_b
+        $field: 'column_b',
+        $eq : 1
+    }
+]
+```
+*will return:*
+```
+table_a.column_a = '1' AND table_b.column_b = '1'
+```
+
+
+#### Comparison Operators
+
+``$gt : value``
 
 |    JSON  |     SQL       |
 |----------|:-------------:|
@@ -348,11 +400,12 @@ column_a = '1' AND column_b = '1' AND column_c = '1'
 
 *example:*
 ```
-{
-    column_a: {
-        $gt: 1
+[
+    {
+        $field: 'column_a',
+        $gt : 1
     }
-}
+]
 ```
 *will return:*
 ```
@@ -364,11 +417,9 @@ column_a > '1'
 *example:*
 ```
 {
-    column_a: {
-        $in: [
-            1,
-            2
-        ]
+    {
+        $field: 'column_a',
+        $in: [ 1, 2 ]
     }
 }
 ```
