@@ -32,16 +32,16 @@ var sqlJsonGenerator = function (options) {
 
 
         // if conditions is an array, split and call wherebuilder for each of the array element
-        if ( Array.isArray(conditions) && conditions.length > 0  ) {
+        if (Array.isArray(conditions) && conditions.length > 0) {
 
             if (options.debug) {
                 console.log('    splitting conditions'.cyan);
             }
 
-            conditions.forEach( function ( condition ) {
-                var whereExpression = whereBuilder ( condition , parentKey , inheritedTable) ;
-                if ( whereExpression ) {
-                    whereArray.push (  whereExpression );
+            conditions.forEach(function (condition) {
+                var whereExpression = whereBuilder(condition, parentKey, inheritedTable);
+                if (whereExpression) {
+                    whereArray.push(whereExpression);
                 }
             });
 
@@ -59,40 +59,67 @@ var sqlJsonGenerator = function (options) {
         }
 
 
-
         // test if there is a logical operator
-        if (  conditions['$or'] || conditions['$and']  ) {
+        if (conditions['$or'] || conditions['$and']) {
 
             if (options.debug) {
                 console.log('    logical operator'.cyan);
             }
 
-          return null;
-        };
+            return null;
+        }
 
 
-        // test if there is a logical operator
-        if (  conditions['$field'] ) {
+        // test if there is a $field (complete field with comparison operators
+        if (conditions['$field']) {
+
+            if (options.debug) {
+                console.log('    full field comparaison'.cyan);
+            }
+
+            var currentTable = ( conditions['$table'] ) ? conditions['$table'] : inheritedTable;
+
+            if (conditions["$gt"]) {
+                return conditionBuilder(conditions['$field'], currentTable, '>', conditions["$gt"], "'");
+            }
+
+            if (conditions["$gte"]) {
+                return conditionBuilder(conditions['$field'], currentTable, '>=', conditions["$gte"], "'");
+            }
+
+            if (conditions["$lt"]) {
+                return conditionBuilder(conditions['$field'], currentTable, '<', conditions["$lt"], "'");
+            }
+
+            if (conditions["$lte"]) {
+                return conditionBuilder(conditions['$field'], currentTable, '<=', conditions["$lte"], "'");
+            }
+
+            if (conditions["$eq"]) {
+                return conditionBuilder(conditions['$field'], currentTable, '=', conditions["$eq"], "'");
+            }
+
+            if (conditions["$ne"]) {
+                return conditionBuilder(conditions['$field'], currentTable, '<>', conditions["$ne"], "'");
+            }
 
         }
 
-        if ( whereKeys.length == 1 ) {
+        if (whereKeys.length == 1) {
 
             var result = conditionBuilder(whereKeys[0], inheritedTable, '=', conditions[whereKeys[0]], "'");
 
             if (options.debug) {
                 console.log('    simple columns equality shortcut'.cyan);
-                console.log(colors.yellow('      result: %s'),result);
+                console.log(colors.yellow('      result: %s'), result);
             }
 
             return result;
         }
 
 
-
         return null;
     };
-
 
 
     /**
@@ -120,9 +147,9 @@ var sqlJsonGenerator = function (options) {
         }
 
 
-        if ( Array.isArray(conditions[key]) && conditions[key].length > 0  ) {
+        if (Array.isArray(conditions[key]) && conditions[key].length > 0) {
             var inCondition = "('" + conditions[key].join("','") + "')";
-            conditionBuilder(parentKey, inheritedTable, 'IN', inCondition , '' );
+            conditionBuilder(parentKey, inheritedTable, 'IN', inCondition, '');
         }
 
 
@@ -154,9 +181,9 @@ var sqlJsonGenerator = function (options) {
             }
 
             else if (key === "$in") {
-                if ( Array.isArray(conditions[key]) && conditions[key].length > 0  ) {
+                if (Array.isArray(conditions[key]) && conditions[key].length > 0) {
                     var inCondition = "('" + conditions[key].join("','") + "')";
-                    conditionBuilder(parentKey, inheritedTable, 'IN', inCondition , '' );
+                    conditionBuilder(parentKey, inheritedTable, 'IN', inCondition, '');
                 }
             }
 
@@ -231,14 +258,11 @@ var sqlJsonGenerator = function (options) {
 
         if (joinKeys.indexOf('$inner') >= 0) {
             sqlJoin += 'INNER JOIN `' + joinData['$inner'] + '` ';
-        }
-        else if (joinKeys.indexOf('$left') >= 0) {
+        } else if (joinKeys.indexOf('$left') >= 0) {
             sqlJoin += 'LEFT JOIN `' + joinData['$left'] + '` ';
-        }
-        else if (joinKeys.indexOf('$right') >= 0) {
+        } else if (joinKeys.indexOf('$right') >= 0) {
             sqlJoin += 'RIGHT JOIN `' + joinData['$right'] + '` ';
-        }
-        else if (joinKeys.indexOf('$full') >= 0) {
+        } else if (joinKeys.indexOf('$full') >= 0) {
             sqlJoin += 'FULL JOIN `' + joinData['$full'] + '` ';
         }
 
@@ -276,16 +300,13 @@ var sqlJsonGenerator = function (options) {
         if (selectKeys.indexOf('$inner') >= 0) {
             currentTable = conditions['$inner'];
             selectObject.from.push(joinBuilder(conditions));
-        }
-        else if (selectKeys.indexOf('$left') >= 0) {
+        } else if (selectKeys.indexOf('$left') >= 0) {
             currentTable = conditions['$left'];
             selectObject.from.push(joinBuilder(conditions));
-        }
-        else if (selectKeys.indexOf('$right') >= 0) {
+        } else if (selectKeys.indexOf('$right') >= 0) {
             currentTable = conditions['$right'];
             selectObject.from.push(joinBuilder(conditions));
-        }
-        else if (selectKeys.indexOf('$full') >= 0) {
+        } else if (selectKeys.indexOf('$full') >= 0) {
             currentTable = conditions['$full'];
             selectObject.from.push(joinBuilder(conditions));
         }
@@ -295,7 +316,7 @@ var sqlJsonGenerator = function (options) {
             // only process the $where object if it is not empty
             if (Object.keys(conditions['$where']).length > 0) {
                 var whereObject = whereBuilder(conditions['$where'], null, currentTable);
-                if ( whereObject ) {
+                if (whereObject) {
                     // only add the result of whereBuilder if it has returned a value
                     selectObject.where = whereObject;
                 }
@@ -326,11 +347,10 @@ var sqlJsonGenerator = function (options) {
                     });
 
                     // where is a string, and not an array. manualy concatenate
-                    if ( recursiveSelectObject.where) {
-                        if ( selectObject.where ) {
+                    if (recursiveSelectObject.where) {
+                        if (selectObject.where) {
                             selectObject.where += ' AND ' + recursiveSelectObject.where
-                        }
-                        else {
+                        } else {
                             selectObject.where = recursiveSelectObject.where
                         }
                     }
@@ -363,8 +383,7 @@ var sqlJsonGenerator = function (options) {
                     // add the columm to the select object
                     selectObject.select.push(currentField.sql);
                 }
-            }
-            else {
+            } else {
                 // raw field, add it to the select Object
                 selectObject.select.push("`" + currentTable + "`.`" + field + "`");
             }
@@ -395,23 +414,20 @@ var sqlJsonGenerator = function (options) {
                     if (orderItem['$field']) {
                         //it's a field
                         selectObject.orderBy.push("`" + ( orderItem['$table'] ? orderItem['$table'] : currentTable) + "`.`" + orderItem['$field'] + "`" + ( orderItem['$desc'] ? ' DESC' : ''));
-                    }
-                    else if (orderItem['$as']) {
+                    } else if (orderItem['$as']) {
                         var currentAliasIdx = aliasesList.indexOf(orderItem['$as']);
                         if (currentAliasIdx >= 0) {
                             // It's an alias
                             selectObject.orderBy.push("`" + selectObject.aliases[currentAliasIdx]['$table'] + "`.`" + selectObject.aliases[currentAliasIdx]['$field'] + "`" + ( orderItem['$desc'] ? ' DESC' : '' ));
                         }
                     }
-                }
-                else {
+                } else {
                     // it is not an object. must be an alias or a top level table column name (will use $from table name)
                     var currentAliasIdx = aliasesList.indexOf(orderItem);
                     if (currentAliasIdx >= 0) {
                         // It's an alias
                         selectObject.orderBy.push("`" + selectObject.aliases[currentAliasIdx]['$table'] + "`.`" + selectObject.aliases[currentAliasIdx]['$field'] + "`");
-                    }
-                    else {
+                    } else {
                         //It's a top level table column
                         selectObject.orderBy.push("`" + currentTable + "`.`" + orderItem + "`");
                     }

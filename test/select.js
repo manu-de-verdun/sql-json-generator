@@ -18,9 +18,9 @@ describe('#select - json errors', function () {
     it('call with missing $select', function () {
 
         sqlParams = {
-            $where: {
+            $where: [{
                 id_mi_item_inventario: 3
-            }
+            }]
         };
 
         expect(sqlGenerator.select(sqlParams)).to.be.null;
@@ -238,7 +238,7 @@ describe('#select - queries', function () {
                 $field: 'data',
                 $dateFormat: '%Y-%m-%d',
                 $as: 'data'
-            },]
+            }]
         };
 
         var expectedResult = 'SELECT `mi_itens`.`id_mi_item`, DATE_FORMAT(`mi_itens`.`data`,\'%Y-%m-%d\') AS data FROM `mi_itens`';
@@ -316,10 +316,11 @@ describe('#select - queries', function () {
         sqlParams = {
             $from: 'mi_itens_inventarios',
             $fields: ['id_mi_item_inventario', 'id_modelo_insumo'],
-            $where: {
-                'deleted': 0,
+            $where: [{
+                'deleted': 0
+            }, {
                 'arquivado': 0
-            },
+            }],
             $order: ['id_mi_item_inventario']
         };
 

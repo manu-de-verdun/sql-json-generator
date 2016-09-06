@@ -53,9 +53,9 @@ describe('#update - queries', function () {
             $set: {
                 field_b: 1
             },
-            $where: {
+            $where: [{
                 field_a: 1
-            }
+            }]
         };
 
         var expectedResult = 'UPDATE `mytable` SET `field_b` = \'1\' WHERE `field_a` = \'1\'';
@@ -71,9 +71,9 @@ describe('#update - queries', function () {
             $set: {
                 field_b: 1
             },
-            $where: {
+            $where: [{
                 field_a: 1
-            }
+            }]
         };
 
         var expectedResult = 'UPDATE `mytable` SET `field_b` = \'1\' WHERE `field_a` = \'1\'';
@@ -106,9 +106,9 @@ describe('#update - queries', function () {
                 field_c: 1,
                 field_d: 1
             },
-            $where: {
+            $where: [{
                 field_a: 1
-            }
+            }]
         };
 
         var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` = \'1\'';
@@ -126,10 +126,11 @@ describe('#update - queries', function () {
                 field_c: 1,
                 field_d: 1
             },
-            $where: {
-                field_a: 1,
+            $where: [{
+                field_a: 1
+            }, {
                 field_b: 1
-            }
+            }]
         };
 
         var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` = \'1\' AND `field_b` = \'1\'';
@@ -145,11 +146,10 @@ describe('#update - queries', function () {
                 field_c: 1,
                 field_d: 1
             },
-            $where: {
-                field_a: {
-                    $gt: 1
-                }
-            }
+            $where: [{
+                $field: 'field_a',
+                $gt: 1
+            }]
         };
 
         var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` > \'1\'';
@@ -166,14 +166,13 @@ describe('#update - queries', function () {
                 field_c: 1,
                 field_d: 1
             },
-            $where: {
-                field_a: {
-                    $gt: 1
-                },
-                field_b: {
-                    $gt: 1
-                }
-            }
+            $where: [{
+                $field: 'field_a',
+                $gt: 1
+            },{
+                $field: 'field_b',
+                $gt: 1
+            }]
         };
 
         var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` > \'1\' AND `field_b` > \'1\'';
@@ -189,11 +188,10 @@ describe('#update - queries', function () {
                 field_c: 1,
                 field_d: 1
             },
-            $where: {
-                field_a: {
-                    $gte: 1
-                }
-            }
+            $where: [{
+                $field: 'field_a',
+                $gte: 1
+            }]
         };
 
         var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` >= \'1\'';
@@ -209,11 +207,10 @@ describe('#update - queries', function () {
                 field_c: 1,
                 field_d: 1
             },
-            $where: {
-                field_a: {
-                    $lt: 1
-                }
-            }
+            $where: [{
+                $field: 'field_a',
+                $lt: 1
+            }]
         };
 
         var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` < \'1\'';
@@ -229,11 +226,10 @@ describe('#update - queries', function () {
                 field_c: 1,
                 field_d: 1
             },
-            $where: {
-                field_a: {
-                    $lte: 1
-                }
-            }
+            $where: [{
+                $field: 'field_a',
+                $lte: 1
+            }]
         };
 
         var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` <= \'1\'';
@@ -249,18 +245,17 @@ describe('#update - queries', function () {
                 field_c: 1,
                 field_d: 1
             },
-            $where: {
-                field_a: {
-                    $eq: 1
-                }
-            }
+            $where: [{
+                $field: 'field_a',
+                $eq: 1
+            }]
         };
 
         var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` = \'1\'';
 
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
-    ;
+
 
     it('simple $ne', function () {
 
@@ -270,11 +265,10 @@ describe('#update - queries', function () {
                 field_c: 1,
                 field_d: 1
             },
-            $where: {
-                field_a: {
-                    $ne: 1
-                }
-            }
+            $where: [{
+                $field: 'field_a',
+                $ne: 1
+            }]
         };
 
         var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` <> \'1\'';
@@ -291,10 +285,7 @@ describe('#update - queries', function () {
                 field_d: 1
             },
             $where: {
-                $and: [
-                    {field_a: 1},
-                    {field_b: 1}
-                ]
+                $and: [{field_a: 1}, {field_b: 1}]
 
             }
         };
@@ -313,10 +304,7 @@ describe('#update - queries', function () {
                 field_d: 1
             },
             $where: {
-                $or: [
-                    {field_a: 1},
-                    {field_b: 1}
-                ]
+                $or: [{field_a: 1}, {field_b: 1}]
 
             }
         };
@@ -336,22 +324,13 @@ describe('#update - queries', function () {
                 field_d: 1
             },
             $where: {
-                $or: [
-                    {
-                        $or: [
-                            {field_a: 1},
-                            {field_b: 1}
-                        ]
+                $or: [{
+                    $or: [{field_a: 1}, {field_b: 1}]
 
-                    },
-                    {
-                        $and: [
-                            {field_c: 1},
-                            {field_d: 1}
-                        ]
+                }, {
+                    $and: [{field_c: 1}, {field_d: 1}]
 
-                    }
-                ]
+                }]
             }
         };
 
@@ -369,22 +348,13 @@ describe('#update - queries', function () {
                 field_d: 1
             },
             $where: {
-                $or: [
-                    {
-                        $or: [
-                            {field_a: {$gte: 8}},
-                            {field_a: {$lt: 10}},
-                        ]
+                $or: [{
+                    $or: [{field_a: {$gte: 8}}, {field_a: {$lt: 10}},]
 
-                    },
-                    {
-                        $and: [
-                            {field_b: 3.15},
-                            {field_d: {$ne: 'ERR'}}
-                        ]
+                }, {
+                    $and: [{field_b: 3.15}, {field_d: {$ne: 'ERR'}}]
 
-                    }
-                ]
+                }]
             }
         };
 

@@ -7,22 +7,19 @@ var SQLGenerator = require('../index');
 var sqlGenerator = new SQLGenerator({debug: true});
 
 var queryParams = {
-    $from: 'setores',
-    $fields: ['id_setor', 'nome', {
-        $inner: 'unidades',
-        $using: 'id_unidade',
-        $fields: ['id_unidade', 'nome']
-    }],
-    $where: [{
-        id_setor: 1
+    $update: 'mytable',
+    $set: {
+        field_c: 1,
+        field_d: 1
     },
-        {
-        ativo: 1
-        }]
+    $where: [{
+        $field: 'field_a',
+        $gt: 1
+    }]
 };
 
 
-var sqlQuery = sqlGenerator.select(queryParams);
+var sqlQuery = sqlGenerator.update(queryParams);
 
 console.log(' ');
 console.log(colors.cyan('%s'), sqlQuery);
