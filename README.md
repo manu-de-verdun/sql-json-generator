@@ -541,7 +541,9 @@ ORDER BY current_table.column1 DESC
 ## Debugging
 
 > Display all generator steps in the console:
+
 ´´var sqlGenerator = new SQLGenerator({debug: true});´´
 
 > Display generated SQL in the console:
+
 ´´var sqlGenerator = new SQLGenerator({showSQL: true});´´
