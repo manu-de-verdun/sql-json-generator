@@ -537,6 +537,32 @@ ORDER BY table1.column1 DESC
 ORDER BY current_table.column1 DESC
 ```
 
+### $sqlCalcFoundRows
+
+`` $sqlCalcFoundRows: true``
+
+Will insert SQL_CALC_FOUND_ROWS just after SELECT keywords
+
+> If there is no ``$limit`` defined, the SQL_CALC_FOUND_ROWS is useless and  will not be added after the SELECT.
+
+*example:*
+```
+{
+    $from: 'setores',
+    $fields: ['id_setor', 'nome'],
+    $where: [],
+    $sqlCalcFoundRows: true,
+    $limit: {
+        $rows: 20,
+        $offset: 0
+    }
+}
+```
+*will return:*
+```
+SELECT SQL_CALC_FOUND_ROWS `setores`.`id_setor`, `setores`.`nome` FROM `setores` LIMIT 0,20
+```
+
 
 ## Debugging
 

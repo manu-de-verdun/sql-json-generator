@@ -582,6 +582,78 @@ describe('#select - queries', function () {
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
 
+
+    it('$sqlCalcFoundRows', function () {
+
+        sqlParams = {
+            $from: 'setores',
+            $fields: ['id_setor', 'nome'],
+            $where: [],
+            $sqlCalcFoundRows: true,
+            $limit: {
+                $rows: 20,
+                $offset: 0
+            }
+        };
+
+        var expectedResult = "SELECT SQL_CALC_FOUND_ROWS `setores`.`id_setor`, `setores`.`nome` FROM `setores` LIMIT 0,20";
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+    it('$sqlCalcFoundRows without $limit', function () {
+
+        sqlParams = {
+            $from: 'setores',
+            $fields: ['id_setor', 'nome'],
+            $where: [],
+            $sqlCalcFoundRows: true
+        };
+
+        var expectedResult = "SELECT `setores`.`id_setor`, `setores`.`nome` FROM `setores`";
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+    it('$sqlCalcFoundRows', function () {
+
+        sqlParams = {
+            $from: 'setores',
+            $fields: ['id_setor', 'nome'],
+            $where: [],
+            $sqlCalcFoundRows: true,
+            $limit: {
+                $rows: 20,
+                $offset: 0
+            }
+        };
+
+        var expectedResult = "SELECT SQL_CALC_FOUND_ROWS `setores`.`id_setor`, `setores`.`nome` FROM `setores` LIMIT 0,20";
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+    it('$sqlCalcFoundRows false', function () {
+
+        sqlParams = {
+            $from: 'setores',
+            $fields: ['id_setor', 'nome'],
+            $where: [],
+            $sqlCalcFoundRows: false,
+            $limit: {
+                $rows: 20,
+                $offset: 0
+            }
+        };
+
+        var expectedResult = "SELECT `setores`.`id_setor`, `setores`.`nome` FROM `setores` LIMIT 0,20";
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
 });
 
 

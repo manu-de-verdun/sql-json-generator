@@ -482,7 +482,14 @@ var sqlJsonGenerator = function (options) {
         var sql = "";
         var selectObject = selectBuilder(queryParams);
 
-        sql += "SELECT " + selectObject.select.join(', ');
+        sql += "SELECT"
+
+        if ( queryParams.$sqlCalcFoundRows && queryParams.$limit) {
+            sql += " SQL_CALC_FOUND_ROWS";
+        }
+
+        sql += " " + selectObject.select.join(', ');
+
         sql += " " + selectObject.from.join(' ');
 
         if (selectObject.where) {

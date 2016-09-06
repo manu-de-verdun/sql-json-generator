@@ -9,10 +9,12 @@ var sqlGenerator = new SQLGenerator({showSQL: true});
 var queryParams = {
     $from: 'setores',
     $fields: ['id_setor', 'nome'],
-    $where: [{
-        $field: 'nome',
-        $like: '%prin%'
-    }]
+    $where: [],
+    $sqlCalcFoundRows: false,
+    $limit: {
+        $rows: 20,
+        $offset: 0
+    }
 };
 
 
