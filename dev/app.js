@@ -7,11 +7,20 @@ var SQLGenerator = require('../index');
 var sqlGenerator = new SQLGenerator({debug: true});
 
 var queryParams = {
-    $from: 'gesup_usuarios_perfis_privilegios',
-    $fields: ['id_categoria_gesup', 'id_categoria_gesup_acao'],
+    $from: 'setores',
+    $fields: ['id_setor', 'nome', {
+        $inner: 'unidades',
+        $using: 'id_unidade',
+        $fields: ['id_unidade', 'nome']
+    }],
     $where: [{
-        $field: 'id_perfil',
-        $in: [2, 4, 7]
+        $table: 'setores',
+        $field: 'ativo',
+        $eq: 1
+    },{
+        $table: 'unidades',
+        $field: 'ativo',
+        $eq: 1
     }]
 };
 

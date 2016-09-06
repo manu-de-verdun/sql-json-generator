@@ -515,6 +515,56 @@ describe('#select - queries', function () {
     });
 
 
+    it('$where using full field notation', function () {
+
+        sqlParams = {
+            $from: 'setores',
+            $fields: ['id_setor', 'nome', {
+                $inner: 'unidades',
+                $using: 'id_unidade',
+                $fields: ['id_unidade', 'nome']
+            }],
+            $where: [{
+                $table: 'setores',
+                $field: 'ativo',
+                $eq: 1
+            },{
+                $table: 'unidades',
+                $field: 'ativo',
+                $eq: 1
+            }]
+        };
+
+        var expectedResult = "SELECT `setores`.`id_setor`, `setores`.`nome`, `unidades`.`id_unidade`, `unidades`.`nome` FROM `setores` INNER JOIN `unidades` USING(`id_unidade`) WHERE `setores`.`ativo` = '1' AND `unidades`.`ativo` = '1'";
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+    it('$where using full field notation with optional $table', function () {
+
+        sqlParams = {
+            $from: 'setores',
+            $fields: ['id_setor', 'nome', {
+                $inner: 'unidades',
+                $using: 'id_unidade',
+                $fields: ['id_unidade', 'nome']
+            }],
+            $where: [{
+                $field: 'ativo',
+                $eq: 1
+            },{
+                $table: 'unidades',
+                $field: 'ativo',
+                $eq: 1
+            }]
+        };
+
+        var expectedResult = "SELECT `setores`.`id_setor`, `setores`.`nome`, `unidades`.`id_unidade`, `unidades`.`nome` FROM `setores` INNER JOIN `unidades` USING(`id_unidade`) WHERE `setores`.`ativo` = '1' AND `unidades`.`ativo` = '1'";
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
 });
 
 
