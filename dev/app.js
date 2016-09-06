@@ -4,7 +4,7 @@
 var colors = require('colors');
 var SQLGenerator = require('../index');
 
-var sqlGenerator = new SQLGenerator({debug: true});
+var sqlGenerator = new SQLGenerator({showSQL: true});
 
 var queryParams = {
     $from: 'setores',
@@ -18,5 +18,3 @@ var queryParams = {
 
 var sqlQuery = sqlGenerator.select(queryParams);
 
-console.log(' ');
-console.log(colors.cyan('%s'), sqlQuery);

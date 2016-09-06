@@ -390,6 +390,11 @@ var sqlJsonGenerator = function (options) {
             sql += " WHERE " + whereBuilder(queryParams.$where, null);
         }
 
+        if ( options.debug || options.showSQL){
+            console.log(' ');
+            console.log(colors.cyan('%s'), sql);
+        }
+
         return sql;
 
     };
@@ -427,6 +432,11 @@ var sqlJsonGenerator = function (options) {
 
         sql += " VALUES (" + valuesArray.join(',') + ")";
 
+        if ( options.debug || options.showSQL){
+            console.log(' ');
+            console.log(colors.cyan('%s'), sql);
+        }
+
         return sql;
 
     };
@@ -447,6 +457,11 @@ var sqlJsonGenerator = function (options) {
 
         if (queryParams.$where) {
             sql += " WHERE " + whereBuilder(queryParams.$where, null);
+        }
+
+        if ( options.debug || options.showSQL){
+            console.log(' ');
+            console.log(colors.cyan('%s'), sql);
         }
 
         return sql;
@@ -480,6 +495,11 @@ var sqlJsonGenerator = function (options) {
 
         if (selectObject.limit) {
             sql += selectObject.limit;
+        }
+
+        if ( options.debug || options.showSQL){
+            console.log(' ');
+            console.log(colors.cyan('%s'), sql);
         }
 
         return sql;

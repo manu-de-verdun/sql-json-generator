@@ -6,6 +6,13 @@ Generate SQL command from JSON object
 
 Create reusable json objects to quickly build SQL statments
 
+## Table of Contents
+
+- [Install](#install)
+- [Wiki](#wiki)
+- [API](#api)
+- [Debugging](#debugging)
+
 ## Install
 
 Install with `npm install sql-json-generator`
@@ -15,7 +22,7 @@ var SQLGenerator = require('sql-json-generator');
 var sqlGenerator = new SQLGenerator();
 ```
 
-## WIKI
+## Wiki
 
 Find mode complex queries examples on the project [wiki](https://github.com/manu-de-verdun/sql-json-generator/wiki)
 
@@ -529,3 +536,12 @@ ORDER BY table1.column1 DESC
 ```
 ORDER BY current_table.column1 DESC
 ```
+
+
+## Debugging
+
+> Display all generator steps in the console:
+´´var sqlGenerator = new SQLGenerator({debug: true});´´
+
+> Display generated SQL in the console:
+´´var sqlGenerator = new SQLGenerator({showSQL: true});´´
