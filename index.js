@@ -324,9 +324,17 @@ var sqlJsonGenerator = function (options) {
                     recursiveSelectObject.from.forEach(function (item) {
                         selectObject.from.push(item);
                     });
-                    //recursiveSelectObject.where.forEach(function (item) {
-                    //    selectObject.where.push(item);
-                    //});
+
+                    // where is a string, and not an array. manualy concatenate
+                    if ( recursiveSelectObject.where) {
+                        if ( selectObject.where ) {
+                            selectObject.where += ' AND ' + recursiveSelectObject.where
+                        }
+                        else {
+                            selectObject.where = recursiveSelectObject.where
+                        }
+                    }
+
                     recursiveSelectObject.aliases.forEach(function (item) {
                         selectObject.aliases.push(item);
                     });

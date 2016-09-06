@@ -19,9 +19,9 @@ describe('#delete - json errors', function () {
     it('call with missing $delete', function () {
 
         sqlParams = {
-            $where: {
+            $where: [{
                 id_mi_item_inventario: 3
-            }
+            }]
         };
 
         expect(sqlGenerator.delete(sqlParams)).to.be.null;
@@ -41,9 +41,9 @@ describe('#delete - queries', function () {
 
         sqlParams = {
             $delete: 'mi_itens_inventarios',
-            $where: {
+            $where: [{
                 id_mi_item_inventario: 3
-            }
+            }]
         };
 
         var expectedResult = 'DELETE FROM `mi_itens_inventarios` WHERE `id_mi_item_inventario` = \'3\'';
