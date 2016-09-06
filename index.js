@@ -15,8 +15,11 @@ var sqlJsonGenerator = function (options) {
      */
     var whereBuilder = function (conditions, parentKey, inheritedTable) {
 
+        var whereKeys = Object.keys(conditions);
+        var whereArray = [];
+
         var conditionBuilder = function (column, table, operador, condition, delimiter) {
-            whereArray.push((( table ) ? "`" + table + "`." : "" ) + "`" + column + "` " + operador + " " + delimiter + condition + delimiter);
+            return (( table ) ? "`" + table + "`." : "" ) + "`" + column + "` " + operador + " " + delimiter + condition + delimiter;
         };
 
         if (options.debug) {
@@ -37,12 +40,12 @@ var sqlJsonGenerator = function (options) {
 
             conditions.forEach( function ( condition ) {
                 var whereExpression = whereBuilder ( condition , parentKey , inheritedTable) ;
-                console.log( whereExpression ) ;
                 if ( whereExpression ) {
-                    whereArray.push(  whereExpression );
+                    whereArray.push (  whereExpression );
                 }
-            })
-            return whereArray;
+            });
+
+            return whereArray.join(' AND ');
         }
 
         // if condition is not an object,then exit....
@@ -56,9 +59,6 @@ var sqlJsonGenerator = function (options) {
         }
 
 
-        var whereKeys = Object.keys(conditions);
-        var whereArray = [];
-        var whereExpression = "";
 
         // test if there is a logical operator
         if (  conditions['$or'] || conditions['$and']  ) {
@@ -78,11 +78,14 @@ var sqlJsonGenerator = function (options) {
 
         if ( whereKeys.length == 1 ) {
 
+            var result = conditionBuilder(whereKeys[0], inheritedTable, '=', conditions[whereKeys[0]], "'");
+
             if (options.debug) {
                 console.log('    simple columns equality shortcut'.cyan);
+                console.log(colors.yellow('      result: %s'),result);
             }
-            return conditionBuilder(whereKeys[0], inheritedTable, '=', conditions[0], "'");
 
+            return result;
         }
 
 
@@ -260,7 +263,6 @@ var sqlJsonGenerator = function (options) {
         var selectObject = {
             select: [],
             from: [],
-            where: [],
             aliases: [],
             orderBy: []
         };
@@ -295,7 +297,7 @@ var sqlJsonGenerator = function (options) {
                 var whereObject = whereBuilder(conditions['$where'], null, currentTable);
                 if ( whereObject ) {
                     // only add the result of whereBuilder if it has returned a value
-                    selectObject.where.push(whereObject);
+                    selectObject.where = whereObject;
                 }
             }
         }
@@ -322,9 +324,9 @@ var sqlJsonGenerator = function (options) {
                     recursiveSelectObject.from.forEach(function (item) {
                         selectObject.from.push(item);
                     });
-                    recursiveSelectObject.where.forEach(function (item) {
-                        selectObject.where.push(item);
-                    });
+                    //recursiveSelectObject.where.forEach(function (item) {
+                    //    selectObject.where.push(item);
+                    //});
                     recursiveSelectObject.aliases.forEach(function (item) {
                         selectObject.aliases.push(item);
                     });
@@ -522,8 +524,8 @@ var sqlJsonGenerator = function (options) {
         sql += "SELECT " + selectObject.select.join(', ');
         sql += " " + selectObject.from.join(' ');
 
-        if (selectObject.where && Array.isArray(selectObject.where) && selectObject.where.length > 0) {
-            sql += " WHERE " + selectObject.where.join(' AND ');
+        if (selectObject.where) {
+            sql += " WHERE " + selectObject.where;
         }
 
         if (selectObject.orderBy.length > 0) {
