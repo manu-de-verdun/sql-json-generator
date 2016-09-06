@@ -50,7 +50,7 @@ describe('#select - queries', function () {
                 }
         };
 
-        expectedResult = 'SELECT `table1`.`field_a` FROM `table1` WHERE `table1`.`field_d` = \'1\'';
+        var expectedResult = 'SELECT `table1`.`field_a` FROM `table1` WHERE `table1`.`field_d` = \'1\'';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -70,7 +70,7 @@ describe('#select - queries', function () {
                 }
         };
 
-        expectedResult = 'SELECT `table1`.`field_a`, `table1`.`field_b`, `table1`.`field_c` FROM `table1` WHERE `table1`.`field_d` = \'1\'';
+        var expectedResult = 'SELECT `table1`.`field_a`, `table1`.`field_b`, `table1`.`field_c` FROM `table1` WHERE `table1`.`field_d` = \'1\'';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -90,7 +90,7 @@ describe('#select - queries', function () {
                 ]
         };
 
-        expectedResult = 'SELECT `table1`.`column_a`, `table1`.`column_b` FROM `table1`';
+        var expectedResult = 'SELECT `table1`.`column_a`, `table1`.`column_b` FROM `table1`';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -112,7 +112,7 @@ describe('#select - queries', function () {
                 ]
         };
 
-        expectedResult = 'SELECT `table1`.`column_a` AS new_column_a, `table1`.`column_b` AS new_column_b FROM `table1`';
+        var expectedResult = 'SELECT `table1`.`column_a` AS new_column_a, `table1`.`column_b` AS new_column_b FROM `table1`';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -129,7 +129,7 @@ describe('#select - queries', function () {
             }
         };
 
-        expectedResult = 'SELECT `table1`.`field_a` FROM `table1`';
+        var expectedResult = 'SELECT `table1`.`field_a` FROM `table1`';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
 
@@ -153,7 +153,7 @@ describe('#select - queries', function () {
                 ]
         };
 
-        expectedResult = 'SELECT `setores`.`id_setor`, `setores`.`nome`, `unidades`.`id_unidade`, `unidades`.`nome` FROM `setores` INNER JOIN `unidades` USING(`id_unidade`)';
+        var expectedResult = 'SELECT `setores`.`id_setor`, `setores`.`nome`, `unidades`.`id_unidade`, `unidades`.`nome` FROM `setores` INNER JOIN `unidades` USING(`id_unidade`)';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -183,7 +183,7 @@ describe('#select - queries', function () {
                 ]
         };
 
-        expectedResult = 'SELECT `setores`.`id_setor`, `setores`.`nome` AS setor, `unidades`.`id_unidade`, `unidades`.`nome` AS unidade FROM `setores` INNER JOIN `unidades` USING(`id_unidade`)';
+        var expectedResult = 'SELECT `setores`.`id_setor`, `setores`.`nome` AS setor, `unidades`.`id_unidade`, `unidades`.`nome` AS unidade FROM `setores` INNER JOIN `unidades` USING(`id_unidade`)';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -223,7 +223,7 @@ describe('#select - queries', function () {
                 ]
         };
 
-        expectedResult = 'SELECT `setores`.`id_setor`, `setores`.`nome` AS setor, `unidades`.`id_unidade`, `unidades`.`nome` AS unidade, `entidades`.`id_entidade`, `entidades`.`sigla` AS entidade FROM `setores` INNER JOIN `unidades` USING(`id_unidade`) INNER JOIN `entidades` USING(`id_entidade`)';
+        var expectedResult = 'SELECT `setores`.`id_setor`, `setores`.`nome` AS setor, `unidades`.`id_unidade`, `unidades`.`nome` AS unidade, `entidades`.`id_entidade`, `entidades`.`sigla` AS entidade FROM `setores` INNER JOIN `unidades` USING(`id_unidade`) INNER JOIN `entidades` USING(`id_entidade`)';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -250,7 +250,7 @@ describe('#select - queries', function () {
                 }
         };
 
-        expectedResult = 'SELECT `setores`.`id_setor`, `setores`.`nome`, `unidades`.`id_unidade`, `unidades`.`nome` FROM `setores` INNER JOIN `unidades` USING(`id_unidade`) WHERE `setores`.`ativo` = \'1\'';
+        var expectedResult = 'SELECT `setores`.`id_setor`, `setores`.`nome`, `unidades`.`id_unidade`, `unidades`.`nome` FROM `setores` INNER JOIN `unidades` USING(`id_unidade`) WHERE `setores`.`ativo` = \'1\'';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -279,7 +279,7 @@ describe('#select - queries', function () {
                 }
         };
 
-        expectedResult = 'SELECT `setores`.`id_setor`, `setores`.`nome`, `unidades`.`id_unidade`, `unidades`.`nome` FROM `setores` INNER JOIN `unidades` USING(`id_unidade`) WHERE `setores`.`ativo` = \'1\' AND `unidades`.`ativo` = \'1\'';
+        var expectedResult = 'SELECT `setores`.`id_setor`, `setores`.`nome`, `unidades`.`id_unidade`, `unidades`.`nome` FROM `setores` INNER JOIN `unidades` USING(`id_unidade`) WHERE `setores`.`ativo` = \'1\' AND `unidades`.`ativo` = \'1\'';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -299,7 +299,7 @@ describe('#select - queries', function () {
                 ]
         };
 
-        expectedResult = 'SELECT `mi_itens`.`id_mi_item`, DATE_FORMAT(`mi_itens`.`data`,\'%Y-%m-%d\') AS data FROM `mi_itens`';
+        var expectedResult = 'SELECT `mi_itens`.`id_mi_item`, DATE_FORMAT(`mi_itens`.`data`,\'%Y-%m-%d\') AS data FROM `mi_itens`';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -339,7 +339,7 @@ describe('#select - queries', function () {
                 ]
         };
 
-        expectedResult = 'SELECT `setores`.`id_setor`, `setores`.`nome`, `unidades`.`id_unidade`, `unidades`.`nome`, `usuarios`.`id_usuario`, `usuarios`.`nome`, `avioes`.`id_aviao`, `avioes`.`nome` FROM `setores` LEFT JOIN `unidades` USING(`id_unidade`) RIGHT JOIN `usuarios` USING(`id_usuario`) FULL JOIN `avioes` USING(`id_aviao`)';
+        var expectedResult = 'SELECT `setores`.`id_setor`, `setores`.`nome`, `unidades`.`id_unidade`, `unidades`.`nome`, `usuarios`.`id_usuario`, `usuarios`.`nome`, `avioes`.`id_aviao`, `avioes`.`nome` FROM `setores` LEFT JOIN `unidades` USING(`id_unidade`) RIGHT JOIN `usuarios` USING(`id_usuario`) FULL JOIN `avioes` USING(`id_aviao`)';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -359,7 +359,7 @@ describe('#select - queries', function () {
             }
         };
 
-        expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` FROM `mi_itens_inventarios` LIMIT 0,10';
+        var expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` FROM `mi_itens_inventarios` LIMIT 0,10';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -383,7 +383,7 @@ describe('#select - queries', function () {
             }
         };
 
-        expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` FROM `mi_itens_inventarios` WHERE `mi_itens_inventarios`.`deleted` = \'0\' AND `mi_itens_inventarios`.`arquivado` = \'0\' LIMIT 10,10';
+        var expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` FROM `mi_itens_inventarios` WHERE `mi_itens_inventarios`.`deleted` = \'0\' AND `mi_itens_inventarios`.`arquivado` = \'0\' LIMIT 10,10';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -406,7 +406,7 @@ describe('#select - queries', function () {
             ]
         };
 
-        expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` FROM `mi_itens_inventarios` WHERE `mi_itens_inventarios`.`deleted` = \'0\' AND `mi_itens_inventarios`.`arquivado` = \'0\' ORDER BY `mi_itens_inventarios`.`id_mi_item_inventario`';
+        var expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` FROM `mi_itens_inventarios` WHERE `mi_itens_inventarios`.`deleted` = \'0\' AND `mi_itens_inventarios`.`arquivado` = \'0\' ORDER BY `mi_itens_inventarios`.`id_mi_item_inventario`';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -428,7 +428,7 @@ describe('#select - queries', function () {
             ]
         };
 
-        expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` FROM `mi_itens_inventarios` ORDER BY `mi_itens_inventarios`.`id_mi_item_inventario` DESC';
+        var expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` FROM `mi_itens_inventarios` ORDER BY `mi_itens_inventarios`.`id_mi_item_inventario` DESC';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -450,7 +450,7 @@ describe('#select - queries', function () {
             ]
         };
 
-        expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` AS id FROM `mi_itens_inventarios` ORDER BY `mi_itens_inventarios`.`id_modelo_insumo`';
+        var expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` AS id FROM `mi_itens_inventarios` ORDER BY `mi_itens_inventarios`.`id_modelo_insumo`';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -474,7 +474,7 @@ describe('#select - queries', function () {
             ]
         };
 
-        expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` AS id FROM `mi_itens_inventarios` ORDER BY `mi_itens_inventarios`.`id_modelo_insumo`';
+        var expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` AS id FROM `mi_itens_inventarios` ORDER BY `mi_itens_inventarios`.`id_modelo_insumo`';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -499,7 +499,7 @@ describe('#select - queries', function () {
             ]
         };
 
-        expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` AS id FROM `mi_itens_inventarios` ORDER BY `mi_itens_inventarios`.`id_modelo_insumo` DESC';
+        var expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` AS id FROM `mi_itens_inventarios` ORDER BY `mi_itens_inventarios`.`id_modelo_insumo` DESC';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -550,7 +550,7 @@ describe('#select - queries', function () {
             ]
         };
 
-        expectedResult = 'SELECT `modelos_insumos`.`codigo`, `modelos_insumos`.`nome` AS modelo, `modelos_insumos`.`lote`, `modelos_insumos`.`fracionamento`, `categorias_insumos`.`nome` AS categoria, `categorias_insumos_departamentos`.`nome` AS departamento, `categorias_unidades_medidas`.`sigla` AS unidade FROM `modelos_insumos` INNER JOIN `categorias_insumos` USING(`id_categoria_insumo`) INNER JOIN `categorias_insumos_departamentos` USING(`id_categoria_insumo_departamento`) INNER JOIN `categorias_unidades_medidas` USING(`id_categoria_unidade_medida`) ORDER BY `categorias_insumos_departamentos`.`nome` DESC ,`categorias_insumos`.`nome` ,`modelos_insumos`.`nome` DESC';
+        var expectedResult = 'SELECT `modelos_insumos`.`codigo`, `modelos_insumos`.`nome` AS modelo, `modelos_insumos`.`lote`, `modelos_insumos`.`fracionamento`, `categorias_insumos`.`nome` AS categoria, `categorias_insumos_departamentos`.`nome` AS departamento, `categorias_unidades_medidas`.`sigla` AS unidade FROM `modelos_insumos` INNER JOIN `categorias_insumos` USING(`id_categoria_insumo`) INNER JOIN `categorias_insumos_departamentos` USING(`id_categoria_insumo_departamento`) INNER JOIN `categorias_unidades_medidas` USING(`id_categoria_unidade_medida`) ORDER BY `categorias_insumos_departamentos`.`nome` DESC ,`categorias_insumos`.`nome` ,`modelos_insumos`.`nome` DESC';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -569,7 +569,7 @@ describe('#select - queries', function () {
             }
         };
 
-        expectedResult = "SELECT `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup`, `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup_acao` FROM `gesup_usuarios_perfis_privilegios` WHERE `gesup_usuarios_perfis_privilegios`.`id_perfil` IN ('2','4','7')";
+        var expectedResult = "SELECT `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup`, `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup_acao` FROM `gesup_usuarios_perfis_privilegios` WHERE `gesup_usuarios_perfis_privilegios`.`id_perfil` IN ('2','4','7')";
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -590,7 +590,7 @@ describe('#select - queries', function () {
             }
         };
 
-        expectedResult = "SELECT `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup`, `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup_acao` FROM `gesup_usuarios_perfis_privilegios` WHERE `gesup_usuarios_perfis_privilegios`.`id_perfil` IN ('AA','BB','CC')";
+        var expectedResult = "SELECT `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup`, `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup_acao` FROM `gesup_usuarios_perfis_privilegios` WHERE `gesup_usuarios_perfis_privilegios`.`id_perfil` IN ('AA','BB','CC')";
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -608,7 +608,7 @@ describe('#select - queries', function () {
             }
         };
 
-        expectedResult = "SELECT `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup`, `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup_acao` FROM `gesup_usuarios_perfis_privilegios`";
+        var expectedResult = "SELECT `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup`, `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup_acao` FROM `gesup_usuarios_perfis_privilegios`";
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
@@ -626,7 +626,7 @@ describe('#select - queries', function () {
             }
         };
 
-        expectedResult = "SELECT `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup`, `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup_acao` FROM `gesup_usuarios_perfis_privilegios`";
+        var expectedResult = "SELECT `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup`, `gesup_usuarios_perfis_privilegios`.`id_categoria_gesup_acao` FROM `gesup_usuarios_perfis_privilegios`";
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });

@@ -55,7 +55,7 @@ describe('#insert - queries', function () {
             }
         };
 
-        expectedResult = 'INSERT INTO `table_1` (`field_a`) VALUES (\'1\')';
+        var expectedResult = 'INSERT INTO `table_1` (`field_a`) VALUES (\'1\')';
 
         sqlGenerator.insert(sqlParams).should.equal(expectedResult);
 
@@ -75,7 +75,7 @@ describe('#insert - queries', function () {
             }
         };
 
-        expectedResult = 'INSERT INTO `mi_itens_inventarios` (`id_modelo_insumo`,`folha`,`quantidade`,`lote`,`validade`,`id_usuario`) VALUES (\'2301\',\'ZZ\',\'1500\',\'ABCD7F\',\'2019-12-12\',\'3\')';
+        var expectedResult = 'INSERT INTO `mi_itens_inventarios` (`id_modelo_insumo`,`folha`,`quantidade`,`lote`,`validade`,`id_usuario`) VALUES (\'2301\',\'ZZ\',\'1500\',\'ABCD7F\',\'2019-12-12\',\'3\')';
 
         sqlGenerator.insert(sqlParams).should.equal(expectedResult);
 

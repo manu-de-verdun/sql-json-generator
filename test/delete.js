@@ -46,7 +46,7 @@ describe('#delete - queries', function () {
             }
         };
 
-        expectedResult = 'DELETE FROM `mi_itens_inventarios` WHERE `id_mi_item_inventario` = \'3\'';
+        var expectedResult = 'DELETE FROM `mi_itens_inventarios` WHERE `id_mi_item_inventario` = \'3\'';
 
         sqlGenerator.delete(sqlParams).should.equal(expectedResult);
     });
@@ -58,7 +58,7 @@ describe('#delete - queries', function () {
             $delete: 'loopback_usuarios'
         };
 
-        expectedResult = 'DELETE FROM `loopback_usuarios`';
+        var expectedResult = 'DELETE FROM `loopback_usuarios`';
 
         sqlGenerator.delete(sqlParams).should.equal(expectedResult);
     });

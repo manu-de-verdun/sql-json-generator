@@ -7,36 +7,22 @@ var SQLGenerator = require('../index');
 var sqlGenerator = new SQLGenerator({debug: true});
 
 var queryParams = {
-    $from: 'modelos_insumos',
-    $fields: [
-        'id_modelo_insumo',
-        'codigo',
+    $from : 'setores',
+    $fields : [
+        'id_setor',
         'nome',
-        'referencia',
-        'fracionamento',
-        'ativo',
         {
-            $inner: 'categorias_insumos',
-            $using: 'id_categoria_insumo',
-            $fields: [
-                { $field : 'nome', $as: 'categoria'},
-                {
-                    $inner: 'categorias_insumos_departamentos',
-                    $using: 'id_categoria_insumo_departamento',
-                    $fields: [
-                        { $field : 'nome', $as: 'departamento'},
-                    ]
-                }
-            ]
-        },
-        {
-            $inner: 'categorias_unidades_medidas',
-            $using: 'id_categoria_unidade_medida',
-            $fields: [
-                { $field : 'sigla', $as: 'unidade'},
+            $inner : 'unidades',
+            $using : 'id_unidade',
+            $fields : [
+                'id_unidade',
+                'nome'
             ]
         }
-    ]
+    ],
+    $where : {
+
+    }
 };
 
 

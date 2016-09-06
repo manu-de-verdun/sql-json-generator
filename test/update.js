@@ -58,7 +58,7 @@ describe('#update - queries', function () {
             }
         };
 
-        expectedResult = 'UPDATE `mytable` SET `field_b` = \'1\' WHERE `field_a` = \'1\'';
+        var expectedResult = 'UPDATE `mytable` SET `field_b` = \'1\' WHERE `field_a` = \'1\'';
 
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
 
@@ -76,7 +76,7 @@ describe('#update - queries', function () {
             }
         };
 
-        expectedResult = 'UPDATE `mytable` SET `field_b` = \'1\' WHERE `field_a` = \'1\'';
+        var expectedResult = 'UPDATE `mytable` SET `field_b` = \'1\' WHERE `field_a` = \'1\'';
 
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
 
@@ -92,7 +92,7 @@ describe('#update - queries', function () {
             }
         };
 
-        expectedResult = 'UPDATE `mi_itens_inventarios` SET `arquivado` = \'0\',`arquivado_codigo` = \'\'';
+        var expectedResult = 'UPDATE `mi_itens_inventarios` SET `arquivado` = \'0\',`arquivado_codigo` = \'\'';
 
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
 
@@ -111,7 +111,7 @@ describe('#update - queries', function () {
             }
         };
 
-        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` = \'1\'';
+        var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` = \'1\'';
 
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
 
@@ -132,7 +132,7 @@ describe('#update - queries', function () {
             }
         };
 
-        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` = \'1\' AND `field_b` = \'1\'';
+        var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` = \'1\' AND `field_b` = \'1\'';
 
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
@@ -152,7 +152,7 @@ describe('#update - queries', function () {
             }
         };
 
-        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` > \'1\'';
+        var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` > \'1\'';
 
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
@@ -176,7 +176,7 @@ describe('#update - queries', function () {
             }
         };
 
-        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` > \'1\' AND `field_b` > \'1\'';
+        var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` > \'1\' AND `field_b` > \'1\'';
 
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
@@ -196,7 +196,7 @@ describe('#update - queries', function () {
             }
         };
 
-        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` >= \'1\'';
+        var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` >= \'1\'';
 
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
@@ -216,7 +216,7 @@ describe('#update - queries', function () {
             }
         };
 
-        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` < \'1\'';
+        var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` < \'1\'';
 
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
@@ -236,7 +236,7 @@ describe('#update - queries', function () {
             }
         };
 
-        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` <= \'1\'';
+        var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` <= \'1\'';
 
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
@@ -256,7 +256,7 @@ describe('#update - queries', function () {
             }
         };
 
-        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` = \'1\'';
+        var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` = \'1\'';
 
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
@@ -277,7 +277,7 @@ describe('#update - queries', function () {
             }
         };
 
-        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` <> \'1\'';
+        var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE `field_a` <> \'1\'';
 
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
@@ -299,7 +299,7 @@ describe('#update - queries', function () {
             }
         };
 
-        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE (`field_a` = \'1\' AND `field_b` = \'1\')';
+        var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE (`field_a` = \'1\' AND `field_b` = \'1\')';
 
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
@@ -321,7 +321,7 @@ describe('#update - queries', function () {
             }
         };
 
-        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE (`field_a` = \'1\' OR `field_b` = \'1\')';
+        var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE (`field_a` = \'1\' OR `field_b` = \'1\')';
 
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
@@ -355,7 +355,7 @@ describe('#update - queries', function () {
             }
         };
 
-        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE ((`field_a` = \'1\' OR `field_b` = \'1\') OR (`field_c` = \'1\' AND `field_d` = \'1\'))';
+        var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE ((`field_a` = \'1\' OR `field_b` = \'1\') OR (`field_c` = \'1\' AND `field_d` = \'1\'))';
 
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
@@ -388,7 +388,7 @@ describe('#update - queries', function () {
             }
         };
 
-        expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE ((`field_a` >= \'8\' OR `field_a` < \'10\') OR (`field_b` = \'3.15\' AND `field_d` <> \'ERR\'))';
+        var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE ((`field_a` >= \'8\' OR `field_a` < \'10\') OR (`field_b` = \'3.15\' AND `field_d` <> \'ERR\'))';
 
         sqlGenerator.update(sqlParams).should.equal(expectedResult);
     });
