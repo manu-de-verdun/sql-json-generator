@@ -396,6 +396,7 @@ table_a.column_a = '1' AND table_b.column_b = '1'
 | ``$lte`` |    ``<=``   |
 | ``$eq`` |    ``=``   |
 | ``$ne`` |    ``<>``   |
+| ``$like`` |    ``LIKE``   |
 
 
 *example:*

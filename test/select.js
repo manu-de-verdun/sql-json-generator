@@ -565,6 +565,23 @@ describe('#select - queries', function () {
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
 
+
+    it('$where $like', function () {
+
+        sqlParams = {
+            $from: 'setores',
+            $fields: ['id_setor', 'nome'],
+            $where: [{
+                $field: 'nome',
+                $like: '%prin%'
+            }]
+        };
+
+        var expectedResult = "SELECT `setores`.`id_setor`, `setores`.`nome` FROM `setores` WHERE `setores`.`nome` LIKE '%prin%'";
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
 });
 
 

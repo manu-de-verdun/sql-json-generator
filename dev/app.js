@@ -8,19 +8,10 @@ var sqlGenerator = new SQLGenerator({debug: true});
 
 var queryParams = {
     $from: 'setores',
-    $fields: ['id_setor', 'nome', {
-        $inner: 'unidades',
-        $using: 'id_unidade',
-        $fields: ['id_unidade', 'nome']
-    }],
+    $fields: ['id_setor', 'nome'],
     $where: [{
-        $table: 'setores',
-        $field: 'ativo',
-        $eq: 1
-    },{
-        $table: 'unidades',
-        $field: 'ativo',
-        $eq: 1
+        $field: 'nome',
+        $like: '%prin%'
     }]
 };
 

@@ -122,6 +122,10 @@ var sqlJsonGenerator = function (options) {
                 return conditionBuilder(conditions['$field'], currentTable, '<>', conditions["$ne"], "'");
             }
 
+            else  if (conditions["$like"]) {
+                return conditionBuilder(conditions['$field'], currentTable, 'LIKE', conditions["$like"], "'");
+            }
+
 
             else  if (conditions["$in"]) {
 
