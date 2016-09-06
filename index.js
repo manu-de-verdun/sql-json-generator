@@ -62,11 +62,30 @@ var sqlJsonGenerator = function (options) {
         // test if there is a logical operator
         if (conditions['$or'] || conditions['$and']) {
 
-            if (options.debug) {
-                console.log('    logical operator'.cyan);
+            var operator;
+            var operatorSQL;
+
+            if( conditions['$or'] ) {
+                operator = '$or';
+                operatorSQL = ' OR ';
+            }
+            else if( conditions['$and'] ) {
+                operator = '$and';
+                operatorSQL = ' AND ';
             }
 
-            return null;
+            if (options.debug) {
+                console.log(colors.cyan('    logical operator %s'), operator);
+            }
+
+            var andArray = [];
+
+            conditions[operator].forEach(function (element) {
+                andArray.push(whereBuilder(element, null, inheritedTable));
+            });
+
+            return ("(" + andArray.join(operatorSQL) + ")");
+
         }
 
 

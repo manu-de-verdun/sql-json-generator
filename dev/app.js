@@ -13,8 +13,21 @@ var queryParams = {
         field_d: 1
     },
     $where: [{
-        $field: 'field_a',
-        $gt: 1
+        $or: [{
+            $or: [{
+                $field: "field_a",
+                $gte: 8
+            }, {
+                $field: "field_a",
+                $lt: 10
+            }]
+
+        }, {
+            $and: [{field_b: 3.15}, {
+                $field: 'field_d',
+                $ne: 'ERR'
+            }]
+        }]
     }]
 };
 

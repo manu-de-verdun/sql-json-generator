@@ -169,7 +169,7 @@ describe('#update - queries', function () {
             $where: [{
                 $field: 'field_a',
                 $gt: 1
-            },{
+            }, {
                 $field: 'field_b',
                 $gt: 1
             }]
@@ -284,10 +284,9 @@ describe('#update - queries', function () {
                 field_c: 1,
                 field_d: 1
             },
-            $where: {
+            $where: [{
                 $and: [{field_a: 1}, {field_b: 1}]
-
-            }
+            }]
         };
 
         var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE (`field_a` = \'1\' AND `field_b` = \'1\')';
@@ -303,10 +302,9 @@ describe('#update - queries', function () {
                 field_c: 1,
                 field_d: 1
             },
-            $where: {
+            $where: [{
                 $or: [{field_a: 1}, {field_b: 1}]
-
-            }
+            }]
         };
 
         var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE (`field_a` = \'1\' OR `field_b` = \'1\')';
@@ -323,7 +321,7 @@ describe('#update - queries', function () {
                 field_c: 1,
                 field_d: 1
             },
-            $where: {
+            $where: [{
                 $or: [{
                     $or: [{field_a: 1}, {field_b: 1}]
 
@@ -331,7 +329,7 @@ describe('#update - queries', function () {
                     $and: [{field_c: 1}, {field_d: 1}]
 
                 }]
-            }
+            }]
         };
 
         var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE ((`field_a` = \'1\' OR `field_b` = \'1\') OR (`field_c` = \'1\' AND `field_d` = \'1\'))';
@@ -347,15 +345,23 @@ describe('#update - queries', function () {
                 field_c: 1,
                 field_d: 1
             },
-            $where: {
+            $where: [{
                 $or: [{
-                    $or: [{field_a: {$gte: 8}}, {field_a: {$lt: 10}},]
+                    $or: [{
+                        $field: "field_a",
+                        $gte: 8
+                    }, {
+                        $field: "field_a",
+                        $lt: 10
+                    }]
 
                 }, {
-                    $and: [{field_b: 3.15}, {field_d: {$ne: 'ERR'}}]
-
+                    $and: [{field_b: 3.15}, {
+                        $field: 'field_d',
+                        $ne: 'ERR'
+                    }]
                 }]
-            }
+            }]
         };
 
         var expectedResult = 'UPDATE `mytable` SET `field_c` = \'1\',`field_d` = \'1\' WHERE ((`field_a` >= \'8\' OR `field_a` < \'10\') OR (`field_b` = \'3.15\' AND `field_d` <> \'ERR\'))';
