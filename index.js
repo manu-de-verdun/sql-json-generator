@@ -1,8 +1,11 @@
+var colors = require('colors');
+
 var sqlJsonGenerator = function (options) {
 
     if (!options) {
         options = {};
     }
+
 
     /**
      * Building SQL WHERE conditions
@@ -11,6 +14,91 @@ var sqlJsonGenerator = function (options) {
      * @returns {string}
      */
     var whereBuilder = function (conditions, parentKey, inheritedTable) {
+
+        var conditionBuilder = function (column, table, operador, condition, delimiter) {
+            whereArray.push((( table ) ? "`" + table + "`." : "" ) + "`" + column + "` " + operador + " " + delimiter + condition + delimiter);
+        };
+
+        if (options.debug) {
+            console.log('');
+            console.log('whereBuilder'.green);
+            console.log('  conditions: ', conditions);
+            console.log('  parentKey: ', parentKey);
+            console.log('  inheritedTable: ', inheritedTable);
+        }
+
+
+        // if conditions is an array, split and call wherebuilder for each of the array element
+        if ( Array.isArray(conditions) && conditions.length > 0  ) {
+
+            if (options.debug) {
+                console.log('    splitting conditions'.cyan);
+            }
+
+            conditions.forEach( function ( condition ) {
+                var whereExpression = whereBuilder ( condition , parentKey , inheritedTable) ;
+                console.log( whereExpression ) ;
+                if ( whereExpression ) {
+                    whereArray.push(  whereExpression );
+                }
+            })
+            return whereArray;
+        }
+
+        // if condition is not an object,then exit....
+        if (typeof conditions != 'object') {
+
+            if (options.debug) {
+                console.log('    wrong condition format'.red);
+            }
+
+            return null;
+        }
+
+
+        var whereKeys = Object.keys(conditions);
+        var whereArray = [];
+        var whereExpression = "";
+
+        // test if there is a logical operator
+        if (  conditions['$or'] || conditions['$and']  ) {
+
+            if (options.debug) {
+                console.log('    logical operator'.cyan);
+            }
+
+          return null;
+        };
+
+
+        // test if there is a logical operator
+        if (  conditions['$field'] ) {
+
+        }
+
+        if ( whereKeys.length == 1 ) {
+
+            if (options.debug) {
+                console.log('    simple columns equality shortcut'.cyan);
+            }
+            return conditionBuilder(whereKeys[0], inheritedTable, '=', conditions[0], "'");
+
+        }
+
+
+
+        return null;
+    };
+
+
+
+    /**
+     * Building SQL WHERE conditions
+     * @param conditions
+     * @param parentKey
+     * @returns {string}
+     */
+    var whereBuilder1 = function (conditions, parentKey, inheritedTable) {
 
         var whereKeys = Object.keys(conditions);
         var whereArray = [];
@@ -22,10 +110,16 @@ var sqlJsonGenerator = function (options) {
 
         if (options.debug) {
             console.log('');
-            console.log('whereBuilder');
+            console.log('whereBuilder'.green);
             console.log('  conditions: ', conditions);
             console.log('  parentKey: ', parentKey);
             console.log('  inheritedTable: ', inheritedTable);
+        }
+
+
+        if ( Array.isArray(conditions[key]) && conditions[key].length > 0  ) {
+            var inCondition = "('" + conditions[key].join("','") + "')";
+            conditionBuilder(parentKey, inheritedTable, 'IN', inCondition , '' );
         }
 
 
@@ -123,7 +217,7 @@ var sqlJsonGenerator = function (options) {
 
         if (options.debug) {
             console.log('');
-            console.log('joinBuilder');
+            console.log('joinBuilder'.green);
             console.log('  joinData: ', joinData);
         }
 
@@ -157,7 +251,7 @@ var sqlJsonGenerator = function (options) {
 
         if (options.debug) {
             console.log('');
-            console.log('selectBuilder');
+            console.log('selectBuilder'.green);
             console.log('  conditions: ', conditions);
         }
 
@@ -428,7 +522,7 @@ var sqlJsonGenerator = function (options) {
         sql += "SELECT " + selectObject.select.join(', ');
         sql += " " + selectObject.from.join(' ');
 
-        if (selectObject.where.length > 0) {
+        if (selectObject.where && Array.isArray(selectObject.where) && selectObject.where.length > 0) {
             sql += " WHERE " + selectObject.where.join(' AND ');
         }
 

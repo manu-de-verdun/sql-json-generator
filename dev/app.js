@@ -7,22 +7,15 @@ var SQLGenerator = require('../index');
 var sqlGenerator = new SQLGenerator({debug: true});
 
 var queryParams = {
-    $from : 'setores',
-    $fields : [
-        'id_setor',
-        'nome',
-        {
-            $inner : 'unidades',
-            $using : 'id_unidade',
-            $fields : [
-                'id_unidade',
-                'nome'
-            ]
-        }
-    ],
-    $where : {
-
-    }
+    $from: 'setores',
+    $fields: ['id_setor', 'nome', {
+        $inner: 'unidades',
+        $using: 'id_unidade',
+        $fields: ['id_unidade', 'nome']
+    }],
+    $where: [{
+        id_setor: 1
+    }]
 };
 
 
