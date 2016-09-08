@@ -392,7 +392,6 @@ var sqlJsonGenerator = function (options) {
         }
 
         if (options.debug || options.showSQL) {
-            console.log(' ');
             console.log(colors.cyan('%s'), sql);
         }
 
