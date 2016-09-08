@@ -65,11 +65,10 @@ var sqlJsonGenerator = function (options) {
             var operator;
             var operatorSQL;
 
-            if( conditions['$or'] ) {
+            if (conditions['$or']) {
                 operator = '$or';
                 operatorSQL = ' OR ';
-            }
-            else if( conditions['$and'] ) {
+            } else if (conditions['$and']) {
                 operator = '$and';
                 operatorSQL = ' AND ';
             }
@@ -118,16 +117,16 @@ var sqlJsonGenerator = function (options) {
                 return conditionBuilder(conditions['$field'], currentTable, '=', conditions["$eq"], "'");
             }
 
-            else  if (conditions["$ne"]) {
+            else if (conditions["$ne"]) {
                 return conditionBuilder(conditions['$field'], currentTable, '<>', conditions["$ne"], "'");
             }
 
-            else  if (conditions["$like"]) {
+            else if (conditions["$like"]) {
                 return conditionBuilder(conditions['$field'], currentTable, 'LIKE', conditions["$like"], "'");
             }
 
 
-            else  if (conditions["$in"]) {
+            else if (conditions["$in"]) {
 
                 if (options.debug) {
                     console.log('      $in'.cyan);
@@ -135,8 +134,7 @@ var sqlJsonGenerator = function (options) {
                 if (Array.isArray(conditions["$in"]) && conditions["$in"].length > 0) {
                     var inCondition = "('" + conditions["$in"].join("','") + "')";
                     return conditionBuilder(conditions['$field'], currentTable, 'IN', inCondition, '');
-                }
-                else {
+                } else {
                     return null;
                 }
             }
@@ -247,71 +245,74 @@ var sqlJsonGenerator = function (options) {
 
 
         // Process all provided elements of fields Array
-        conditions['$fields'].forEach(function (field) {
+        if (conditions['$fields'] && conditions['$fields'].length > 0) {
 
-            // Test if array element is an object
-            if (typeof field === 'object') {
+            conditions['$fields'].forEach(function (field) {
 
-                // It's an object. Determine which kind of object
+                // Test if array element is an object
+                if (typeof field === 'object') {
 
-                var fieldKeys = Object.keys(field);
+                    // It's an object. Determine which kind of object
 
-                // If it is a special operation that needs recursive call ( $inner, $left, $right )
-                if (fieldKeys.indexOf('$inner') >= 0 || fieldKeys.indexOf('$left') >= 0 || fieldKeys.indexOf('$right') >= 0 || fieldKeys.indexOf('$full') >= 0) {
-                    var recursiveSelectObject = selectBuilder(field);
+                    var fieldKeys = Object.keys(field);
 
-                    //After recursive call, add itens from recursive call into the current object
-                    recursiveSelectObject.select.forEach(function (item) {
-                        selectObject.select.push(item);
-                    });
-                    recursiveSelectObject.from.forEach(function (item) {
-                        selectObject.from.push(item);
-                    });
+                    // If it is a special operation that needs recursive call ( $inner, $left, $right )
+                    if (fieldKeys.indexOf('$inner') >= 0 || fieldKeys.indexOf('$left') >= 0 || fieldKeys.indexOf('$right') >= 0 || fieldKeys.indexOf('$full') >= 0) {
+                        var recursiveSelectObject = selectBuilder(field);
 
-                    // where is a string, and not an array. manualy concatenate
-                    if (recursiveSelectObject.where) {
-                        if (selectObject.where) {
-                            selectObject.where += ' AND ' + recursiveSelectObject.where
-                        } else {
-                            selectObject.where = recursiveSelectObject.where
+                        //After recursive call, add itens from recursive call into the current object
+                        recursiveSelectObject.select.forEach(function (item) {
+                            selectObject.select.push(item);
+                        });
+                        recursiveSelectObject.from.forEach(function (item) {
+                            selectObject.from.push(item);
+                        });
+
+                        // where is a string, and not an array. manualy concatenate
+                        if (recursiveSelectObject.where) {
+                            if (selectObject.where) {
+                                selectObject.where += ' AND ' + recursiveSelectObject.where
+                            } else {
+                                selectObject.where = recursiveSelectObject.where
+                            }
                         }
-                    }
 
-                    recursiveSelectObject.aliases.forEach(function (item) {
-                        selectObject.aliases.push(item);
-                    });
+                        recursiveSelectObject.aliases.forEach(function (item) {
+                            selectObject.aliases.push(item);
+                        });
+                    }
+                    // It is a field object
+                    else if (fieldKeys.indexOf('$field') >= 0) {
+
+                        var currentField = {};
+
+                        currentField.sql = "`" + currentTable + "`.`" + field['$field'] + "`";
+
+                        if (fieldKeys.indexOf('$dateFormat') >= 0) {
+                            currentField.sql = "DATE_FORMAT(" + currentField.sql + ",'" + field['$dateFormat'] + "')";
+                        }
+
+                        if (fieldKeys.indexOf('$as') >= 0) {
+                            currentField.as = field['$as'];
+                            currentField.sql = (currentField.sql) + " AS " + currentField.as;
+                            selectObject.aliases.push({
+                                $table: currentTable,
+                                $field: field['$field'],
+                                $as: field['$as']
+                            })
+                        }
+
+                        // add the columm to the select object
+                        selectObject.select.push(currentField.sql);
+                    }
+                } else {
+                    // raw field, add it to the select Object
+                    selectObject.select.push("`" + currentTable + "`.`" + field + "`");
                 }
-                // It is a field object
-                else if (fieldKeys.indexOf('$field') >= 0) {
 
-                    var currentField = {};
+            });
 
-                    currentField.sql = "`" + currentTable + "`.`" + field['$field'] + "`";
-
-                    if (fieldKeys.indexOf('$dateFormat') >= 0) {
-                        currentField.sql = "DATE_FORMAT(" + currentField.sql + ",'" + field['$dateFormat'] + "')";
-                    }
-
-                    if (fieldKeys.indexOf('$as') >= 0) {
-                        currentField.as = field['$as'];
-                        currentField.sql = (currentField.sql) + " AS " + currentField.as;
-                        selectObject.aliases.push({
-                            $table: currentTable,
-                            $field: field['$field'],
-                            $as: field['$as']
-                        })
-                    }
-
-                    // add the columm to the select object
-                    selectObject.select.push(currentField.sql);
-                }
-            } else {
-                // raw field, add it to the select Object
-                selectObject.select.push("`" + currentTable + "`.`" + field + "`");
-            }
-
-        });
-
+        }
 
         // Process the $limit object
         if (selectKeys.indexOf('$limit') >= 0) {
@@ -390,7 +391,7 @@ var sqlJsonGenerator = function (options) {
             sql += " WHERE " + whereBuilder(queryParams.$where, null);
         }
 
-        if ( options.debug || options.showSQL){
+        if (options.debug || options.showSQL) {
             console.log(' ');
             console.log(colors.cyan('%s'), sql);
         }
@@ -432,7 +433,7 @@ var sqlJsonGenerator = function (options) {
 
         sql += " VALUES (" + valuesArray.join(',') + ")";
 
-        if ( options.debug || options.showSQL){
+        if (options.debug || options.showSQL) {
             console.log(' ');
             console.log(colors.cyan('%s'), sql);
         }
@@ -459,7 +460,7 @@ var sqlJsonGenerator = function (options) {
             sql += " WHERE " + whereBuilder(queryParams.$where, null);
         }
 
-        if ( options.debug || options.showSQL){
+        if (options.debug || options.showSQL) {
             console.log(' ');
             console.log(colors.cyan('%s'), sql);
         }
@@ -482,15 +483,23 @@ var sqlJsonGenerator = function (options) {
         var sql = "";
         var selectObject = selectBuilder(queryParams);
 
+        if (selectObject.select.length == 0 || selectObject.from.length == 0) {
+            return null;
+        }
+
         sql += "SELECT"
 
-        if ( queryParams.$sqlCalcFoundRows && queryParams.$limit) {
+        if (queryParams.$sqlCalcFoundRows && queryParams.$limit) {
             sql += " SQL_CALC_FOUND_ROWS";
         }
 
-        sql += " " + selectObject.select.join(', ');
+        if (selectObject.select.length > 0) {
+            sql += " " + selectObject.select.join(', ');
+        }
 
-        sql += " " + selectObject.from.join(' ');
+        if (selectObject.from.length > 0) {
+            sql += " " + selectObject.from.join(' ');
+        }
 
         if (selectObject.where) {
             sql += " WHERE " + selectObject.where;
@@ -504,7 +513,7 @@ var sqlJsonGenerator = function (options) {
             sql += selectObject.limit;
         }
 
-        if ( options.debug || options.showSQL){
+        if (options.debug || options.showSQL) {
             console.log(' ');
             console.log(colors.cyan('%s'), sql);
         }

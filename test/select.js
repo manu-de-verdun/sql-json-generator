@@ -18,9 +18,39 @@ describe('#select - json errors', function () {
     it('call with missing $select', function () {
 
         sqlParams = {
+            $from: 'table1',
             $where: [{
                 id_mi_item_inventario: 3
             }]
+        };
+
+        expect(sqlGenerator.select(sqlParams)).to.be.null;
+
+    });
+
+
+    it('call with missing $fields', function () {
+
+        sqlParams = {
+            $from: 'table1',
+            $where: [{
+                id_mi_item_inventario: 3
+            }]
+        };
+
+        expect(sqlGenerator.select(sqlParams)).to.be.null;
+
+    })
+
+
+    it('call with empty $fields', function () {
+
+        sqlParams = {
+            $from: 'table1',
+            $where: [{
+                id_mi_item_inventario: 3
+            }],
+            $fields: []
         };
 
         expect(sqlGenerator.select(sqlParams)).to.be.null;

@@ -8,7 +8,7 @@ var sqlGenerator = new SQLGenerator({showSQL: true});
 
 var queryParams = {
     $from: 'setores',
-    $fields: ['id_setor', 'nome'],
+    $fields: [],
     $where: [],
     $sqlCalcFoundRows: false,
     $limit: {
