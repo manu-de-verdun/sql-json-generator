@@ -186,9 +186,12 @@ var sqlJsonGenerator = function (options) {
             sqlJoin += 'FULL JOIN `' + joinData['$full'] + '` ';
         }
 
-        if (joinKeys.indexOf('$using') >= 0) {
-            sqlJoin += 'USING(`' + joinData['$using'] + '`)';
+        // if there is no $using
+        if ((joinKeys.indexOf('$using') == 0)) {
+            return null
         }
+
+        sqlJoin += 'USING(`' + joinData['$using'] + '`)';
 
         return sqlJoin;
 
