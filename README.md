@@ -326,6 +326,37 @@ SELECT `table1`.`column1a`, `table1`.`column1b`, `table2`.`column2a`, `table2`.`
 SELECT `table1`.`column1a`, `table1`.`column1b`, `table2`.`column2a`, `table2`.`column2b` FROM `table1` INNER JOIN `table2` ON `table1`.`table2ForeignKey` = `table2`.`primaryKey`
 ```
 
+>  ``$on`` can be an array
+
+*example:*
+```
+{
+    $from : 'table1',
+    $fields : [
+        'column1a',
+        'column1b',
+        {
+            $inner : 'table2',
+            $on: [{
+                $parent : 'table2ForeignKeyA',
+                $child : 'primaryKeyA'
+            },
+            {
+                $parent : 'table2ForeignKeyB',
+                $child : 'primaryKeyB'
+                        }]
+            $fields : [
+                'column2a',
+                'column2b',
+            ]
+        }
+    ]
+}
+```
+*will return:*
+```
+SELECT `table1`.`column1a`, `table1`.`column1b`, `table2`.`column2a`, `table2`.`column2b` FROM `table1` INNER JOIN `table2` ON ( `table1`.`table2ForeignKeyA` = `table2`.`primaryKeyA` AND `table1`.`table2ForeignKeyB` = `table2`.`primaryKeyB` )
+```
 ### $where
 
 ``$where: [{condition1}, {condition2}....]``
