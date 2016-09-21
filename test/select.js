@@ -390,6 +390,39 @@ describe('#select - queries', function () {
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
 
+
+    it('$inner $on (array)', function () {
+
+        sqlParams = {
+            $from: 'chamados_logs',
+            $fields: ['id_chamado_log', 'id_chamado', 'id_categoria_responsavel_chamado' , 'id_setor_responsavel' , 'timestamp' , 'log' , {
+                $inner: 'categorias_responsaveis_chamados',
+                $on : [{
+                    $parent : 'id_categoria_responsavel_chamado',
+                    $child: 'id_categoria_responsavel_chamado'
+                },{
+                    $parent : 'id_setor_responsavel',
+                    $child: 'id_setor_responsavel'
+                }],
+                $fields: [{
+                    $field: 'nome',
+                    $as: 'crc'
+                }]
+            } ],
+            $where: [{
+                $field: "id_chamado",
+                $eq : 28200
+            }]
+        };
+
+        var expectedResult = 'SELECT `chamados_logs`.`id_chamado_log`, `chamados_logs`.`id_chamado`, `chamados_logs`.`id_categoria_responsavel_chamado`, `chamados_logs`.`id_setor_responsavel`, `chamados_logs`.`timestamp`, `chamados_logs`.`log`, `categorias_responsaveis_chamados`.`nome` AS crc FROM `chamados_logs` INNER JOIN `categorias_responsaveis_chamados` ON (`chamados_logs`.`id_categoria_responsavel_chamado` = `categorias_responsaveis_chamados`.`id_categoria_responsavel_chamado` AND `chamados_logs`.`id_setor_responsavel` = `categorias_responsaveis_chamados`.`id_setor_responsavel` ) WHERE `chamados_logs`.`id_chamado` = \'28200\'';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+
+
     it('$limit', function () {
 
         sqlParams = {

@@ -192,11 +192,26 @@ var sqlJsonGenerator = function (options) {
         if ((joinKeys.indexOf('$using') >= 0)) {
             sqlJoin += 'USING(`' + joinData['$using'] + '`)';
             return sqlJoin;
+
         } else if ((joinKeys.indexOf('$on') >= 0)) {
-            if (!joinData['$on'].$parent && !joinData['$on'].$child) {
-                return null;
+
+            if ( Array.isArray(joinData['$on']) ) {
+                var tempArray = [];
+
+                joinData['$on'].forEach(function ( item ) {
+                    if (item.$parent && item.$child) {
+                        tempArray.push( '`' + inheritedTable  +'`.`' + item.$parent  +'` = `' + curentTable  +'`.`' + item.$child  + '`' );
+                    }
+                });
+
+                sqlJoin += 'ON (' + tempArray.join(' AND ') + ' )';
             }
-            sqlJoin += 'ON `' + inheritedTable  +'`.`' + joinData['$on'].$parent  +'` = `' + curentTable  +'`.`' + joinData['$on'].$child  +'`';
+            else {
+                if (!joinData['$on'].$parent && !joinData['$on'].$child) {
+                    return null;
+                }
+                sqlJoin += 'ON `' + inheritedTable  +'`.`' + joinData['$on'].$parent  +'` = `' + curentTable  +'`.`' + joinData['$on'].$child  +'`';
+            }
             return sqlJoin;
         } else {
             return null;

@@ -6,22 +6,26 @@ var SQLGenerator = require('../index');
 
 var sqlGenerator = new SQLGenerator({debug: true});
 
-var queryParams = { $from : 'table1',
-    $fields : [
-        'column1a',
-        'column1b',
-        {
-            $inner : 'table2',
-            $on: {
-                $parent : 'table2ForeignKey',
-                $child : 'primaryKey'
-            },
-            $fields : [
-                'column2a',
-                'column2b',
-            ]
-        }
-    ]
+var queryParams = {
+    $from: 'chamados_logs',
+        $fields: ['id_chamado_log', 'id_chamado', 'id_categoria_responsavel_chamado' , 'id_setor_responsavel' , 'timestamp' , 'log' , {
+            $inner: 'categorias_responsaveis_chamados',
+            $on : [{
+                $parent : 'id_categoria_responsavel_chamado',
+                $child: 'id_categoria_responsavel_chamado'
+            },{
+                $parent : 'id_setor_responsavel',
+                $child: 'id_setor_responsavel'
+            }],
+            $fields: [{
+                $field: 'nome',
+                $as: 'crc'
+            }]
+        } ],
+        $where: [{
+            $field: "id_chamado",
+            $eq : 28200
+        }]
 };
 
 
