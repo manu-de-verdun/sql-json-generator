@@ -262,7 +262,6 @@ SELECT `table1`.`column_a`, `table1`.`column_b` FROM `table1` WHERE `table1`.`co
 
 ### JOINS : $inner, $left, $right, $full
 
-``
 
 > JOIN tables are placed as an element inside the ``$fields`` array of the parent table.
 
@@ -275,7 +274,7 @@ SELECT `table1`.`column_a`, `table1`.`column_b` FROM `table1` WHERE `table1`.`co
 | ``$right`` |    RIGHT JOIN  |
 | ``$full`` |    LEFT JOIN   |
 
-> JOIN object must have one ``$using`` parameter
+> JOIN object must have one ``$using``  or one  ``$on`` parameter
 > JOIN object must have one ``$fields`` parameter
 
 *example:*
@@ -301,6 +300,31 @@ SELECT `table1`.`column_a`, `table1`.`column_b` FROM `table1` WHERE `table1`.`co
 SELECT `table1`.`column1a`, `table1`.`column1b`, `table2`.`column2a`, `table2`.`column2b` FROM `table1` INNER JOIN `table2` USING(`column2a`)
 ```
 
+*example:*
+```
+{
+    $from : 'table1',
+    $fields : [
+        'column1a',
+        'column1b',
+        {
+            $inner : 'table2',
+            $on: {
+                $parent : 'table2ForeignKey',
+                $child : 'primaryKey'
+            }
+            $fields : [
+                'column2a',
+                'column2b',
+            ]
+        }
+    ]
+}
+```
+*will return:*
+```
+SELECT `table1`.`column1a`, `table1`.`column1b`, `table2`.`column2a`, `table2`.`column2b` FROM `table1` INNER JOIN `table2` ON `table1`.`table2ForeignKey` = `table2`.`primaryKey`
+```
 
 ### $where
 
