@@ -10,10 +10,6 @@ var queryParams = {
     $from: 'setores',
     $fields: ['id_setor', 'nome', {
         $inner: 'unidades',
-        $on: {
-            $parent : 'id_unidade_customer',
-            $child : 'id_unidade'
-        },
         $fields: ['id_unidade', 'nome']
     }]
 };

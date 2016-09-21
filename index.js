@@ -168,6 +168,8 @@ var sqlJsonGenerator = function (options) {
         if (options.debug) {
             console.log('');
             console.log('joinBuilder'.green);
+            console.log('  curentTable: ', curentTable);
+            console.log('  inheritedTable: ', inheritedTable);
             console.log('  joinData: ', joinData);
         }
 
