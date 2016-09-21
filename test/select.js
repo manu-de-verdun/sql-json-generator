@@ -357,6 +357,39 @@ describe('#select - queries', function () {
     });
 
 
+    it('$left $right $full  $on', function () {
+
+        sqlParams = {
+            $from: 'setores',
+            $fields: ['id_setor', 'nome', {
+                $left: 'unidades',
+                $on: {
+                    $parent : 'id_unidade_customer',
+                    $child : 'id_unidade'
+                },
+                $fields: ['id_unidade', 'nome']
+            }, {
+                $right: 'usuarios',
+                $on: {
+                    $parent : 'id_usuario_customer',
+                    $child : 'id_usuario'
+                },
+                $fields: ['id_usuario', 'nome']
+            }, {
+                $full: 'avioes',
+                $on: {
+                    $parent : 'id_aviao_customer',
+                    $child : 'id_aviao'
+                },
+                $fields: ['id_aviao', 'nome']
+            }]
+        };
+
+        var expectedResult = 'SELECT `setores`.`id_setor`, `setores`.`nome`, `unidades`.`id_unidade`, `unidades`.`nome`, `usuarios`.`id_usuario`, `usuarios`.`nome`, `avioes`.`id_aviao`, `avioes`.`nome` FROM `setores` LEFT JOIN `unidades` ON `setores`.`id_unidade_customer` = `unidades`.`id_unidade` RIGHT JOIN `usuarios` ON `setores`.`id_usuario_customer` = `usuarios`.`id_usuario` FULL JOIN `avioes` ON `setores`.`id_aviao_customer` = `avioes`.`id_aviao`';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
     it('$limit', function () {
 
         sqlParams = {
