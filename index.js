@@ -163,7 +163,7 @@ var sqlJsonGenerator = function (options) {
      * @param conditions
      * @param parentKey
      */
-    var joinBuilder = function (joinData) {
+    var joinBuilder = function (joinData, curentTable, inheritedTable ) {
 
         if (options.debug) {
             console.log('');
@@ -186,23 +186,30 @@ var sqlJsonGenerator = function (options) {
             sqlJoin += 'FULL JOIN `' + joinData['$full'] + '` ';
         }
 
-        // if there is no $using
-        if ((joinKeys.indexOf('$using') == 0)) {
-            return null
+        // if there is  $using
+        if ((joinKeys.indexOf('$using') >= 0)) {
+            sqlJoin += 'USING(`' + joinData['$using'] + '`)';
+            return sqlJoin;
+        } else if ((joinKeys.indexOf('$on') >= 0)) {
+            if (!joinData['$on'].$parent && !joinData['$on'].$child) {
+                return null;
+            }
+            sqlJoin += 'ON `' + inheritedTable  +'`.`' + joinData['$on'].$parent  +'` = `' + curentTable  +'`.`' + joinData['$on'].$child  +'`';
+            return sqlJoin;
+        } else {
+            return null;
         }
 
-        sqlJoin += 'USING(`' + joinData['$using'] + '`)';
-
-        return sqlJoin;
 
     };
 
-    var selectBuilder = function (conditions) {
+    var selectBuilder = function (conditions , inheritedTable ) {
 
         if (options.debug) {
             console.log('');
             console.log('selectBuilder'.green);
             console.log('  conditions: ', conditions);
+            console.log('  inheritedTable: ', inheritedTable);
         }
 
         var currentTable;
@@ -222,16 +229,16 @@ var sqlJsonGenerator = function (options) {
 
         if (selectKeys.indexOf('$inner') >= 0) {
             currentTable = conditions['$inner'];
-            selectObject.from.push(joinBuilder(conditions));
+            selectObject.from.push(joinBuilder(conditions, currentTable , inheritedTable ));
         } else if (selectKeys.indexOf('$left') >= 0) {
             currentTable = conditions['$left'];
-            selectObject.from.push(joinBuilder(conditions));
+            selectObject.from.push(joinBuilder(conditions , currentTable, inheritedTable));
         } else if (selectKeys.indexOf('$right') >= 0) {
             currentTable = conditions['$right'];
-            selectObject.from.push(joinBuilder(conditions));
+            selectObject.from.push(joinBuilder(conditions, currentTable, inheritedTable));
         } else if (selectKeys.indexOf('$full') >= 0) {
             currentTable = conditions['$full'];
-            selectObject.from.push(joinBuilder(conditions));
+            selectObject.from.push(joinBuilder(conditions, currentTable, inheritedTable));
         }
 
         // Process the $where object
@@ -261,7 +268,7 @@ var sqlJsonGenerator = function (options) {
 
                     // If it is a special operation that needs recursive call ( $inner, $left, $right )
                     if (fieldKeys.indexOf('$inner') >= 0 || fieldKeys.indexOf('$left') >= 0 || fieldKeys.indexOf('$right') >= 0 || fieldKeys.indexOf('$full') >= 0) {
-                        var recursiveSelectObject = selectBuilder(field);
+                        var recursiveSelectObject = selectBuilder(field , currentTable );
 
                         //After recursive call, add itens from recursive call into the current object
                         recursiveSelectObject.select.forEach(function (item) {
@@ -483,7 +490,7 @@ var sqlJsonGenerator = function (options) {
         if (!queryParams || !queryParams.$from) return null;
 
         var sql = "";
-        var selectObject = selectBuilder(queryParams);
+        var selectObject = selectBuilder(queryParams , null);
 
         if (selectObject.select.length == 0 || selectObject.from.length == 0) {
             return null;

@@ -4,17 +4,18 @@
 var colors = require('colors');
 var SQLGenerator = require('../index');
 
-var sqlGenerator = new SQLGenerator({showSQL: true});
+var sqlGenerator = new SQLGenerator({debug: true});
 
 var queryParams = {
     $from: 'setores',
-    $fields: [],
-    $where: [],
-    $sqlCalcFoundRows: false,
-    $limit: {
-        $rows: 20,
-        $offset: 0
-    }
+    $fields: ['id_setor', 'nome', {
+        $inner: 'unidades',
+        $on: {
+            $parent : 'id_unidade_customer',
+            $child : 'id_unidade'
+        },
+        $fields: ['id_unidade', 'nome']
+    }]
 };
 
 
