@@ -4,15 +4,21 @@
 var colors = require('colors');
 var SQLGenerator = require('../index');
 
-var sqlGenerator = new SQLGenerator({debug: true});
+var sqlGenerator = new SQLGenerator({ debug: true });
 
 var queryParams = {
-            $from: 'chamados_logs',
-            $fields: [ {
-                $field: 'id_chamado_log',
-                $min: 1,
-                $as: 'total'
-            }]
+    $from: 'setores',
+    $fields: ['id_setor', 'nome', {
+        $inner: 'unidades',
+        $using: 'id_unidade',
+        $fields: ['id_unidade', 'nome']
+    },
+        {
+            $table: 'unidades',
+            $field: 'id_unidade',
+            $avg: 1,
+            $as: 'average'
+        }]
 };
 
 

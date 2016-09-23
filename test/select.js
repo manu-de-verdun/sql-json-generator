@@ -149,6 +149,7 @@ describe('#select - queries', function () {
 
     });
 
+
     it('$inner $using', function () {
 
         sqlParams = {
@@ -164,6 +165,7 @@ describe('#select - queries', function () {
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
+
 
     it('$inner $using $as', function () {
 
@@ -186,6 +188,7 @@ describe('#select - queries', function () {
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
+
 
     it('nested $inner $using $as', function () {
 
@@ -235,6 +238,7 @@ describe('#select - queries', function () {
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
+
 
     it('nested $inner $using multiple $where', function () {
 
@@ -359,6 +363,51 @@ describe('#select - queries', function () {
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
+
+
+    it('$inner $using $count', function () {
+
+        sqlParams = {
+            $from: 'setores',
+            $fields: ['id_setor', 'nome', {
+                $inner: 'unidades',
+                $using: 'id_unidade',
+                $fields: ['id_unidade', 'nome', {
+                    $field: 'id_unidade',
+                    $avg: 1,
+                    $as: 'average'
+                }]
+            }]
+        };
+
+        var expectedResult = 'SELECT `setores`.`id_setor`, `setores`.`nome`, `unidades`.`id_unidade`, `unidades`.`nome`, AVG(`unidades`.`id_unidade`) AS average FROM `setores` INNER JOIN `unidades` USING(`id_unidade`)';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+    
+    it('$inner $using $count $table', function () {
+
+        sqlParams = {
+    $from: 'setores',
+    $fields: ['id_setor', 'nome', {
+        $inner: 'unidades',
+        $using: 'id_unidade',
+        $fields: ['id_unidade', 'nome']
+        },
+        {
+            $table: 'unidades',
+            $field: 'id_unidade',
+            $avg: 1,
+            $as: 'average'
+        }]
+        };
+
+        var expectedResult = 'SELECT `setores`.`id_setor`, `setores`.`nome`, `unidades`.`id_unidade`, `unidades`.`nome`, AVG(`unidades`.`id_unidade`) AS average FROM `setores` INNER JOIN `unidades` USING(`id_unidade`)';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
 
 
     it('$left $right $full $using', function () {
@@ -504,8 +553,6 @@ describe('#select - queries', function () {
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
-
-
 
 
     it('$limit', function () {

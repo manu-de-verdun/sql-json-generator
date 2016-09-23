@@ -313,7 +313,12 @@ var sqlJsonGenerator = function (options) {
 
                         var currentField = {};
 
-                        currentField.sql = "`" + currentTable + "`.`" + field['$field'] + "`";
+                        if (fieldKeys.indexOf('$table') >= 0) {
+                            currentField.sql = "`" + field['$table'] + "`.`" + field['$field'] + "`";
+                        }
+                        else {
+                            currentField.sql = "`" + currentTable + "`.`" + field['$field'] + "`";
+                        }
 
                         if (fieldKeys.indexOf('$avg') >= 0) {
                             currentField.sql = "AVG(" + currentField.sql + ")";
