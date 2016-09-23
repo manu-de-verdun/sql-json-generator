@@ -315,7 +315,10 @@ var sqlJsonGenerator = function (options) {
 
                         currentField.sql = "`" + currentTable + "`.`" + field['$field'] + "`";
 
-                        if (fieldKeys.indexOf('$dateFormat') >= 0) {
+                        if (fieldKeys.indexOf('$count') >= 0) {
+                            currentField.sql = "COUNT(" + currentField.sql + ")";
+                        }
+                        else if (fieldKeys.indexOf('$dateFormat') >= 0) {
                             currentField.sql = "DATE_FORMAT(" + currentField.sql + ",'" + field['$dateFormat'] + "')";
                         }
 

@@ -238,6 +238,29 @@ SELECT DATE_FORMAT(`table1`.`column_a`,'%Y-%m-%d') AS column_date FROM `table1`
 ```
 
 
+#### $count
+
+``count : 1``
+
+*example:*
+```
+{
+    $from : 'table1',
+    $fields : [
+        {
+            $field: 'column_a',
+            $count : 1,
+            $as: 'column_date'
+        }
+    ]
+}
+```
+*will return:*
+```
+SELECT COUNT(`table1`.`column_a`) AS column_date FROM `table1`
+```
+
+
 #### $where
 
 

@@ -275,6 +275,24 @@ describe('#select - queries', function () {
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
 
+    
+
+    it('$field $count', function () {
+
+        sqlParams = {
+            $from: 'chamados_logs',
+            $fields: [ {
+                $field: 'id_chamado_log',
+                $count: 1,
+                $as: 'total'
+            }]
+        };
+
+        var expectedResult = 'SELECT COUNT(`chamados_logs`.`id_chamado_log`) AS total FROM `chamados_logs`';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
 
     it('$left $right $full $using', function () {
 
