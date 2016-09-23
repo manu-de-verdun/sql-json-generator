@@ -238,7 +238,7 @@ SELECT DATE_FORMAT(`table1`.`column_a`,'%Y-%m-%d') AS column_date FROM `table1`
 ```
 
 
-#### $count
+#### $avg $count $min $max $sum
 
 ``count : 1``
 

@@ -315,11 +315,23 @@ var sqlJsonGenerator = function (options) {
 
                         currentField.sql = "`" + currentTable + "`.`" + field['$field'] + "`";
 
-                        if (fieldKeys.indexOf('$count') >= 0) {
+                        if (fieldKeys.indexOf('$avg') >= 0) {
+                            currentField.sql = "AVG(" + currentField.sql + ")";
+                        }
+                        else if (fieldKeys.indexOf('$count') >= 0) {
                             currentField.sql = "COUNT(" + currentField.sql + ")";
                         }
                         else if (fieldKeys.indexOf('$dateFormat') >= 0) {
                             currentField.sql = "DATE_FORMAT(" + currentField.sql + ",'" + field['$dateFormat'] + "')";
+                        }
+                        else if (fieldKeys.indexOf('$max') >= 0) {
+                            currentField.sql = "MAX(" + currentField.sql + ")";
+                        }
+                        else if (fieldKeys.indexOf('$min') >= 0) {
+                            currentField.sql = "MIN(" + currentField.sql + ")";
+                        }
+                        else if (fieldKeys.indexOf('$sum') >= 0) {
+                            currentField.sql = "SUM(" + currentField.sql + ")";
                         }
 
                         if (fieldKeys.indexOf('$as') >= 0) {

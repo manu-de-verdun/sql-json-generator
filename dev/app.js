@@ -10,7 +10,7 @@ var queryParams = {
             $from: 'chamados_logs',
             $fields: [ {
                 $field: 'id_chamado_log',
-                $count: 1,
+                $min: 1,
                 $as: 'total'
             }]
 };

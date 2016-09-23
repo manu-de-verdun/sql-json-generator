@@ -275,7 +275,6 @@ describe('#select - queries', function () {
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
 
-    
 
     it('$field $count', function () {
 
@@ -289,6 +288,74 @@ describe('#select - queries', function () {
         };
 
         var expectedResult = 'SELECT COUNT(`chamados_logs`.`id_chamado_log`) AS total FROM `chamados_logs`';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+    it('$field $avg', function () {
+
+        sqlParams = {
+            $from: 'chamados_logs',
+            $fields: [ {
+                $field: 'id_chamado_log',
+                $avg: 1,
+                $as: 'total'
+            }]
+        };
+
+        var expectedResult = 'SELECT AVG(`chamados_logs`.`id_chamado_log`) AS total FROM `chamados_logs`';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+    it('$field $min', function () {
+
+        sqlParams = {
+            $from: 'chamados_logs',
+            $fields: [ {
+                $field: 'id_chamado_log',
+                $min: 1,
+                $as: 'total'
+            }]
+        };
+
+        var expectedResult = 'SELECT MIN(`chamados_logs`.`id_chamado_log`) AS total FROM `chamados_logs`';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+    it('$field $max', function () {
+
+        sqlParams = {
+            $from: 'chamados_logs',
+            $fields: [ {
+                $field: 'id_chamado_log',
+                $max: 1,
+                $as: 'total'
+            }]
+        };
+
+        var expectedResult = 'SELECT MAX(`chamados_logs`.`id_chamado_log`) AS total FROM `chamados_logs`';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+    it('$field $sum', function () {
+
+        sqlParams = {
+            $from: 'chamados_logs',
+            $fields: [ {
+                $field: 'id_chamado_log',
+                $sum: 1,
+                $as: 'total'
+            }]
+        };
+
+        var expectedResult = 'SELECT SUM(`chamados_logs`.`id_chamado_log`) AS total FROM `chamados_logs`';
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });

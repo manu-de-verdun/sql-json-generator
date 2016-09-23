@@ -8,7 +8,15 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## [Unreleased]
 ### Added
  - ``$count`` feature for SELECT Statents
+ - ``$max`` feature for SELECT Statents
+ - ``$min`` feature for SELECT Statents
+ - ``$sum`` feature for SELECT Statents
+ - ``$avg`` feature for SELECT Statents
 
 ## [0.8.6] - 2016-09-22
 ### Added
  - ``$on`` feature for JOIN operations
+
+## [0.8.2] - 2016-09-06
+### Added
+ - ``$like`` feature for WHERE operations
