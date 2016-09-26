@@ -228,7 +228,7 @@ var sqlJsonGenerator = function (options) {
             console.log('  conditions: ', conditions);
             console.log('  inheritedTable: ', inheritedTable);
         }
-        
+
         var byGroupOrOrder = function ( conditions , selectObject, currentTable ) {
 
             var aliasesList = selectObject.aliases.map(function (x) {
@@ -567,7 +567,7 @@ var sqlJsonGenerator = function (options) {
         }
 
         if (selectObject.groupBy.length > 0) {
-            sql += " GROUP BY " + selectObject.orderBy.join(' ,');
+            sql += " GROUP BY " + selectObject.groupBy.join(' ,');
         }
 
         if (selectObject.orderBy.length > 0) {
