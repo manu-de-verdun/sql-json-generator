@@ -6,7 +6,18 @@ Generate SQL statements from JSON objects
 
 Create reusable json objects to quickly build SQL statments
 
-> This module was created because I wanted to start using javascript and node to develop
+## Introduction
+
+This module was created because I wanted to create REST services for my existing projects, using node, building also Angular Clients. Even if it is easier to use noSQL database as Mongo with node, all my databases are running with mySQL and I do not want to change or migrate them.  
+  
+Using the mySQL connector with node is quite easy, but the code for building the SQL statement from scratch could be painful and eventually becomes unreadable the more the query becomes complex.  
+  
+The input JSON object can be build using other reusable JSON objects (for example a constant with nested JOIN statements, that are used in various queries.  
+  
+It offers an easy way to build simple or complex queries without having to write the SQL syntax, just writing down the query logic.  
+  
+The module syntax is loosely based on MongoDB querying syntax.  
+
 
 ## Table of Contents
 
@@ -616,6 +627,27 @@ ORDER BY table1.column1 DESC
 ```
 ORDER BY current_table.column1 DESC
 ```
+
+
+### $group
+
+``$group: [ list of fields ]``
+
+*example:*
+```
+{
+    $group : [
+        'column1',
+        'column2'
+    ]
+}
+```
+*will return:*
+```
+GROUP BY current_table.column1, current_table.column2
+```
+
+> ``$group`` uses the same syntaxt as ``$order``
 
 ### $sqlCalcFoundRows
 
