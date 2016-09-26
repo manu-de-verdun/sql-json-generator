@@ -228,6 +228,48 @@ var sqlJsonGenerator = function (options) {
             console.log('  conditions: ', conditions);
             console.log('  inheritedTable: ', inheritedTable);
         }
+        
+        var byGroupOrOrder = function ( conditions , selectObject, currentTable ) {
+
+            var aliasesList = selectObject.aliases.map(function (x) {
+                return x['$as'];
+            });
+
+            var resultArray = [];
+
+            conditions.forEach(function (orderItem) {
+
+
+                // test if the array element is an object ( column descriptor ) or a simple string ( an column alias )
+                if (typeof orderItem === 'object') {
+                    //if it is an object, must contain a $as or $field keys
+                    if (orderItem['$field']) {
+                        //it's a field
+                        resultArray.push("`" + (orderItem['$table'] ? orderItem['$table'] : currentTable) + "`.`" + orderItem['$field'] + "`" + (orderItem['$desc'] ? ' DESC' : ''));
+                    } else if (orderItem['$as']) {
+                        var currentAliasIdx = aliasesList.indexOf(orderItem['$as']);
+                        if (currentAliasIdx >= 0) {
+                            // It's an alias
+                            resultArray.push("`" + selectObject.aliases[currentAliasIdx]['$table'] + "`.`" + selectObject.aliases[currentAliasIdx]['$field'] + "`" + (orderItem['$desc'] ? ' DESC' : ''));
+                        }
+                    }
+                } else {
+                    // it is not an object. must be an alias or a top level table column name (will use $from table name)
+                    var currentAliasIdx = aliasesList.indexOf(orderItem);
+                    if (currentAliasIdx >= 0) {
+                        // It's an alias
+                        resultArray.push("`" + selectObject.aliases[currentAliasIdx]['$table'] + "`.`" + selectObject.aliases[currentAliasIdx]['$field'] + "`");
+                    } else {
+                        //It's a top level table column
+                        resultArray.push("`" + currentTable + "`.`" + orderItem + "`");
+                    }
+                }
+
+            });
+
+            return resultArray;
+
+        };
 
         var currentTable;
         var selectKeys = Object.keys(conditions);
@@ -369,49 +411,15 @@ var sqlJsonGenerator = function (options) {
             }
         }
 
-        var byGroupOrOrder = function (selectObject) {
 
-
-            var aliasesList = selectObject.aliases.map(function (x) {
-                return x['$as'];
-            });
-
-            conditions['$order'].forEach(function (orderItem) {
-
-
-                // test if the array element is an object ( column descriptor ) or a simple string ( an column alias )
-                if (typeof orderItem === 'object') {
-                    //if it is an object, must contain a $as or $field keys
-                    if (orderItem['$field']) {
-                        //it's a field
-                        selectObject.orderBy.push("`" + (orderItem['$table'] ? orderItem['$table'] : currentTable) + "`.`" + orderItem['$field'] + "`" + (orderItem['$desc'] ? ' DESC' : ''));
-                    } else if (orderItem['$as']) {
-                        var currentAliasIdx = aliasesList.indexOf(orderItem['$as']);
-                        if (currentAliasIdx >= 0) {
-                            // It's an alias
-                            selectObject.orderBy.push("`" + selectObject.aliases[currentAliasIdx]['$table'] + "`.`" + selectObject.aliases[currentAliasIdx]['$field'] + "`" + (orderItem['$desc'] ? ' DESC' : ''));
-                        }
-                    }
-                } else {
-                    // it is not an object. must be an alias or a top level table column name (will use $from table name)
-                    var currentAliasIdx = aliasesList.indexOf(orderItem);
-                    if (currentAliasIdx >= 0) {
-                        // It's an alias
-                        selectObject.orderBy.push("`" + selectObject.aliases[currentAliasIdx]['$table'] + "`.`" + selectObject.aliases[currentAliasIdx]['$field'] + "`");
-                    } else {
-                        //It's a top level table column
-                        selectObject.orderBy.push("`" + currentTable + "`.`" + orderItem + "`");
-                    }
-                }
-
-            });
-
-        };
+        // Process the $groupBy object
+        if (selectKeys.indexOf('$group') >= 0) {
+            selectObject.groupBy = byGroupOrOrder(conditions['$group'] , selectObject, currentTable);
+        }
 
         // Process the $orderBy object
         if (selectKeys.indexOf('$order') >= 0) {
-
-            byGroupOrOrder(selectObject);
+            selectObject.orderBy = byGroupOrOrder(conditions['$order'] , selectObject, currentTable);
         }
 
         return selectObject
