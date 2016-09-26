@@ -2,9 +2,11 @@
 
 # sql-json-generator
 
-Generate SQL command from JSON object
+Generate SQL statements from JSON objects
 
 Create reusable json objects to quickly build SQL statments
+
+> This module was created because I wanted to start using javascript and node to develop
 
 ## Table of Contents
 

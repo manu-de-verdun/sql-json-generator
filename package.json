@@ -1,6 +1,6 @@
 {
   "name": "sql-json-generator",
-  "version": "0.8.7",
+  "version": "0.9.0",
   "description": "Module to create SQL queries from JSON objects",
   "main": "index.js",
   "scripts": {

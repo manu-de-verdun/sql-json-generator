@@ -6,15 +6,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
+### Added
+ - ``$group`` Statement
 
 
 ## [0.8.7] - 2016-09-23
 ### Added
- - ``$count`` feature for SELECT Statents
- - ``$max`` feature for SELECT Statents
- - ``$min`` feature for SELECT Statents
- - ``$sum`` feature for SELECT Statents
- - ``$avg`` feature for SELECT Statents
+ - ``$count`` feature for SELECT Statements
+ - ``$max`` feature for SELECT Statements
+ - ``$min`` feature for SELECT Statements
+ - ``$sum`` feature for SELECT Statements
+ - ``$avg`` feature for SELECT Statements
 
 ## [0.8.6] - 2016-09-22
 ### Added

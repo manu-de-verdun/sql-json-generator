@@ -19,7 +19,7 @@ var sqlJsonGenerator = function (options) {
         var whereArray = [];
 
         var conditionBuilder = function (column, table, operador, condition, delimiter) {
-            return (( table ) ? "`" + table + "`." : "" ) + "`" + column + "` " + operador + " " + delimiter + condition + delimiter;
+            return ((table) ? "`" + table + "`." : "") + "`" + column + "` " + operador + " " + delimiter + condition + delimiter;
         };
 
         if (options.debug) {
@@ -95,7 +95,7 @@ var sqlJsonGenerator = function (options) {
                 console.log('    full field comparaison'.cyan);
             }
 
-            var currentTable = ( conditions['$table'] ) ? conditions['$table'] : inheritedTable;
+            var currentTable = (conditions['$table']) ? conditions['$table'] : inheritedTable;
 
             if (conditions["$gt"]) {
                 return conditionBuilder(conditions['$field'], currentTable, '>', conditions["$gt"], "'");
@@ -163,7 +163,7 @@ var sqlJsonGenerator = function (options) {
      * @param conditions
      * @param parentKey
      */
-    var joinBuilder = function (joinData, curentTable, inheritedTable ) {
+    var joinBuilder = function (joinData, curentTable, inheritedTable) {
 
         if (options.debug) {
             console.log('');
@@ -195,12 +195,12 @@ var sqlJsonGenerator = function (options) {
 
         } else if ((joinKeys.indexOf('$on') >= 0)) {
 
-            if ( Array.isArray(joinData['$on']) ) {
+            if (Array.isArray(joinData['$on'])) {
                 var tempArray = [];
 
-                joinData['$on'].forEach(function ( item ) {
+                joinData['$on'].forEach(function (item) {
                     if (item.$parent && item.$child) {
-                        tempArray.push( '`' + inheritedTable  +'`.`' + item.$parent  +'` = `' + curentTable  +'`.`' + item.$child  + '`' );
+                        tempArray.push('`' + inheritedTable + '`.`' + item.$parent + '` = `' + curentTable + '`.`' + item.$child + '`');
                     }
                 });
 
@@ -210,7 +210,7 @@ var sqlJsonGenerator = function (options) {
                 if (!joinData['$on'].$parent && !joinData['$on'].$child) {
                     return null;
                 }
-                sqlJoin += 'ON `' + inheritedTable  +'`.`' + joinData['$on'].$parent  +'` = `' + curentTable  +'`.`' + joinData['$on'].$child  +'`';
+                sqlJoin += 'ON `' + inheritedTable + '`.`' + joinData['$on'].$parent + '` = `' + curentTable + '`.`' + joinData['$on'].$child + '`';
             }
             return sqlJoin;
         } else {
@@ -220,7 +220,7 @@ var sqlJsonGenerator = function (options) {
 
     };
 
-    var selectBuilder = function (conditions , inheritedTable ) {
+    var selectBuilder = function (conditions, inheritedTable) {
 
         if (options.debug) {
             console.log('');
@@ -235,6 +235,7 @@ var sqlJsonGenerator = function (options) {
             select: [],
             from: [],
             aliases: [],
+            groupBy: [],
             orderBy: []
         };
 
@@ -246,10 +247,10 @@ var sqlJsonGenerator = function (options) {
 
         if (selectKeys.indexOf('$inner') >= 0) {
             currentTable = conditions['$inner'];
-            selectObject.from.push(joinBuilder(conditions, currentTable , inheritedTable ));
+            selectObject.from.push(joinBuilder(conditions, currentTable, inheritedTable));
         } else if (selectKeys.indexOf('$left') >= 0) {
             currentTable = conditions['$left'];
-            selectObject.from.push(joinBuilder(conditions , currentTable, inheritedTable));
+            selectObject.from.push(joinBuilder(conditions, currentTable, inheritedTable));
         } else if (selectKeys.indexOf('$right') >= 0) {
             currentTable = conditions['$right'];
             selectObject.from.push(joinBuilder(conditions, currentTable, inheritedTable));
@@ -285,7 +286,7 @@ var sqlJsonGenerator = function (options) {
 
                     // If it is a special operation that needs recursive call ( $inner, $left, $right )
                     if (fieldKeys.indexOf('$inner') >= 0 || fieldKeys.indexOf('$left') >= 0 || fieldKeys.indexOf('$right') >= 0 || fieldKeys.indexOf('$full') >= 0) {
-                        var recursiveSelectObject = selectBuilder(field , currentTable );
+                        var recursiveSelectObject = selectBuilder(field, currentTable);
 
                         //After recursive call, add itens from recursive call into the current object
                         recursiveSelectObject.select.forEach(function (item) {
@@ -368,9 +369,8 @@ var sqlJsonGenerator = function (options) {
             }
         }
 
+        var byGroupOrOrder = function (selectObject) {
 
-        // Process the $orderBy object
-        if (selectKeys.indexOf('$order') >= 0) {
 
             var aliasesList = selectObject.aliases.map(function (x) {
                 return x['$as'];
@@ -378,17 +378,18 @@ var sqlJsonGenerator = function (options) {
 
             conditions['$order'].forEach(function (orderItem) {
 
+
                 // test if the array element is an object ( column descriptor ) or a simple string ( an column alias )
                 if (typeof orderItem === 'object') {
                     //if it is an object, must contain a $as or $field keys
                     if (orderItem['$field']) {
                         //it's a field
-                        selectObject.orderBy.push("`" + ( orderItem['$table'] ? orderItem['$table'] : currentTable) + "`.`" + orderItem['$field'] + "`" + ( orderItem['$desc'] ? ' DESC' : ''));
+                        selectObject.orderBy.push("`" + (orderItem['$table'] ? orderItem['$table'] : currentTable) + "`.`" + orderItem['$field'] + "`" + (orderItem['$desc'] ? ' DESC' : ''));
                     } else if (orderItem['$as']) {
                         var currentAliasIdx = aliasesList.indexOf(orderItem['$as']);
                         if (currentAliasIdx >= 0) {
                             // It's an alias
-                            selectObject.orderBy.push("`" + selectObject.aliases[currentAliasIdx]['$table'] + "`.`" + selectObject.aliases[currentAliasIdx]['$field'] + "`" + ( orderItem['$desc'] ? ' DESC' : '' ));
+                            selectObject.orderBy.push("`" + selectObject.aliases[currentAliasIdx]['$table'] + "`.`" + selectObject.aliases[currentAliasIdx]['$field'] + "`" + (orderItem['$desc'] ? ' DESC' : ''));
                         }
                     }
                 } else {
@@ -405,6 +406,12 @@ var sqlJsonGenerator = function (options) {
 
             });
 
+        };
+
+        // Process the $orderBy object
+        if (selectKeys.indexOf('$order') >= 0) {
+
+            byGroupOrOrder(selectObject);
         }
 
         return selectObject
@@ -527,7 +534,7 @@ var sqlJsonGenerator = function (options) {
         if (!queryParams || !queryParams.$from) return null;
 
         var sql = "";
-        var selectObject = selectBuilder(queryParams , null);
+        var selectObject = selectBuilder(queryParams, null);
 
         if (selectObject.select.length == 0 || selectObject.from.length == 0) {
             return null;
@@ -549,6 +556,10 @@ var sqlJsonGenerator = function (options) {
 
         if (selectObject.where) {
             sql += " WHERE " + selectObject.where;
+        }
+
+        if (selectObject.groupBy.length > 0) {
+            sql += " GROUP BY " + selectObject.orderBy.join(' ,');
         }
 
         if (selectObject.orderBy.length > 0) {
