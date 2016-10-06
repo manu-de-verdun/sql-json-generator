@@ -21,7 +21,6 @@ The module syntax is loosely based on MongoDB querying syntax.
 
 ##  2. <a name='TableofContents-1'></a>Table of Contents
 
-<!-- vscode-markdown-toc -->
 * 1. [Introduction](#Introduction-0)
 * 2. [Table of Contents](#TableofContents-1)
 * 3. [Install](#Install-2)
@@ -56,7 +55,6 @@ The module syntax is loosely based on MongoDB querying syntax.
 	* 8.2. [$sqlCalcFoundRows](#sqlCalcFoundRows-31)
 * 9. [Debugging](#Debugging-32)
 
-<!-- /vscode-markdown-toc -->[![npm version](https://badge.fury.io/js/sql-json-generator.svg)](https://badge.fury.io/js/sql-json-generator)
 
 ##  3. <a name='Install-2'></a>Install
 
