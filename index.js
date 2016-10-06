@@ -27,8 +27,8 @@ var sqlJsonGenerator = function (options) {
         var whereKeys = Object.keys(conditions);
         var whereArray = [];
 
-        var conditionBuilder = function (column, table, operador, condition, delimiter) {
-            return ((table) ? "`" + table + "`." : "") + "`" + column + "` " + operador + " " + delimiter + condition + delimiter;
+        var conditionBuilder = function (column, table, operador, condition) {
+            return ((table) ? "`" + table + "`." : "") + "`" + column + "` " + operador + " " +  escaping(condition) ;
         };
 
         if (options.debug) {
@@ -107,31 +107,31 @@ var sqlJsonGenerator = function (options) {
             var currentTable = (conditions['$table']) ? conditions['$table'] : inheritedTable;
 
             if (conditions["$gt"]) {
-                return conditionBuilder(conditions['$field'], currentTable, '>', conditions["$gt"], "'");
+                return conditionBuilder(conditions['$field'], currentTable, '>', conditions["$gt"]);
             }
 
             else if (conditions["$gte"]) {
-                return conditionBuilder(conditions['$field'], currentTable, '>=', conditions["$gte"], "'");
+                return conditionBuilder(conditions['$field'], currentTable, '>=', conditions["$gte"]);
             }
 
             else if (conditions["$lt"]) {
-                return conditionBuilder(conditions['$field'], currentTable, '<', conditions["$lt"], "'");
+                return conditionBuilder(conditions['$field'], currentTable, '<', conditions["$lt"]);
             }
 
             else if (conditions["$lte"]) {
-                return conditionBuilder(conditions['$field'], currentTable, '<=', conditions["$lte"], "'");
+                return conditionBuilder(conditions['$field'], currentTable, '<=', conditions["$lte"]);
             }
 
             else if (conditions["$eq"]) {
-                return conditionBuilder(conditions['$field'], currentTable, '=', conditions["$eq"], "'");
+                return conditionBuilder(conditions['$field'], currentTable, '=', conditions["$eq"]);
             }
 
             else if (conditions["$ne"]) {
-                return conditionBuilder(conditions['$field'], currentTable, '<>', conditions["$ne"], "'");
+                return conditionBuilder(conditions['$field'], currentTable, '<>', conditions["$ne"]);
             }
 
             else if (conditions["$like"]) {
-                return conditionBuilder(conditions['$field'], currentTable, 'LIKE', conditions["$like"], "'");
+                return conditionBuilder(conditions['$field'], currentTable, 'LIKE', conditions["$like"]);
             }
 
 
@@ -142,7 +142,7 @@ var sqlJsonGenerator = function (options) {
                 }
                 if (Array.isArray(conditions["$in"]) && conditions["$in"].length > 0) {
                     var inCondition = "('" + conditions["$in"].join("','") + "')";
-                    return conditionBuilder(conditions['$field'], currentTable, 'IN', inCondition, '');
+                    return conditionBuilder(conditions['$field'], currentTable, 'IN', inCondition);
                 } else {
                     return null;
                 }
@@ -152,7 +152,7 @@ var sqlJsonGenerator = function (options) {
 
         if (whereKeys.length == 1) {
 
-            var result = conditionBuilder(whereKeys[0], inheritedTable, '=', conditions[whereKeys[0]], "'");
+            var result = conditionBuilder(whereKeys[0], inheritedTable, '=', conditions[whereKeys[0]]);
 
             if (options.debug) {
                 console.log('    simple columns equality shortcut'.cyan);
