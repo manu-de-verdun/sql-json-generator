@@ -4,43 +4,20 @@
 var colors = require('colors');
 var SQLGenerator = require('../index');
 
-var sqlGenerator = new SQLGenerator({ debug: true });
+var sqlGenerator = new SQLGenerator({ debug: true, escaped: true });
 
 var queryParams = {
-    $from: 'modelos_insumos',
-    $fields: ['codigo', {
-        $field: 'nome',
-        $as: 'modelo'
-    }, 'lote', 'fracionamento', {
-            $inner: 'categorias_insumos',
-            $using: 'id_categoria_insumo',
-            $fields: [{
-                $field: 'nome',
-                $as: 'categoria'
-            }, {
-                    $inner: 'categorias_insumos_departamentos',
-                    $using: 'id_categoria_insumo_departamento',
-                    $fields: [{
-                        $field: 'nome',
-                        $as: 'departamento'
-                    },]
-                }]
-        }, {
-            $inner: 'categorias_unidades_medidas',
-            $using: 'id_categoria_unidade_medida',
-            $fields: [{
-                $field: 'sigla',
-                $as: 'unidade'
-            },]
-        }],
-    $group: [{
-        $table: 'categorias_insumos_departamentos',
-        $field: 'nome'
-    }, 'categoria', {
-            $as: 'modelo'
-        }]
+    $update: 'mytable',
+    $set: {
+        field_a: "string",
+        field_b: "string n' roses",
+        field_c: 1
+    },
+    $where: [{
+        field_a: 1
+    }]
 };
 
 
-var sqlQuery = sqlGenerator.select(queryParams);
+var sqlQuery = sqlGenerator.update(queryParams);
 

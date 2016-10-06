@@ -8,13 +8,11 @@ var sqlJsonGenerator = function (options) {
     }
 
     var escaping = function ( data ) {
-        if (typeof data === 'string' && options.escape) {
-            var escaped = 
-            console.log('escaping: ', data);
+        if (typeof data === 'string' && options.escaped) {
             return sqlString.escape(data);
         }
         else {
-            return data;
+            return "'" + data + "'";
         }
     }
 
@@ -455,7 +453,7 @@ var sqlJsonGenerator = function (options) {
         var setArray = [];
 
         setKeys.forEach(function (key) {
-            setArray.push("`" + key + "` = '" + queryParams.$set[key] + "'");
+            setArray.push("`" + key + "` = " + escaping(queryParams.$set[key]));
         });
 
         sql += " SET " + setArray.join(',');
@@ -500,7 +498,7 @@ var sqlJsonGenerator = function (options) {
 
         var valuesArray = [];
         setKeys.forEach(function (key) {
-            valuesArray.push("'" + queryParams.$values[key] + "'");
+            valuesArray.push(escaping(queryParams.$values[key]));
         });
 
         sql += " VALUES (" + valuesArray.join(',') + ")";
