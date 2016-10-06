@@ -26,6 +26,7 @@
     "mocha": "^3.0.2"
   },
   "dependencies": {
-    "colors": "^1.1.2"
+    "colors": "^1.1.2",
+    "sqlstring": "^2.1.0"
   }
 }

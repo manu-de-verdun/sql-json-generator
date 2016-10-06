@@ -25,6 +25,7 @@ The module syntax is loosely based on MongoDB querying syntax.
 - [Wiki](#wiki)
 - [API](#api)
 - [Debugging](#debugging)
+- [mySQL features](#mySQL-Features)
 
 ## Install
 
@@ -38,6 +39,8 @@ var sqlGenerator = new SQLGenerator();
 ## Wiki
 
 Find mode complex queries examples on the project [wiki](https://github.com/manu-de-verdun/sql-json-generator/wiki)
+
+## Change log
 
 ## API
 
@@ -648,6 +651,14 @@ GROUP BY current_table.column1, current_table.column2
 ```
 
 > ``$group`` uses the same syntaxt as ``$order``
+
+## mySQL Features
+
+### Escaping strings
+
+´´var sqlGenerator = new SQLGenerator({escape: true});´´
+
+will escape the strings values.
 
 ### $sqlCalcFoundRows
 

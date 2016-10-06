@@ -1,4 +1,5 @@
 var colors = require('colors');
+var sqlString = require('sqlstring');
 
 var sqlJsonGenerator = function (options) {
 
@@ -6,6 +7,16 @@ var sqlJsonGenerator = function (options) {
         options = {};
     }
 
+    var escaping = function ( data ) {
+        if (typeof data === 'string' && options.escape) {
+            var escaped = 
+            console.log('escaping: ', data);
+            return sqlString.escape(data);
+        }
+        else {
+            return data;
+        }
+    }
 
     /**
      * Building SQL WHERE conditions
