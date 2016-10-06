@@ -42,6 +42,10 @@ Find mode complex queries examples on the project [wiki](https://github.com/manu
 
 ## Change log
 
+[Change Log](https://github.com/manu-de-verdun/sql-json-generator/blob/master/CHANGELOG.md)
+
+All notable changes to this project will be documented in this file.
+
 ## API
 
 ### SELECT
