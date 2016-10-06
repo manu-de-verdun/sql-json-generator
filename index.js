@@ -31,6 +31,10 @@ var sqlJsonGenerator = function (options) {
             return ((table) ? "`" + table + "`." : "") + "`" + column + "` " + operador + " " +  escaping(condition) ;
         };
 
+        var inBuilder = function (column, table, operador, condition) {
+            return ((table) ? "`" + table + "`." : "") + "`" + column + "` " + operador + " " +  condition ;
+        };
+
         if (options.debug) {
             console.log('');
             console.log('whereBuilder'.green);
@@ -141,8 +145,11 @@ var sqlJsonGenerator = function (options) {
                     console.log('      $in'.cyan);
                 }
                 if (Array.isArray(conditions["$in"]) && conditions["$in"].length > 0) {
-                    var inCondition = "('" + conditions["$in"].join("','") + "')";
-                    return conditionBuilder(conditions['$field'], currentTable, 'IN', inCondition);
+                    conditions["$in"].forEach ( function ( condition , idx ) {
+                         conditions["$in"][idx] = escaping(condition);
+                    });
+                    var inCondition = "(" + conditions["$in"].join(",") + ")";
+                    return inBuilder(conditions['$field'], currentTable, 'IN', inCondition);
                 } else {
                     return null;
                 }

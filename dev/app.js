@@ -7,17 +7,13 @@ var SQLGenerator = require('../index');
 var sqlGenerator = new SQLGenerator({ debug: true, escaped: true });
 
 var queryParams = {
-    $update: 'mytable',
-    $set: {
-        field_a: "string",
-        field_b: "string n' roses",
-        field_c: 1
-    },
-    $where: [{
-        field_a: 1
-    }]
+            $from: 'gesup_usuarios_perfis_privilegios',
+            $fields: ['id_categoria_gesup', 'id_categoria_gesup_acao'],
+            $where: [{
+                field_a: "string n' roses"
+            }]
 };
 
 
-var sqlQuery = sqlGenerator.update(queryParams);
+var sqlQuery = sqlGenerator.select(queryParams);
 
