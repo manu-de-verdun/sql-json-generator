@@ -590,6 +590,10 @@ var sqlJsonGenerator = function (options) {
             sql += " ORDER BY " + selectObject.orderBy.join(' ,');
         }
 
+        if (selectObject.having.length > 0) {
+            sql += " HAVING " + selectObject.having;
+        }
+
         if (selectObject.limit) {
             sql += selectObject.limit;
         }

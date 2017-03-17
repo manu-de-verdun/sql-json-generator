@@ -7,6 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
+## [0.10.0] - 2017-03-17
+### Added
+ - ``HAVING`` HAVING operation
+ - ``$raw`` feature
+
 ## [0.10.0] - 2016-10-06
 ### Added
  - escaping strings
