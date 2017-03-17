@@ -7,7 +7,7 @@ var sqlJsonGenerator = function (options) {
         options = {};
     }
 
-    var escaping = function ( data ) {
+    var escaping = function (data) {
         if (typeof data === 'string' && options.escaped) {
             return sqlString.escape(data);
         }
@@ -28,11 +28,11 @@ var sqlJsonGenerator = function (options) {
         var whereArray = [];
 
         var conditionBuilder = function (column, table, operador, condition) {
-            return ((table) ? "`" + table + "`." : "") + "`" + column + "` " + operador + " " +  escaping(condition) ;
+            return ((table) ? "`" + table + "`." : "") + "`" + column + "` " + operador + " " + escaping(condition);
         };
 
         var inBuilder = function (column, table, operador, condition) {
-            return ((table) ? "`" + table + "`." : "") + "`" + column + "` " + operador + " " +  condition ;
+            return ((table) ? "`" + table + "`." : "") + "`" + column + "` " + operador + " " + condition;
         };
 
         if (options.debug) {
@@ -145,8 +145,8 @@ var sqlJsonGenerator = function (options) {
                     console.log('      $in'.cyan);
                 }
                 if (Array.isArray(conditions["$in"]) && conditions["$in"].length > 0) {
-                    conditions["$in"].forEach ( function ( condition , idx ) {
-                         conditions["$in"][idx] = escaping(condition);
+                    conditions["$in"].forEach(function (condition, idx) {
+                        conditions["$in"][idx] = escaping(condition);
                     });
                     var inCondition = "(" + conditions["$in"].join(",") + ")";
                     return inBuilder(conditions['$field'], currentTable, 'IN', inCondition);
@@ -245,7 +245,7 @@ var sqlJsonGenerator = function (options) {
             console.log('  inheritedTable: ', inheritedTable);
         }
 
-        var byGroupOrOrder = function ( conditions , selectObject, currentTable ) {
+        var byGroupOrOrder = function (conditions, selectObject, currentTable) {
 
             var aliasesList = selectObject.aliases.map(function (x) {
                 return x['$as'];
@@ -326,6 +326,18 @@ var sqlJsonGenerator = function (options) {
                 if (whereObject) {
                     // only add the result of whereBuilder if it has returned a value
                     selectObject.where = whereObject;
+                }
+            }
+        }
+
+        // Process the $having object
+        if (selectKeys.indexOf('$having') >= 0) {
+            // only process the $where object if it is not empty
+            if (Object.keys(conditions['$having']).length > 0) {
+                var whereObject = whereBuilder(conditions['$having'], null, currentTable);
+                if (whereObject) {
+                    // only add the result of whereBuilder if it has returned a value
+                    selectObject.having = whereObject;
                 }
             }
         }
@@ -431,12 +443,12 @@ var sqlJsonGenerator = function (options) {
 
         // Process the $groupBy object
         if (selectKeys.indexOf('$group') >= 0) {
-            selectObject.groupBy = byGroupOrOrder(conditions['$group'] , selectObject, currentTable);
+            selectObject.groupBy = byGroupOrOrder(conditions['$group'], selectObject, currentTable);
         }
 
         // Process the $orderBy object
         if (selectKeys.indexOf('$order') >= 0) {
-            selectObject.orderBy = byGroupOrOrder(conditions['$order'] , selectObject, currentTable);
+            selectObject.orderBy = byGroupOrOrder(conditions['$order'], selectObject, currentTable);
         }
 
         return selectObject
