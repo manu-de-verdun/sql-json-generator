@@ -1026,7 +1026,7 @@ describe('#select - queries', function () {
         var sqlGenerator = new SQLGenerator();
         var sqlParams;
 
-        it('simple field', function () {
+        it('$raw in WHERE', function () {
 
             sqlParams = {
                 $from: 'table1',
