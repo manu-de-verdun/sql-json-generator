@@ -294,7 +294,8 @@ var sqlJsonGenerator = function (options) {
             from: [],
             aliases: [],
             groupBy: [],
-            orderBy: []
+            orderBy: [],
+            having: []
         };
 
         // Tests the conditions object keys to see what action is required (from, join, etc...)

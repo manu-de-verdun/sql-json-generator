@@ -54,6 +54,7 @@ The module syntax is loosely based on MongoDB querying syntax.
 	* 8.1. [Escaping strings](#Escapingstrings-30)
 	* 8.2. [$sqlCalcFoundRows](#sqlCalcFoundRows-31)
 * 9. [Debugging](#Debugging-32)
+* 10. [Testing](#Testing-33)
 
 
 ##  3. <a name='Install-2'></a>Install
@@ -729,3 +730,10 @@ SELECT SQL_CALC_FOUND_ROWS `setores`.`id_setor`, `setores`.`nome` FROM `setores`
 > Display generated SQL in the console:
 
 ``var sqlGenerator = new SQLGenerator({showSQL: true});``
+
+
+##  10. <a name='Testing-33'></a>Testing
+
+> Using Mocha & Chai, test most common and uncommon queries
+
+``npm test``
