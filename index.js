@@ -71,6 +71,12 @@ var sqlJsonGenerator = function (options) {
             return null;
         }
 
+        
+        // test if there is a $raw operator
+        if ( conditions['$raw'] )  {
+            return ( conditions['$raw'] ); 
+        }
+
 
         // test if there is a logical operator
         if (conditions['$or'] || conditions['$and']) {

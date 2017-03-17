@@ -7,12 +7,12 @@ var SQLGenerator = require('../index');
 var sqlGenerator = new SQLGenerator({ debug: true, escaped: true });
 
 var queryParams = {
-            $from: 'gesup_usuarios_perfis_privilegios',
-            $fields: ['id_categoria_gesup', 'id_categoria_gesup_acao'],
-            $where: [{
-                field_a: "string n' roses"
-            }]
-};
+                $from: 'table1',
+                $fields: ['field_a'],
+                $where: [{
+                    $raw: "field_a = 12"
+                }]
+            };
 
 
 var sqlQuery = sqlGenerator.select(queryParams);

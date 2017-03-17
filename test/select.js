@@ -106,8 +106,8 @@ describe('#select - queries', function () {
             $fields: [{
                 $field: 'column_a'
             }, {
-                    $field: 'column_b'
-                }]
+                $field: 'column_b'
+            }]
         };
 
         var expectedResult = 'SELECT `table1`.`column_a`, `table1`.`column_b` FROM `table1`';
@@ -124,9 +124,9 @@ describe('#select - queries', function () {
                 $field: 'column_a',
                 $as: "new_column_a"
             }, {
-                    $field: 'column_b',
-                    $as: "new_column_b"
-                }]
+                $field: 'column_b',
+                $as: "new_column_b"
+            }]
         };
 
         var expectedResult = 'SELECT `table1`.`column_a` AS new_column_a, `table1`.`column_b` AS new_column_b FROM `table1`';
@@ -535,9 +535,9 @@ describe('#select - queries', function () {
                     $parent: 'id_categoria_responsavel_chamado',
                     $child: 'id_categoria_responsavel_chamado'
                 }, {
-                        $parent: 'id_setor_responsavel',
-                        $child: 'id_setor_responsavel'
-                    }],
+                    $parent: 'id_setor_responsavel',
+                    $child: 'id_setor_responsavel'
+                }],
                 $fields: [{
                     $field: 'nome',
                     $as: 'crc'
@@ -580,8 +580,8 @@ describe('#select - queries', function () {
             $where: [{
                 'deleted': 0
             }, {
-                    'arquivado': 0
-                }],
+                'arquivado': 0
+            }],
             $limit: {
                 $offset: 10,
                 $rows: 10
@@ -602,8 +602,8 @@ describe('#select - queries', function () {
             $where: [{
                 'deleted': 0
             }, {
-                    'arquivado': 0
-                }],
+                'arquivado': 0
+            }],
             $order: ['id_mi_item_inventario']
         };
 
@@ -681,13 +681,13 @@ describe('#select - queries', function () {
                         $field: 'nome',
                         $as: 'categoria'
                     }, {
-                            $inner: 'categorias_insumos_departamentos',
-                            $using: 'id_categoria_insumo_departamento',
-                            $fields: [{
-                                $field: 'nome',
-                                $as: 'departamento'
-                            },]
-                        }]
+                        $inner: 'categorias_insumos_departamentos',
+                        $using: 'id_categoria_insumo_departamento',
+                        $fields: [{
+                            $field: 'nome',
+                            $as: 'departamento'
+                        },]
+                    }]
                 }, {
                     $inner: 'categorias_unidades_medidas',
                     $using: 'id_categoria_unidade_medida',
@@ -701,9 +701,9 @@ describe('#select - queries', function () {
                 $field: 'nome',
                 $desc: 1
             }, 'categoria', {
-                    $as: 'modelo',
-                    $desc: 1
-                }]
+                $as: 'modelo',
+                $desc: 1
+            }]
         };
 
         var expectedResult = 'SELECT `modelos_insumos`.`codigo`, `modelos_insumos`.`nome` AS modelo, `modelos_insumos`.`lote`, `modelos_insumos`.`fracionamento`, `categorias_insumos`.`nome` AS categoria, `categorias_insumos_departamentos`.`nome` AS departamento, `categorias_unidades_medidas`.`sigla` AS unidade FROM `modelos_insumos` INNER JOIN `categorias_insumos` USING(`id_categoria_insumo`) INNER JOIN `categorias_insumos_departamentos` USING(`id_categoria_insumo_departamento`) INNER JOIN `categorias_unidades_medidas` USING(`id_categoria_unidade_medida`) ORDER BY `categorias_insumos_departamentos`.`nome` DESC ,`categorias_insumos`.`nome` ,`modelos_insumos`.`nome` DESC';
@@ -794,10 +794,10 @@ describe('#select - queries', function () {
                 $field: 'ativo',
                 $eq: 1
             }, {
-                    $table: 'unidades',
-                    $field: 'ativo',
-                    $eq: 1
-                }]
+                $table: 'unidades',
+                $field: 'ativo',
+                $eq: 1
+            }]
         };
 
         var expectedResult = "SELECT `setores`.`id_setor`, `setores`.`nome`, `unidades`.`id_unidade`, `unidades`.`nome` FROM `setores` INNER JOIN `unidades` USING(`id_unidade`) WHERE `setores`.`ativo` = '1' AND `unidades`.`ativo` = '1'";
@@ -819,10 +819,10 @@ describe('#select - queries', function () {
                 $field: 'ativo',
                 $eq: 1
             }, {
-                    $table: 'unidades',
-                    $field: 'ativo',
-                    $eq: 1
-                }]
+                $table: 'unidades',
+                $field: 'ativo',
+                $eq: 1
+            }]
         };
 
         var expectedResult = "SELECT `setores`.`id_setor`, `setores`.`nome`, `unidades`.`id_unidade`, `unidades`.`nome` FROM `setores` INNER JOIN `unidades` USING(`id_unidade`) WHERE `setores`.`ativo` = '1' AND `unidades`.`ativo` = '1'";
@@ -984,13 +984,13 @@ describe('#select - queries', function () {
                         $field: 'nome',
                         $as: 'categoria'
                     }, {
-                            $inner: 'categorias_insumos_departamentos',
-                            $using: 'id_categoria_insumo_departamento',
-                            $fields: [{
-                                $field: 'nome',
-                                $as: 'departamento'
-                            },]
-                        }]
+                        $inner: 'categorias_insumos_departamentos',
+                        $using: 'id_categoria_insumo_departamento',
+                        $fields: [{
+                            $field: 'nome',
+                            $as: 'departamento'
+                        },]
+                    }]
                 }, {
                     $inner: 'categorias_unidades_medidas',
                     $using: 'id_categoria_unidade_medida',
@@ -1003,8 +1003,8 @@ describe('#select - queries', function () {
                 $table: 'categorias_insumos_departamentos',
                 $field: 'nome'
             }, 'categoria', {
-                    $as: 'modelo'
-                }]
+                $as: 'modelo'
+            }]
         };
 
         var expectedResult = 'SELECT `modelos_insumos`.`codigo`, `modelos_insumos`.`nome` AS modelo, `modelos_insumos`.`lote`, `modelos_insumos`.`fracionamento`, `categorias_insumos`.`nome` AS categoria, `categorias_insumos_departamentos`.`nome` AS departamento, `categorias_unidades_medidas`.`sigla` AS unidade FROM `modelos_insumos` INNER JOIN `categorias_insumos` USING(`id_categoria_insumo`) INNER JOIN `categorias_insumos_departamentos` USING(`id_categoria_insumo_departamento`) INNER JOIN `categorias_unidades_medidas` USING(`id_categoria_unidade_medida`) GROUP BY `categorias_insumos_departamentos`.`nome` ,`categorias_insumos`.`nome` ,`modelos_insumos`.`nome`';
@@ -1012,6 +1012,35 @@ describe('#select - queries', function () {
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
 
+
+    describe('#select - Having', function () {
+
+        var sqlGenerator = new SQLGenerator();
+        var sqlParams;
+
+    });
+
+
+    describe('#select - $raw attribute', function () {
+
+        var sqlGenerator = new SQLGenerator();
+        var sqlParams;
+
+        it('simple field', function () {
+
+            sqlParams = {
+                $from: 'table1',
+                $fields: ['field_a'],
+                $where: [{
+                    $raw: "field_a = 12"
+                }]
+            };
+
+            var expectedResult = 'SELECT `table1`.`field_a` FROM `table1` WHERE field_a = 12';
+
+            sqlGenerator.select(sqlParams).should.equal(expectedResult);
+        });
+    });
 });
 
 
