@@ -7,11 +7,32 @@ var SQLGenerator = require('../index');
 var sqlGenerator = new SQLGenerator({ debug: true, escaped: true });
 
 var queryParams = {
-                $from: 'table1',
-                $fields: ['field_a'],
-                $where: [{
-                    $raw: "field_a = 12"
-                }]
+            $from: 'pessoas_fisicas',
+            $fields: [
+                'data_nascimento',
+                {
+                    $field: 'data_nascimento',
+                    $count: 1,
+                    $as: 'count'
+                }
+            ],
+            $where: [{
+                $table: "pessoas_fisicas",
+                $field: "nome",
+                $like: "%joao%"
+            },
+            {
+                $as: 'count',
+                $gt: 1
+            }],
+            $group: [
+                { $as: 'count' }
+            ],
+            $having: [
+                { 
+                   $raw: "`count` > 1"
+                }
+            ]
             };
 
 

@@ -1040,6 +1040,42 @@ describe('#select - queries', function () {
 
             sqlGenerator.select(sqlParams).should.equal(expectedResult);
         });
+
+        it('$raw in HAVING', function () {
+
+            sqlParams = {
+            $from: 'pessoas_fisicas',
+            $fields: [
+                'data_nascimento',
+                {
+                    $field: 'data_nascimento',
+                    $count: 1,
+                    $as: 'count'
+                }
+            ],
+            $where: [{
+                $table: "pessoas_fisicas",
+                $field: "nome",
+                $like: "%joao%"
+            },
+            {
+                $as: 'count',
+                $gt: 1
+            }],
+            $group: [
+                { $as: 'count' }
+            ],
+            $having: [
+                { 
+                   $raw: "`count` > 1"
+                }
+            ]
+            };
+
+            var expectedResult = "SELECT `pessoas_fisicas`.`data_nascimento`, COUNT(`pessoas_fisicas`.`data_nascimento`) AS count FROM `pessoas_fisicas` WHERE `pessoas_fisicas`.`nome` LIKE '%joao%' GROUP BY `pessoas_fisicas`.`data_nascimento` HAVING `count` > 1";
+
+            sqlGenerator.select(sqlParams).should.equal(expectedResult);
+        });
     });
 });
 
