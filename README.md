@@ -49,7 +49,8 @@ The module syntax is loosely based on MongoDB querying syntax.
 	* 7.4. [$limit](#limit-25)
 	* 7.5. [$order](#order-26)
 		* 7.5.1. [$desc](#desc-27)
-	* 7.6.1. [$group](#group-28)
+	* 7.6 [$group](#group-28)
+	* 7.7 [$group](#having-34)
 * 8. [mySQL Features](#mySQLFeatures-29)
 	* 8.1. [Escaping strings](#Escapingstrings-30)
 	* 8.2. [$sqlCalcFoundRows](#sqlCalcFoundRows-31)
@@ -666,7 +667,7 @@ ORDER BY current_table.column1 DESC
 ```
 
 
-###  7.6.1. <a name='group-28'></a>$group
+###  7.6 <a name='group-28'></a>$group
 
 ``$group: [ list of fields ]``
 
@@ -685,6 +686,28 @@ GROUP BY current_table.column1, current_table.column2
 ```
 
 > ``$group`` uses the same syntaxt as ``$order``
+
+
+###  7.7 <a name='having-34'></a>$having
+
+``$group: [ list of fields ]``
+
+*example:*
+```
+{
+    $group : [
+        'column1',
+        'column2'
+    ]
+}
+```
+*will return:*
+```
+GROUP BY current_table.column1, current_table.column2
+```
+
+> ``$group`` uses the same syntaxt as ``$order``
+
 
 ##  8. <a name='mySQLFeatures-29'></a>mySQL Features
 

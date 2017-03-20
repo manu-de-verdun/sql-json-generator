@@ -7,10 +7,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 
-## [0.10.0] - 2017-03-17
+## [0.11.0] - 2017-03-20
 ### Added
- - ``HAVING`` HAVING operation
- - ``$raw`` feature
+ - ``HAVING`` HAVING operation 
+ - ``$raw`` feature ($only in where & having)
 
 ## [0.10.0] - 2016-10-06
 ### Added
