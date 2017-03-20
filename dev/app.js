@@ -7,12 +7,14 @@ var SQLGenerator = require('../index');
 var sqlGenerator = new SQLGenerator({ debug: true, escaped: true });
 
 var queryParams = {
-                $from: 'mi_itens_inventarios',
-                $fields: ['id_mi_item_inventario',  {
-                    $raw: "MAX(`fieldA`) as max"
-                }, {
-                    $raw: "MIN(`fieldA`) as min"
-                }]
+            $from: 'mi_itens_inventarios',
+            $fields: ['id_mi_item_inventario', 'id_modelo_insumo'],
+            $where: [{
+                'deleted': 0
+            }, {
+                'arquivado': 0
+            }],
+            $order: [{ $raw: '`mi_itens_inventarios` DESC, `id_modelo_insumo` '}]
             };
 
 

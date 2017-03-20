@@ -1030,7 +1030,7 @@ describe('#select - queries', function () {
 
             sqlParams = {
                 $from: 'mi_itens_inventarios',
-                $fields: ['id_mi_item_inventario',  {
+                $fields: ['id_mi_item_inventario', {
                     $raw: "MAX(`fieldA`) as max"
                 }]
             };
@@ -1044,11 +1044,11 @@ describe('#select - queries', function () {
 
             sqlParams = {
                 $from: 'mi_itens_inventarios',
-                $fields: ['id_mi_item_inventario',  {
+                $fields: ['id_mi_item_inventario', {
                     $raw: "MAX(`fieldA`) as max"
                 }, {
-                    $raw: "MIN(`fieldA`) as min"
-                }]
+                        $raw: "MIN(`fieldA`) as min"
+                    }]
             };
 
             var expectedResult = 'SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, MAX(`fieldA`) as max, MIN(`fieldA`) as min FROM `mi_itens_inventarios`';
@@ -1071,6 +1071,43 @@ describe('#select - queries', function () {
 
             sqlGenerator.select(sqlParams).should.equal(expectedResult);
         });
+
+        it('$raw in ORDER', function () {
+
+            sqlParams = {
+                $from: 'mi_itens_inventarios',
+                $fields: ['id_mi_item_inventario', 'id_modelo_insumo'],
+                $where: [{
+                    'deleted': 0
+                }, {
+                    'arquivado': 0
+                }],
+                $order: [{ $raw: '`mi_itens_inventarios` DESC, `id_modelo_insumo`' }]
+            };
+
+            var expectedResult = "SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` FROM `mi_itens_inventarios` WHERE `mi_itens_inventarios`.`deleted` = '0' AND `mi_itens_inventarios`.`arquivado` = '0' ORDER BY `mi_itens_inventarios` DESC, `id_modelo_insumo`";
+
+            sqlGenerator.select(sqlParams).should.equal(expectedResult);
+        });
+
+        it('$raw in GROUP BY', function () {
+
+            sqlParams = {
+                $from: 'mi_itens_inventarios',
+                $fields: ['id_mi_item_inventario', 'id_modelo_insumo'],
+                $where: [{
+                    'deleted': 0
+                }, {
+                    'arquivado': 0
+                }],
+                $group: [{ $raw: '`mi_itens_inventarios`, `id_modelo_insumo`' }]
+            };
+
+            var expectedResult = "SELECT `mi_itens_inventarios`.`id_mi_item_inventario`, `mi_itens_inventarios`.`id_modelo_insumo` FROM `mi_itens_inventarios` WHERE `mi_itens_inventarios`.`deleted` = '0' AND `mi_itens_inventarios`.`arquivado` = '0' GROUP BY `mi_itens_inventarios`, `id_modelo_insumo`";
+
+            sqlGenerator.select(sqlParams).should.equal(expectedResult);
+        });
+
 
         it('$raw in HAVING', function () {
 

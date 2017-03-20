@@ -278,7 +278,7 @@ var sqlJsonGenerator = function (options) {
                     }
                     // test if there is a $raw operator
                     else if (orderItem['$raw']) {
-                        resultArray.push(conditions['$raw']);
+                        resultArray.push(orderItem['$raw']);
                     }
                 }
                 else {
