@@ -50,7 +50,7 @@ The module syntax is loosely based on MongoDB querying syntax.
 	* 7.5. [$order](#order-26)
 		* 7.5.1. [$desc](#desc-27)
 	* 7.6 [$group](#group-28)
-	* 7.7 [$group](#having-34)
+	* 7.7 [$having](#having-34)
 * 8. [mySQL Features](#mySQLFeatures-29)
 	* 8.1. [Escaping strings](#Escapingstrings-30)
 	* 8.2. [$sqlCalcFoundRows](#sqlCalcFoundRows-31)
@@ -690,23 +690,9 @@ GROUP BY current_table.column1, current_table.column2
 
 ###  7.7 <a name='having-34'></a>$having
 
-``$group: [ list of fields ]``
+``$having: [ list of conditions ]``
 
-*example:*
-```
-{
-    $group : [
-        'column1',
-        'column2'
-    ]
-}
-```
-*will return:*
-```
-GROUP BY current_table.column1, current_table.column2
-```
-
-> ``$group`` uses the same syntaxt as ``$order``
+`$having` is resolved using the same rules as `$where` conditions
 
 
 ##  8. <a name='mySQLFeatures-29'></a>mySQL Features
