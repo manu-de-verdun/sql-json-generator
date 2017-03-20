@@ -51,6 +51,7 @@ The module syntax is loosely based on MongoDB querying syntax.
 		* 7.5.1. [$desc](#desc-27)
 	* 7.6 [$group](#group-28)
 	* 7.7 [$having](#having-34)
+    * 7.8 [$raw](#raw-35)
 * 8. [mySQL Features](#mySQLFeatures-29)
 	* 8.1. [Escaping strings](#Escapingstrings-30)
 	* 8.2. [$sqlCalcFoundRows](#sqlCalcFoundRows-31)
@@ -693,6 +694,30 @@ GROUP BY current_table.column1, current_table.column2
 ``$having: [ list of conditions ]``
 
 `$having` is resolved using the same rules as `$where` conditions
+
+
+
+###  7.8 <a name='$raw'></a>$raw
+
+``$raw: string``
+
+`$raw` argument is not interpreted and is put in the query without processing.
+
+
+*example:*
+```
+{
+    $having: [
+        { 
+            $raw: "`count` > 1"
+        }
+    ]
+}
+```
+*will return:*
+```
+HAVING `count` > 1
+```
 
 
 ##  8. <a name='mySQLFeatures-29'></a>mySQL Features

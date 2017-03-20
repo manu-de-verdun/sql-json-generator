@@ -7,32 +7,12 @@ var SQLGenerator = require('../index');
 var sqlGenerator = new SQLGenerator({ debug: true, escaped: true });
 
 var queryParams = {
-            $from: 'pessoas_fisicas',
-            $fields: [
-                'data_nascimento',
-                {
-                    $field: 'data_nascimento',
-                    $count: 1,
-                    $as: 'count'
-                }
-            ],
-            $where: [{
-                $table: "pessoas_fisicas",
-                $field: "nome",
-                $like: "%joao%"
-            },
-            {
-                $as: 'count',
-                $gt: 1
-            }],
-            $group: [
-                { $as: 'count' }
-            ],
-            $having: [
-                { 
-                   $raw: "`count` > 1"
-                }
-            ]
+                $from: 'mi_itens_inventarios',
+                $fields: ['id_mi_item_inventario',  {
+                    $raw: "MAX(`fieldA`) as max"
+                }, {
+                    $raw: "MIN(`fieldA`) as min"
+                }]
             };
 
 

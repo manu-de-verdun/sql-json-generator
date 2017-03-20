@@ -71,10 +71,10 @@ var sqlJsonGenerator = function (options) {
             return null;
         }
 
-        
+
         // test if there is a $raw operator
-        if ( conditions['$raw'] )  {
-            return ( conditions['$raw'] ); 
+        if (conditions['$raw']) {
+            return (conditions['$raw']);
         }
 
 
@@ -268,20 +268,27 @@ var sqlJsonGenerator = function (options) {
                     if (orderItem['$field']) {
                         //it's a field
                         resultArray.push("`" + (orderItem['$table'] ? orderItem['$table'] : currentTable) + "`.`" + orderItem['$field'] + "`" + (orderItem['$desc'] ? ' DESC' : ''));
-                    } else if (orderItem['$as']) {
+                    }
+                    else if (orderItem['$as']) {
                         var currentAliasIdx = aliasesList.indexOf(orderItem['$as']);
                         if (currentAliasIdx >= 0) {
                             // It's an alias
                             resultArray.push("`" + selectObject.aliases[currentAliasIdx]['$table'] + "`.`" + selectObject.aliases[currentAliasIdx]['$field'] + "`" + (orderItem['$desc'] ? ' DESC' : ''));
                         }
                     }
-                } else {
+                    // test if there is a $raw operator
+                    else if (orderItem['$raw']) {
+                        resultArray.push(conditions['$raw']);
+                    }
+                }
+                else {
                     // it is not an object. must be an alias or a top level table column name (will use $from table name)
                     var currentAliasIdx = aliasesList.indexOf(orderItem);
                     if (currentAliasIdx >= 0) {
                         // It's an alias
                         resultArray.push("`" + selectObject.aliases[currentAliasIdx]['$table'] + "`.`" + selectObject.aliases[currentAliasIdx]['$field'] + "`");
-                    } else {
+                    }
+                    else {
                         //It's a top level table column
                         resultArray.push("`" + currentTable + "`.`" + orderItem + "`");
                     }
@@ -430,7 +437,12 @@ var sqlJsonGenerator = function (options) {
                         // add the columm to the select object
                         selectObject.select.push(currentField.sql);
                     }
-                } else {
+                    // test if there is a $raw operator
+                    else if (fieldKeys.indexOf('$raw') >=0 ) {
+                        selectObject.select.push(field['$raw']);
+                    }
+                }
+                else {
                     // raw field, add it to the select Object
                     selectObject.select.push("`" + currentTable + "`.`" + field + "`");
                 }
