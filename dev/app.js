@@ -7,15 +7,11 @@ var SQLGenerator = require('../index');
 var sqlGenerator = new SQLGenerator({ debug: true, escaped: true });
 
 var queryParams = {
-    $from: 'table1',
+    $from: 'categorias_unidades_medidas',
     $fields: [{
-        $field: 'column_a',
-        $as: "new_column_a",
-        $function: "upper"
-    }, {
-        $field: 'column_b',
-        $as: "new_column_b",
-        $function: "lower"
+        $field: 'sigla',
+        $function: 1,
+        $as: 'unidade'
     }]
 };
 

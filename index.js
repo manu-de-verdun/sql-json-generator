@@ -432,8 +432,10 @@ var sqlJsonGenerator = function (options) {
 
                         
                         if (fieldKeys.indexOf('$function') >= 0) {
-                            currentField.function = field['$function'].toUpperCase();
-                            currentField.sql = currentField.function + "(" + currentField.sql + ")";
+                            if ( typeof(field['$function']) == 'string' && field['$function'].length > 0 ) {
+                                currentField.function = field['$function'].toUpperCase();
+                                currentField.sql = currentField.function + "(" + currentField.sql + ")";
+                            }
                         }
 
                         if (fieldKeys.indexOf('$as') >= 0) {

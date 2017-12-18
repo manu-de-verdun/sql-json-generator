@@ -365,6 +365,75 @@ describe('#select - queries', function () {
     });
 
 
+
+    it('$field $upper', function () {
+
+        sqlParams = {
+            $from: 'categorias_unidades_medidas',
+            $fields: [{
+                $field: 'sigla',
+                $upper: 1,
+                $as: 'unidade'
+            }]
+        };
+
+        var expectedResult = 'SELECT UPPER(`categorias_unidades_medidas`.`sigla`) AS unidade FROM `categorias_unidades_medidas`';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+    it('$field $lower', function () {
+
+        sqlParams = {
+            $from: 'categorias_unidades_medidas',
+            $fields: [{
+                $field: 'sigla',
+                $lower: 1,
+                $as: 'unidade'
+            }]
+        };
+
+        var expectedResult = 'SELECT LOWER(`categorias_unidades_medidas`.`sigla`) AS unidade FROM `categorias_unidades_medidas`';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+
+    it('$field $function', function () {
+
+        sqlParams = {
+            $from: 'categorias_unidades_medidas',
+            $fields: [{
+                $field: 'sigla',
+                $function: 'ACOS'
+            }]
+        };
+
+        var expectedResult = 'SELECT ACOS(`categorias_unidades_medidas`.`sigla`) FROM `categorias_unidades_medidas`';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
+
+    it('$field $function not a string', function () {
+
+        sqlParams = {
+            $from: 'categorias_unidades_medidas',
+            $fields: [{
+                $field: 'sigla',
+                $function: 1
+            }]
+        };
+
+        var expectedResult = 'SELECT `categorias_unidades_medidas`.`sigla` FROM `categorias_unidades_medidas`';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
+
+
     it('$inner $using $count', function () {
 
         sqlParams = {
