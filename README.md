@@ -38,7 +38,9 @@ The module syntax is loosely based on MongoDB querying syntax.
 		* 7.1.3. [$as](#as-14)
 		* 7.1.4. [$dateFormat](#dateFormat-15)
 		* 7.1.5. [$avg $count $min $max $sum](#avgcountminmaxsum-16)
-		* 7.1.6. [$where](#where-17)
+		* 7.1.6. [$upper $lower](#upperlower-16)
+		* 7.1.7. [$function](#function-16)
+		* 7.1.8. [$where](#where-17)
 	* 7.2. [JOINS : $inner, $left, $right, $full](#JOINS:innerleftrightfull-18)
 	* 7.3. [$where](#where-19)
 		* 7.3.1. [Simple Column comparison](#SimpleColumncomparison-20)
@@ -311,9 +313,74 @@ SELECT DATE_FORMAT(`table1`.`column_a`,'%Y-%m-%d') AS column_date FROM `table1`
 ```
 SELECT COUNT(`table1`.`column_a`) AS column_date FROM `table1`
 ```
+####  7.1.5. <a name='avgcountminmaxsum-16'></a>$avg $count $min $max $sum
+
+``$count : 1``
+
+*example:*
+```
+{
+    $from : 'table1',
+    $fields : [
+        {
+            $field: 'column_a',
+            $count : 1,
+            $as: 'column_date'
+        }
+    ]
+}
+```
+*will return:*
+```
+SELECT COUNT(`table1`.`column_a`) AS column_date FROM `table1`
+```
+
+####  7.1.6. <a name='upperlower-16'></a>$upper $lower
+
+``$upper : 1``
+
+*example:*
+```
+{
+    $from : 'table1',
+    $fields : [
+        {
+            $field: 'column_a',
+            $upper : 1,
+            $as: 'column_date'
+        }
+    ]
+}
+```
+*will return:*
+```
+SELECT UPPER(`table1`.`column_a`) AS column_date FROM `table1`
+```
 
 
-####  7.1.6. <a name='where-17'></a>$where
+####  7.1.7. <a name='function-16'></a>$function
+
+``$function : 'acos'``
+
+*example:*
+```
+{
+    $from : 'table1',
+    $fields : [
+        {
+            $field: 'column_a',
+            $function : 'acos'
+        }
+    ]
+}
+```
+*will return:*
+```
+SELECT ACOS(`table1`.`column_a`) FROM `table1`
+```
+
+
+####  7.1.8. <a name='where-17'></a>$where
 
 
 *example:*

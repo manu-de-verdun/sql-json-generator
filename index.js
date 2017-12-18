@@ -423,6 +423,18 @@ var sqlJsonGenerator = function (options) {
                         else if (fieldKeys.indexOf('$sum') >= 0) {
                             currentField.sql = "SUM(" + currentField.sql + ")";
                         }
+                        else if (fieldKeys.indexOf('$upper') >= 0) {
+                            currentField.sql = "UPPER(" + currentField.sql + ")";
+                        }
+                        else if (fieldKeys.indexOf('$lower') >= 0) {
+                            currentField.sql = "LOWER(" + currentField.sql + ")";
+                        }
+
+                        
+                        if (fieldKeys.indexOf('$function') >= 0) {
+                            currentField.function = field['$function'].toUpperCase();
+                            currentField.sql = currentField.function + "(" + currentField.sql + ")";
+                        }
 
                         if (fieldKeys.indexOf('$as') >= 0) {
                             currentField.as = field['$as'];
