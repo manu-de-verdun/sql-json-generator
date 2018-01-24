@@ -16,12 +16,12 @@ var sqlJsonGenerator = function (options) {
         }
     }
 
-    var enclosure = function() {
+    var enclosure = function( param ) {
         if( options.pgSQL) {
-            return '';
+            return param;
         }
         else {
-            return '`';
+            return '`' + param + '`';
         }
     }
 
@@ -37,11 +37,11 @@ var sqlJsonGenerator = function (options) {
         var whereArray = [];
 
         var conditionBuilder = function (column, table, operador, condition) {
-            return ((table) ? "`" + table + "`." : "") + "`" + column + "` " + operador + " " + escaping(condition);
+            return ((table) ? enclosure(table) + "." : "") + enclosure(column) + " " + operador + " " + escaping(condition);
         };
 
         var inBuilder = function (column, table, operador, condition) {
-            return ((table) ? "`" + table + "`." : "") + "`" + column + "` " + operador + " " + condition;
+            return ((table) ? enclosure(table) + "." : "") + enclosure(column) + " " + operador + " " + condition;
         };
 
         if (options.debug) {
@@ -210,18 +210,18 @@ var sqlJsonGenerator = function (options) {
         var joinKeys = Object.keys(joinData);
 
         if (joinKeys.indexOf('$inner') >= 0) {
-            sqlJoin += 'INNER JOIN `' + joinData['$inner'] + '` ';
+            sqlJoin += 'INNER JOIN ' + enclosure(joinData['$inner'])  + " ";
         } else if (joinKeys.indexOf('$left') >= 0) {
-            sqlJoin += 'LEFT JOIN `' + joinData['$left'] + '` ';
+            sqlJoin += 'LEFT JOIN ' + enclosure(joinData['$left'])  + " ";
         } else if (joinKeys.indexOf('$right') >= 0) {
-            sqlJoin += 'RIGHT JOIN `' + joinData['$right'] + '` ';
+            sqlJoin += 'RIGHT JOIN ' + enclosure(joinData['$right'])  + " ";
         } else if (joinKeys.indexOf('$full') >= 0) {
-            sqlJoin += 'FULL JOIN `' + joinData['$full'] + '` ';
+            sqlJoin += 'FULL JOIN ' + enclosure(joinData['$full'])  + " ";
         }
 
         // if there is  $using
         if ((joinKeys.indexOf('$using') >= 0)) {
-            sqlJoin += 'USING(`' + joinData['$using'] + '`)';
+            sqlJoin += 'USING(' + enclosure(joinData['$using']) + ')';
             return sqlJoin;
 
         } else if ((joinKeys.indexOf('$on') >= 0)) {
@@ -231,7 +231,7 @@ var sqlJsonGenerator = function (options) {
 
                 joinData['$on'].forEach(function (item) {
                     if (item.$parent && item.$child) {
-                        tempArray.push('`' + inheritedTable + '`.`' + item.$parent + '` = `' + curentTable + '`.`' + item.$child + '`');
+                        tempArray.push( enclosure(inheritedTable) + '.' + enclosure(item.$parent) + ' = ' + enclosure(curentTable) + '.' + enclosure(item.$child) );
                     }
                 });
 
