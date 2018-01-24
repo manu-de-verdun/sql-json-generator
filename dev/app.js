@@ -21,14 +21,14 @@ var queryParams ={
             ],
             $where: [{
                 $field : 'nm_pessoa',
-                $like: '%emmanuel%'
+                $like: '%EMMA%'
             }]
         }
     ],
     $where: [],
     $order: [{
-        $field: 'grl_pessoa',
-        $table: 'iab_cidadao',
+        $field: 'nm_pessoa',
+        $table: 'grl_pessoa',
     }]
 };
 

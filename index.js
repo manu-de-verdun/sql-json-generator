@@ -241,7 +241,7 @@ var sqlJsonGenerator = function (options) {
                 if (!joinData['$on'].$parent && !joinData['$on'].$child) {
                     return null;
                 }
-                sqlJoin += 'ON `' + inheritedTable + '`.`' + joinData['$on'].$parent + '` = `' + curentTable + '`.`' + joinData['$on'].$child + '`';
+                sqlJoin += 'ON ' + enclosure(inheritedTable) + '.' + enclosure(joinData['$on'].$parent) + ' = ' + enclosure(curentTable) + '.' + enclosure(joinData['$on'].$child);
             }
             return sqlJoin;
         } else {
@@ -276,13 +276,13 @@ var sqlJsonGenerator = function (options) {
                     //if it is an object, must contain a $as or $field keys
                     if (orderItem['$field']) {
                         //it's a field
-                        resultArray.push("`" + (orderItem['$table'] ? orderItem['$table'] : currentTable) + "`.`" + orderItem['$field'] + "`" + (orderItem['$desc'] ? ' DESC' : ''));
+                        resultArray.push(enclosure((orderItem['$table'] ? orderItem['$table'] : currentTable)) + "." + enclosure(orderItem['$field']) + (orderItem['$desc'] ? ' DESC' : ''));
                     }
                     else if (orderItem['$as']) {
                         var currentAliasIdx = aliasesList.indexOf(orderItem['$as']);
                         if (currentAliasIdx >= 0) {
                             // It's an alias
-                            resultArray.push("`" + selectObject.aliases[currentAliasIdx]['$table'] + "`.`" + selectObject.aliases[currentAliasIdx]['$field'] + "`" + (orderItem['$desc'] ? ' DESC' : ''));
+                            resultArray.push( enclosure(selectObject.aliases[currentAliasIdx]['$table']) + "." + enclosure(selectObject.aliases[currentAliasIdx]['$field']) + (orderItem['$desc'] ? ' DESC' : ''));
                         }
                     }
                     // test if there is a $raw operator
@@ -295,11 +295,11 @@ var sqlJsonGenerator = function (options) {
                     var currentAliasIdx = aliasesList.indexOf(orderItem);
                     if (currentAliasIdx >= 0) {
                         // It's an alias
-                        resultArray.push("`" + selectObject.aliases[currentAliasIdx]['$table'] + "`.`" + selectObject.aliases[currentAliasIdx]['$field'] + "`");
+                        resultArray.push( enclosure(selectObject.aliases[currentAliasIdx]['$table']) + "." + enclosure(selectObject.aliases[currentAliasIdx]['$field']));
                     }
                     else {
                         //It's a top level table column
-                        resultArray.push("`" + currentTable + "`.`" + orderItem + "`");
+                        resultArray.push( enclosure(currentTable) + "." + enclosure(orderItem));
                     }
                 }
 
@@ -323,7 +323,7 @@ var sqlJsonGenerator = function (options) {
         // Tests the conditions object keys to see what action is required (from, join, etc...)
         if (selectKeys.indexOf('$from') >= 0) {
             currentTable = conditions['$from'];
-            selectObject.from.push("FROM `" + currentTable + "`");
+            selectObject.from.push("FROM " + enclosure(currentTable));
         }
 
         if (selectKeys.indexOf('$inner') >= 0) {
@@ -408,10 +408,10 @@ var sqlJsonGenerator = function (options) {
                         var currentField = {};
 
                         if (fieldKeys.indexOf('$table') >= 0) {
-                            currentField.sql = "`" + field['$table'] + "`.`" + field['$field'] + "`";
+                            currentField.sql = enclosure(field['$table']) + "." + enclosure(field['$field']);
                         }
                         else {
-                            currentField.sql = "`" + currentTable + "`.`" + field['$field'] + "`";
+                            currentField.sql = enclosure(currentTable) + "." + enclosure(field['$field']);
                         }
 
                         if (fieldKeys.indexOf('$avg') >= 0) {
@@ -467,7 +467,7 @@ var sqlJsonGenerator = function (options) {
                 }
                 else {
                     // raw field, add it to the select Object
-                    selectObject.select.push("`" + currentTable + "`.`" + field + "`");
+                    selectObject.select.push( enclosure(currentTable) + "." + enclosure(field));
                 }
 
             });
@@ -507,14 +507,14 @@ var sqlJsonGenerator = function (options) {
         if (!queryParams || !queryParams.$update || !queryParams.$set) return null;
 
         // UPDATE
-        var sql = "UPDATE `" + queryParams.$update + "`";
+        var sql = "UPDATE " + enclosure(queryParams.$update);
 
         // SET
         var setKeys = Object.keys(queryParams.$set);
         var setArray = [];
 
         setKeys.forEach(function (key) {
-            setArray.push("`" + key + "` = " + escaping(queryParams.$set[key]));
+            setArray.push( enclosure(key) + " = " + escaping(queryParams.$set[key]));
         });
 
         sql += " SET " + setArray.join(',');
@@ -543,14 +543,14 @@ var sqlJsonGenerator = function (options) {
         if (!queryParams || !queryParams.$insert || !queryParams.$values) return null;
 
         // INSERT
-        var sql = "INSERT INTO `" + queryParams.$insert + "`";
+        var sql = "INSERT INTO " + enclosure(queryParams.$insert);
 
         // KEYS
         var setKeys = Object.keys(queryParams.$values);
 
         var keysArray = [];
         setKeys.forEach(function (key) {
-            keysArray.push("`" + key + "`");
+            keysArray.push(enclosure(key));
         });
 
         sql += " (" + keysArray.join(',') + ")";
@@ -585,7 +585,7 @@ var sqlJsonGenerator = function (options) {
         if (!queryParams || !queryParams.$delete) return null;
 
         // DELETE
-        var sql = "DELETE FROM `" + queryParams.$delete + "`";
+        var sql = "DELETE FROM " + enclosure(queryParams.$delete);
 
         if (queryParams.$where) {
             sql += " WHERE " + whereBuilder(queryParams.$where, null);
