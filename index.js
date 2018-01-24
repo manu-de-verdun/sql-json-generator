@@ -477,7 +477,12 @@ var sqlJsonGenerator = function (options) {
         // Process the $limit object
         if (selectKeys.indexOf('$limit') >= 0) {
             if (conditions['$limit']['$offset'] >= 0 && conditions['$limit']['$rows'] >= 0) {
-                selectObject.limit = ' LIMIT ' + conditions['$limit']['$offset'] + ',' + conditions['$limit']['$rows'];
+                if ( options.pgSQL) {
+                    selectObject.limit = ' LIMIT ' + conditions['$limit']['$rows'] + ' OFFSET ' + conditions['$limit']['$offset'];
+                }
+                else {
+                    selectObject.limit = ' LIMIT ' + conditions['$limit']['$offset'] + ',' + conditions['$limit']['$rows'];
+                }
             }
         }
 

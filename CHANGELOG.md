@@ -8,7 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [0.13.0] - 2018-01-24
 ### Added
-- Compatiblity with PostgreSQL syntax
+- Compatiblity  with PostgreSQL syntax (only tested for few select statemets)
 
 
 ## [0.12.0] - 2017-12-18

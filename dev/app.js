@@ -18,18 +18,18 @@ var queryParams ={
             },
             $fields: [
                 'nm_pessoa'
-            ],
-            $where: [{
-                $field : 'nm_pessoa',
-                $like: '%EMMA%'
-            }]
+            ]
         }
     ],
     $where: [],
     $order: [{
         $field: 'nm_pessoa',
         $table: 'grl_pessoa',
-    }]
+    }],
+    $limit : {
+        $offset: 0,
+        $rows: 10
+    }
 };
 
 
