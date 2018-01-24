@@ -16,6 +16,15 @@ var sqlJsonGenerator = function (options) {
         }
     }
 
+    var enclosure = function() {
+        if( options.pgSQL) {
+            return '';
+        }
+        else {
+            return '`';
+        }
+    }
+
     /**
      * Building SQL WHERE conditions
      * @param conditions

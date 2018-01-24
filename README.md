@@ -6,6 +6,8 @@ Generate SQL statements from JSON objects
 
 Create reusable json objects to quickly build SQL statments
 
+> Initially designed for MySQL syntax, see _Other Databases_ section
+
 ##  1. <a name='Introduction-0'></a>Introduction
 
 This module was created because I wanted to create REST services for my existing projects, using node, building also Angular Clients. Even if it is easier to use noSQL database as Mongo with node, all my databases are running with mySQL and I do not want to change or migrate them.  
@@ -17,6 +19,7 @@ The input JSON object can be build using other reusable JSON objects (for exampl
 It offers an easy way to build simple or complex queries without having to write the SQL syntax, just writing down the query logic.  
   
 The module syntax is loosely based on MongoDB querying syntax.  
+
 
 
 ##  2. <a name='TableofContents-1'></a>Table of Contents
@@ -57,8 +60,9 @@ The module syntax is loosely based on MongoDB querying syntax.
 * 8. [mySQL Features](#mySQLFeatures-29)
 	* 8.1. [Escaping strings](#Escapingstrings-30)
 	* 8.2. [$sqlCalcFoundRows](#sqlCalcFoundRows-31)
-* 9. [Debugging](#Debugging-32)
-* 10. [Testing](#Testing-33)
+* 9. [Other Databases](#otherdb-01)
+* 10. [Debugging](#Debugging-32)
+* 11. [Testing](#Testing-33)
 
 
 ##  3. <a name='Install-2'></a>Install
@@ -821,8 +825,16 @@ Will insert SQL_CALC_FOUND_ROWS just after SELECT keywords
 SELECT SQL_CALC_FOUND_ROWS `setores`.`id_setor`, `setores`.`nome` FROM `setores` LIMIT 0,20
 ```
 
+otherdb-01
 
-##  9. <a name='Debugging-32'></a>Debugging
+##  9. <a name='otherdb-01'></a>Other Databases
+
+> Using PostgreSQL syntax:
+
+``var sqlGenerator = new SQLGenerator({pgSQL: true});``
+
+
+##  10. <a name='Debugging-32'></a>Debugging
 
 > Display all generator steps in the console:
 
@@ -833,7 +845,7 @@ SELECT SQL_CALC_FOUND_ROWS `setores`.`id_setor`, `setores`.`nome` FROM `setores`
 ``var sqlGenerator = new SQLGenerator({showSQL: true});``
 
 
-##  10. <a name='Testing-33'></a>Testing
+##  11. <a name='Testing-33'></a>Testing
 
 > Using Mocha & Chai, test most common and uncommon queries
 

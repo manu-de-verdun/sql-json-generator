@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.13.0] - 2018-01-24
+### Added
+- Compatiblity with PostgreSQL syntax
+
+
 ## [0.12.0] - 2017-12-18
 ### Added
  - ``$upper`` feature for SELECT Statements
