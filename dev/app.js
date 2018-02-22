@@ -6,30 +6,24 @@ var SQLGenerator = require('../index');
 
 var sqlGenerator = new SQLGenerator({ debug: true, pgSQL: true });
 
-var queryParams ={
-    $from: 'iab_cidadao',
-    $fields: [,
-        'nr_cartao_sus',
+var queryParams = {
+    $from: 'estoques',
+    $fields: [
+        'id_estoque',
         {
-            $inner: 'grl_pessoa',
-            $on: {
-                $parent: 'cd_cidadao',
-                $child: 'cd_pessoa'
-            },
+            $inner: 'estoques_departamentos',
+            $using: 'id_estoque',
             $fields: [
-                'nm_pessoa'
+                {
+                    $field: 'id_categoria_insumo_departamento',
+                    $groupConcat: 1,
+                    $as: 'departamentos'
+                }
+                
             ]
         }
     ],
-    $where: [],
-    $order: [{
-        $field: 'nm_pessoa',
-        $table: 'grl_pessoa',
-    }],
-    $limit : {
-        $offset: 0,
-        $rows: 10
-    }
+    $where: []
 };
 
 

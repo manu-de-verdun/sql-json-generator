@@ -6,6 +6,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+
+## [0.14.0] - 2018-02-22
+### Added
+ - ``$groupConcat`` feature for SELECT Statements
+
 ## [0.13.0] - 2018-01-24
 ### Added
 - Compatiblity  with PostgreSQL syntax (only tested for few select statemets)

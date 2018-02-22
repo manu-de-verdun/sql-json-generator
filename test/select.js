@@ -400,6 +400,31 @@ describe('#select - queries', function () {
     });
 
 
+    it('$field $groupConcat', function () {
+
+        sqlParams = {
+            $from: 'estoques',
+            $fields: [
+                'id_estoque',
+                {
+                    $inner: 'estoques_departamentos',
+                    $using: 'id_estoque',
+                    $fields: [
+                        {
+                            $field: 'id_categoria_insumo_departamento',
+                            $groupConcat: 1,
+                            $as: 'departamentos'
+                        }
+                        
+                    ]
+                }
+            ]
+        };
+
+        var expectedResult = 'SELECT `estoques`.`id_estoque`, GROUP_CONCAT(`estoques_departamentos`.`id_categoria_insumo_departamento`) AS departamentos FROM `estoques` INNER JOIN `estoques_departamentos` USING(`id_estoque`)';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
 
     it('$field $function', function () {
 

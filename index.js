@@ -423,6 +423,12 @@ var sqlJsonGenerator = function (options) {
                         else if (fieldKeys.indexOf('$dateFormat') >= 0) {
                             currentField.sql = "DATE_FORMAT(" + currentField.sql + ",'" + field['$dateFormat'] + "')";
                         }
+                        else if (fieldKeys.indexOf('$groupConcat') >= 0) {
+                            currentField.sql = "GROUP_CONCAT(" + currentField.sql + ")";
+                        }
+                        else if (fieldKeys.indexOf('$lower') >= 0) {
+                            currentField.sql = "LOWER(" + currentField.sql + ")";
+                        }
                         else if (fieldKeys.indexOf('$max') >= 0) {
                             currentField.sql = "MAX(" + currentField.sql + ")";
                         }
@@ -434,9 +440,6 @@ var sqlJsonGenerator = function (options) {
                         }
                         else if (fieldKeys.indexOf('$upper') >= 0) {
                             currentField.sql = "UPPER(" + currentField.sql + ")";
-                        }
-                        else if (fieldKeys.indexOf('$lower') >= 0) {
-                            currentField.sql = "LOWER(" + currentField.sql + ")";
                         }
 
                         

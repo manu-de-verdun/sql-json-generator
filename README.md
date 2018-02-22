@@ -36,18 +36,19 @@ The module syntax is loosely based on MongoDB querying syntax.
 	* 6.4. [DELETE](#DELETE-9)
 * 7. [Formating queryData](#FormatingqueryData-10)
 	* 7.1. [SELECT](#SELECT-11)
-		* 7.1.1. [$from, $fields, $field: basic SELECT FROM query](#fromfieldsfield:basicSELECTFROMquery-12)
+		* 7.1.1. [$from, $fields, $field: basic SELECT FROM query](#fromfieldsfieldquery-12)
 		* 7.1.2. [$field](#field-13)
 		* 7.1.3. [$as](#as-14)
 		* 7.1.4. [$dateFormat](#dateFormat-15)
 		* 7.1.5. [$avg $count $min $max $sum](#avgcountminmaxsum-16)
 		* 7.1.6. [$upper $lower](#upperlower-16)
-		* 7.1.7. [$function](#function-16)
-		* 7.1.8. [$where](#where-17)
-	* 7.2. [JOINS : $inner, $left, $right, $full](#JOINS:innerleftrightfull-18)
+		* 7.1.7. [$groupConcat](#groupconcat-16)
+		* 7.1.8. [$function](#function-16)
+		* 7.1.9. [$where](#where-17)
+	* 7.2. [JOINS : $inner, $left, $right, $full](#joinsinnerleftrightfull-18)
 	* 7.3. [$where](#where-19)
 		* 7.3.1. [Simple Column comparison](#SimpleColumncomparison-20)
-		* 7.3.2. [Logical Operators: $and and $or](#LogicalOperators:andandor-21)
+		* 7.3.2. [Logical Operators: $and and $or](#logicalandandor-21)
 		* 7.3.3. [Complex Colums comparison](#ComplexColumscomparison-22)
 		* 7.3.4. [Comparison Operators](#ComparisonOperators-23)
 		* 7.3.5. [$in](#in-24)
@@ -199,7 +200,7 @@ UPDATE  `mytable`  SET `column_b` = '1' WHERE `column_a` = '1'
 
 ###  7.1. <a name='SELECT-11'></a>SELECT
 
-####  7.1.1. <a name='fromfieldsfield:basicSELECTFROMquery-12'></a>$from, $fields, $field: basic SELECT FROM query
+####  7.1.1. <a name='fromfieldsfieldquery-12'></a>$from, $fields, $field: basic SELECT FROM query
 
 Columns to be displayed in a SELECT statement are elements of an array. It can be just an array of columns names
 
@@ -360,9 +361,29 @@ SELECT COUNT(`table1`.`column_a`) AS column_date FROM `table1`
 ```
 SELECT UPPER(`table1`.`column_a`) AS column_date FROM `table1`
 ```
+####  7.1.7. <a name='groupconcat-16'></a>$groupConcat
 
+``$groupConcat : 1``
 
-####  7.1.7. <a name='function-16'></a>$function
+*example:*
+```
+{
+    $from : 'table1',
+    $fields : [
+        {
+            $field: 'column_a',
+            $groupConcat : 1,
+            $as: 'column_date'
+        }
+    ]
+}
+```
+*will return:*
+```
+SELECT GROUP_CONCAT(`table1`.`column_a`) AS column_date FROM `table1`
+```
+
+####  7.1.8. <a name='function-16'></a>$function
 
 ``$function : 'acos'``
 
@@ -384,7 +405,7 @@ SELECT ACOS(`table1`.`column_a`) FROM `table1`
 ```
 
 
-####  7.1.8. <a name='where-17'></a>$where
+####  7.1.9. <a name='where-17'></a>$where
 
 
 *example:*
@@ -406,7 +427,7 @@ SELECT `table1`.`column_a`, `table1`.`column_b` FROM `table1` WHERE `table1`.`co
 ```
 
 
-###  7.2. <a name='JOINS:innerleftrightfull-18'></a>JOINS : $inner, $left, $right, $full
+###  7.2. <a name='joinsinnerleftrightfull-18'></a>JOINS : $inner, $left, $right, $full
 
 
 > JOIN tables are placed as an element inside the ``$fields`` array of the parent table.
@@ -532,7 +553,7 @@ column_a = '1'
 table_a.column_a = '1'
 ```
 
-####  7.3.2. <a name='LogicalOperators:andandor-21'></a>Logical Operators: $and and $or
+####  7.3.2. <a name='logicalandandor-21'></a>Logical Operators: $and and $or
 
 ``{ $and : [{condition1}, {condition2}... ]}`` , ``{ $or : [{condition1}, {condition2}... ]}``
 
