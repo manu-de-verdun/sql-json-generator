@@ -15,7 +15,7 @@ var sqlJsonGenerator = function (options) {
             return data;
         }
         else {
-            return "'" + data + "'";  
+            return "'" + data + "'";
         }
     }
 
