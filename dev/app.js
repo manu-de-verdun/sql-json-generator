@@ -9,10 +9,11 @@ var sqlGenerator = new SQLGenerator({ debug: true, prestoDB: true });
 var queryParams = {
     $from: 'table1',
     $fields: ['field_a'],
-    $where: [{
-        $field: "field_a",
-        $lt: 10.55
-    }]
+    $where: []
+    ,
+    $limit: {
+        $rows: 10
+    }
 };
 
 

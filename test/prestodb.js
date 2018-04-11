@@ -70,4 +70,21 @@ describe('#prestoDB - SELECT', function () {
 
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
+
+    it('query #04', function () {
+
+        sqlParams = {
+            $from: 'table1',
+            $fields: ['field_a'],
+            $where: [],
+            $limit: {
+                $offset: 0,
+                $rows: 10
+            }
+        };
+
+        var expectedResult = 'SELECT table1.field_a FROM table1 LIMIT 10';
+
+        sqlGenerator.select(sqlParams).should.equal(expectedResult);
+    });
 });
