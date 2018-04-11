@@ -13,7 +13,7 @@ var sqlJsonGenerator = function (options) {
             return sqlString.escape(data);
         }
         // When using prestoDB, numbers can not be wrapped in apostrophes (issue #7)
-        else if (typeof data !== 'string' && options.integers && options.prestoDB) {
+        else if (typeof data !== 'string'  && options.prestoDB) {
               return data;
         }
         else {

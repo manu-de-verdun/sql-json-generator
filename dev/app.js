@@ -7,23 +7,12 @@ var SQLGenerator = require('../index');
 var sqlGenerator = new SQLGenerator({ debug: true, prestoDB: true });
 
 var queryParams = {
-    $from: 'estoques',
-    $fields: [
-        'id_estoque',
-        {
-            $inner: 'estoques_departamentos',
-            $using: 'id_estoque',
-            $fields: [
-                {
-                    $field: 'id_categoria_insumo_departamento',
-                    $groupConcat: 1,
-                    $as: 'departamentos'
-                }
-                
-            ]
-        }
-    ],
-    $where: []
+    $from: 'table1',
+    $fields: ['field_a'],
+    $where: [{
+        $field: "field_a",
+        $lt: 10.55
+    }]
 };
 
 
