@@ -4,7 +4,7 @@
 var colors = require('colors');
 var SQLGenerator = require('../index');
 
-var sqlGenerator = new SQLGenerator({ debug: true, pgSQL: true });
+var sqlGenerator = new SQLGenerator({ debug: true, prestoDB: true });
 
 var queryParams = {
     $from: 'estoques',

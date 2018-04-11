@@ -854,6 +854,14 @@ otherdb-01
 
 ``var sqlGenerator = new SQLGenerator({pgSQL: true});``
 
+_**LIMITED SUPORT, based on my basic pgSQL needs, feel free to report all issues**_
+
+> Using prestoDB syntax:
+
+``var sqlGenerator = new SQLGenerator({prestoDB: true});``
+
+_**BASIC SUPORT, based on @martin-kieliszek contributions, feel free to report all issues**_
+
 
 ##  10. <a name='Debugging-32'></a>Debugging
 

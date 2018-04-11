@@ -8,8 +8,13 @@ var sqlJsonGenerator = function (options) {
     }
 
     var escaping = function (data) {
+        // if the option escaped is selected, will escape the string using sqlString (used for mySQL)
         if (typeof data === 'string' && options.escaped) {
             return sqlString.escape(data);
+        }
+        // When using prestoDB, numbers can not be wrapped in apostrophes (issue #7)
+        else if (typeof data !== 'string' && options.integers && options.prestoDB) {
+              return data;
         }
         else {
             return "'" + data + "'";
@@ -17,7 +22,7 @@ var sqlJsonGenerator = function (options) {
     }
 
     var enclosure = function( param ) {
-        if( options.pgSQL) {
+        if( options.pgSQL || options.prestoDB ) {
             return param;
         }
         else {
@@ -482,6 +487,9 @@ var sqlJsonGenerator = function (options) {
             if (conditions['$limit']['$offset'] >= 0 && conditions['$limit']['$rows'] >= 0) {
                 if ( options.pgSQL) {
                     selectObject.limit = ' LIMIT ' + conditions['$limit']['$rows'] + ' OFFSET ' + conditions['$limit']['$offset'];
+                }
+                if ( options.prestoDB) { // Since presto DB does not have OFFSET feature, $offset will be ignored
+                    selectObject.limit = ' LIMIT ' + conditions['$limit']['$rows'];
                 }
                 else {
                     selectObject.limit = ' LIMIT ' + conditions['$limit']['$offset'] + ',' + conditions['$limit']['$rows'];
