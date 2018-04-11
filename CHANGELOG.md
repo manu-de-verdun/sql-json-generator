@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/)
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
 
+## [0.15.0] - 2018-04-11
+### Added
+- Compatiblity with prestoDB syntax (only tested for few select statemets)
 
 ## [0.14.0] - 2018-02-22
 ### Added
