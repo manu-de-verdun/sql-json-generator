@@ -488,7 +488,7 @@ var sqlJsonGenerator = function (options) {
                 if ( options.pgSQL) {
                     selectObject.limit = ' LIMIT ' + conditions['$limit']['$rows'] + ' OFFSET ' + conditions['$limit']['$offset'];
                 }
-                if ( options.prestoDB) { // Since presto DB does not have OFFSET feature, $offset will be ignored
+                else if ( options.prestoDB) { // Since presto DB does not have OFFSET feature, $offset will be ignored
                     selectObject.limit = ' LIMIT ' + conditions['$limit']['$rows'];
                 }
                 else {
