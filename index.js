@@ -11,6 +11,9 @@ var sqlJsonGenerator = function (options) {
         if (typeof data === 'string' && options.escaped) {
             return sqlString.escape(data);
         }
+        else if (typeof data !== 'string' && options.integers) {
+            return data;
+        }
         else {
             return "'" + data + "'";
         }
