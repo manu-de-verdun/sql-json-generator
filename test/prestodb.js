@@ -8,7 +8,7 @@ describe('#prestoDB - SELECT', function () {
     var sqlGenerator = new SQLGenerator({ prestoDB: true });
     var sqlParams;
 
-    it('query #01 - testing integer type is maintained - equals', function () {
+    it('query #01 - testing integer type is maintained - using equals operator', function () {
 
         sqlParams = {
             $from: 'table1',
@@ -23,7 +23,7 @@ describe('#prestoDB - SELECT', function () {
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
 
-    it('query #02 - testing integer type is mainted - greater than equals', function () {
+    it('query #02 - testing integer type is maintained - using greater than equals operator', function () {
 
         sqlParams = {
             $from: 'table1',
@@ -39,7 +39,7 @@ describe('#prestoDB - SELECT', function () {
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
 
-    it('query #03', function () {
+    it('query #03 - testing float type is maintained', function () {
 
         sqlParams = {
             $from: 'table1',
@@ -55,7 +55,7 @@ describe('#prestoDB - SELECT', function () {
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
 
-    it('query #04', function () {
+    it('query #04 - testing string type on input will be interpreted correctly as a string type by the library', function () {
 
         sqlParams = {
             $from: 'table1',
@@ -71,7 +71,7 @@ describe('#prestoDB - SELECT', function () {
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
 
-    it('query #04', function () {
+    it('query #04 - testing limit syntax correctly forms expected sql query for presto', function () {
 
         sqlParams = {
             $from: 'table1',
@@ -104,7 +104,7 @@ describe('#prestoDB - SELECT', function () {
         sqlGenerator.select(sqlParams).should.equal(expectedResult);
     });
 
-    it('query #06 - testing with integer 0 including and clause', function () {
+    it('query #06 - testing with integer 0 including an $and clause', function () {
 
         sqlParams = {
             $from: 'table1',
