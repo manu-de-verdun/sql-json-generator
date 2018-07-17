@@ -130,36 +130,36 @@ var sqlJsonGenerator = function (options) {
 
             var currentTable = (conditions['$table']) ? conditions['$table'] : inheritedTable;
 
-            if (conditions["$gt"]) {
+            if (typeof conditions["$gt"] !== "undefined") {
                 return conditionBuilder(conditions['$field'], currentTable, '>', conditions["$gt"]);
             }
 
-            else if (conditions["$gte"]) {
+            else if (typeof conditions["$gte"] !== "undefined") {
                 return conditionBuilder(conditions['$field'], currentTable, '>=', conditions["$gte"]);
             }
 
-            else if (conditions["$lt"]) {
+            else if (typeof conditions["$lt"] !== "undefined") {
                 return conditionBuilder(conditions['$field'], currentTable, '<', conditions["$lt"]);
             }
 
-            else if (conditions["$lte"]) {
+            else if (typeof conditions["$lte"] !== "undefined") {
                 return conditionBuilder(conditions['$field'], currentTable, '<=', conditions["$lte"]);
             }
 
-            else if (conditions["$eq"]) {
+            else if (typeof conditions["$eq"] !== "undefined") {
                 return conditionBuilder(conditions['$field'], currentTable, '=', conditions["$eq"]);
             }
 
-            else if (conditions["$ne"]) {
+            else if (typeof conditions["$ne"] !== "undefined") {
                 return conditionBuilder(conditions['$field'], currentTable, '<>', conditions["$ne"]);
             }
 
-            else if (conditions["$like"]) {
+            else if (typeof conditions["$like"] !== "undefined") {
                 return conditionBuilder(conditions['$field'], currentTable, 'LIKE', conditions["$like"]);
             }
 
 
-            else if (conditions["$in"]) {
+            else if (typeof conditions["$in"] !== "undefined") {
 
                 if (options.debug) {
                     console.log('      $in'.cyan);
